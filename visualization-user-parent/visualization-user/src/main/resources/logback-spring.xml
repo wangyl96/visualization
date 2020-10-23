@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!-- 控制台 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 输出格式 -->
+            <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} %logger{36} %line: [%X{traceId}] %msg %n</Pattern>
+            <!-- 解决中文乱码问题 -->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 记录到文件 (每天一个文件) 全量 -->
+    <appender name="SizeAndTimeBasedRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 最新的log文件名 -->
+        <File>logs/visualization-user/visualization-user.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 历史文件名 -->
+            <FileNamePattern>logs/visualization-auth.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!-- 保留 30 天的日志 -->
+            <maxHistory>30</maxHistory>
+            <!-- 单个日志文件大小 -->
+            <MaxFileSize>100MB</MaxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%X{traceId}] [%thread] %-5level %logger{35} : %n %msg %n</Pattern>
+            <!--解决中文乱码问题-->
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 将上面两个 appender 关联到项目 -->
+    <logger name="com.sinosoft" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="SizeAndTimeBasedRollingFileAppender"/>
+    </logger>
+
+    <springProfile name="dev">
+        <logger name="com.sinosoft" level="DEBUG" />
+    </springProfile>
+
+    <springProfile name="prod">
+        <logger name="com.sinosoft" level="INFO" />
+    </springProfile>
+
+</configuration>

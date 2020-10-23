@@ -1,0 +1,8 @@
+#spring:
+#  # nacos注册
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 10.155.208.145:9213
+#      config:
+#        server-addr: 10.155.208.145:9213
