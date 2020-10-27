@@ -28,4 +28,6 @@ public class Oauth2TokenDto {
      * 有效时间（秒）
      */
     private int expiresIn;
+
+
 }

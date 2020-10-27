@@ -33,5 +33,6 @@
             <artifactId>visualization-common-util</artifactId>
             <version>${project.version}</version>
         </dependency>
+
     </dependencies>
 </project>

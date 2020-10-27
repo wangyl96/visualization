@@ -2,6 +2,8 @@ package com.sinosoft.datasupplyplatform.auth.user.controller;
 
 import com.sinosoft.datasupplyplatform.auth.user.domain.Oauth2TokenDto;
 import com.sinosoft.visualization.common.basic.response.ResponseResult;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -19,6 +21,7 @@ import java.util.Map;
  * @author wangyl
  */
 @Slf4j
+@Api("Oauth2获取令牌")
 @ResponseResult
 @RestController
 @RequestMapping("/oauth")
@@ -31,6 +34,7 @@ public class AuthController {
      * Oauth2登录认证
      */
 //    @Log("Oauth2登录认证")
+    @ApiOperation(value = "Oauth2获取令牌", notes = "Oauth2登录认证")
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     public Oauth2TokenDto postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
         log.info("----------------------------------获取认证令牌开始-----------------------------");

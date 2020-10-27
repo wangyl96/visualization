@@ -45,7 +45,7 @@
       100vh - @vab-header-height - @vab-padding - @vab-padding - @vab-padding -
         @vab-padding
     ) !important;
-    padding: @vab-padding;
+    //padding: @vab-padding;
     margin: @vab-margin;
     background: #fff;
     .error-container {

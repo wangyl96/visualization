@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.sinosoft.visualization.common.basic.response.ResponseResultHandler

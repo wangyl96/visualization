@@ -46,6 +46,16 @@ secure:
     urls: #配置白名单路径
       - "/actuator/**"
       - "/auth/oauth/token"
+      - "/api-docs"
+      - "/swagger-ui.html"
+      - "/swagger-resources/**"
+      - "/swagger-resources"
+      - "/**/v2/api-docs"
+      - "/swagger-resources/configuration/ui"
+      - "/**/springfox-swagger-ui/**"
+
+swagger:
+  serivces: visualization-auth,visualization-user
 
 #  #数据库驱动配置信息
 #  datasource:

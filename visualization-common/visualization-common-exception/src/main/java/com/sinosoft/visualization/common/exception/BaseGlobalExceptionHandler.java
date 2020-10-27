@@ -1,6 +1,7 @@
 package com.sinosoft.visualization.common.exception;
 
 import com.sinosoft.visualization.common.basic.enums.ResponseCode;
+import com.sinosoft.visualization.common.basic.response.ServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 

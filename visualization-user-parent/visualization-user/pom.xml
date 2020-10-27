@@ -66,6 +66,12 @@
 
         <dependency>
             <groupId>com.sinosoft.visualization</groupId>
+            <artifactId>visualization-common-basic</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sinosoft.visualization</groupId>
             <artifactId>visualization-common-util</artifactId>
             <version>${project.version}</version>
         </dependency>
