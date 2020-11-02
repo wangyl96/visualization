@@ -25,17 +25,17 @@ spring:
           filters:
             - StripPrefix=1
 
-#        - id: visualization-user
-#          uri: lb://visualization-user
-#          predicates:
-#            - Path=/api/**
-#          filters:
-#            - StripPrefix=1
+        - id: visualization-user
+          uri: lb://visualization-user
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=1
 
         - id: visualization-business
           uri: lb://visualization-business
           predicates:
-            - Path=/api/**
+            - Path=/api/business/**
           filters:
             - StripPrefix=1
   security:
@@ -51,6 +51,8 @@ spring:
 secure:
   ignore:
     urls: #配置白名单路径
+      - "/api/auth/getInfo"
+      - "/api/auth/login"
       - "/actuator/**"
       - "/auth/oauth/token"
       - "/api-docs"

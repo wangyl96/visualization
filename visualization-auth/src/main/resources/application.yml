@@ -58,6 +58,8 @@ spring:
 secure:
   ignore:
     urls:
+      - "/api/auth/getInfo"
+      - "/api/auth/login"
       - "/actuator/**"
       - "/auth/oauth/token"
       - "/api-docs"

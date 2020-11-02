@@ -142,6 +142,7 @@ import '../../../node_modules/echarts/map/js/china.js'
 import {
   RankList
 } from '@/components'
+import { getTodayOverview } from '@/api/business/visOverview'
 const rankList = []
 for (let i = 0; i < 10; i++) {
   rankList.push({
@@ -236,6 +237,10 @@ export default {
   mounted () {
     this.drawLine()
     this.drawPie()
+    console.log(111)
+    getTodayOverview().then(() => {
+      console.log(222)
+    })
   },
 
   methods: {
