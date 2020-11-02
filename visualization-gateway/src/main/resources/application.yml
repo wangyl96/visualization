@@ -21,14 +21,14 @@ spring:
         - id: visualization-auth
           uri: lb://visualization-auth
           predicates:
-            - Path=/auth/**
+            - Path=/api/oauth/**
           filters:
             - StripPrefix=1
 
         - id: visualization-user
           uri: lb://visualization-user
           predicates:
-            - Path=/api/auth/**
+            - Path=/api/user/**
           filters:
             - StripPrefix=1
 
@@ -51,10 +51,10 @@ spring:
 secure:
   ignore:
     urls: #配置白名单路径
-      - "/api/auth/getInfo"
-      - "/api/auth/login"
+      - "/api/user/getInfo"
+      - "/api/user/login"
       - "/actuator/**"
-      - "/auth/oauth/token"
+      - "/api/oauth/token"
       - "/api-docs"
       - "/swagger-ui.html"
       - "/swagger-resources/**"

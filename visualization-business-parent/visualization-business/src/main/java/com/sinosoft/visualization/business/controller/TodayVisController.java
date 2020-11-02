@@ -20,10 +20,11 @@ import java.util.Map;
 @Slf4j
 @ResponseResult
 @RestController
+@RequestMapping(value = "/business")
 public class TodayVisController {
 
     @ResponseBody
-    @RequestMapping(value = "/getTodayOverview", method = RequestMethod.GET)
+    @GetMapping(value = "/getTodayOverview")
     public String getTodayOverview() {
         log.info("----------------接口通畅-------------------");
         return "12323";

@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @ResponseResult
 @RestController
 @CrossOrigin
+@RequestMapping(value = "/user")
 public class LoginController {
 
     @ResponseBody
-    @PostMapping(value = "/auth/login")
+    @PostMapping(value = "/login")
     public JSONObject login() {
         log.info("----------------登录接口通畅-------------------");
         return JSONObject.parseObject("{\n" +
@@ -43,7 +44,7 @@ public class LoginController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/auth/getInfo")
+    @GetMapping(value = "/getInfo")
     public JSONObject getInfo() {
         log.info("----------------用户信息接口通畅-------------------");
         JSONObject userInfo = JSONObject.parseObject(("{\n" +

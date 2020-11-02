@@ -154,7 +154,7 @@ export default {
     // this.requiredTwoStepCaptcha = true
   },
   methods: {
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Login', 'Logout', 'Auth']),
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
@@ -176,7 +176,8 @@ export default {
         form: { validateFields },
         state,
         customActiveKey,
-        Login
+        Login,
+        Auth
       } = this
 
       state.loginBtn = true
@@ -190,6 +191,13 @@ export default {
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
           loginParams.password = md5(values.password)
+          // 先去请求oauth2,获取认证token
+          Auth(loginParams)
+            .then((res) => null)
+            .catch(err => this.requestFailed(err))
+            .finally(() => {
+              state.loginBtn = false
+            })
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
