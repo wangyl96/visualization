@@ -8,6 +8,7 @@
         <module>visualization-gateway</module>
         <module>visualization-auth</module>
         <module>visualization-user-parent</module>
+        <module>visualization-business-parent</module>
     </modules>
 
     <groupId>com.sinosoft.visualization</groupId>
