@@ -25,8 +25,15 @@ spring:
           filters:
             - StripPrefix=1
 
-        - id: visualization-user
-          uri: lb://visualization-user
+#        - id: visualization-user
+#          uri: lb://visualization-user
+#          predicates:
+#            - Path=/api/**
+#          filters:
+#            - StripPrefix=1
+
+        - id: visualization-business
+          uri: lb://visualization-business
           predicates:
             - Path=/api/**
           filters:
