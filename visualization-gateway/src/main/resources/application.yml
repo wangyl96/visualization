@@ -64,7 +64,7 @@ secure:
       - "/**/springfox-swagger-ui/**"
 
 swagger:
-  serivces: visualization-auth,visualization-user
+  serivces: visualization-auth,visualization-user,visualization-business
 
 #  #数据库驱动配置信息
 #  datasource:
