@@ -1,10 +1,13 @@
 package com.sinosoft.visualization.common.basic.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * BasicEntity
@@ -15,10 +18,30 @@ import java.io.Serializable;
  * Modified by:
  */
 @Data
+@MappedSuperclass
 @NoArgsConstructor
 public class BasicEntity <T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    protected String id;
+    @Basic
+    @Column(name = "is_active", nullable = true)
+    protected String is_active;
+
+    @Basic
+    @Column(name = "creator", nullable = true)
+    private String creator;
+
+    @Basic
+    @Column(name = "modifier", nullable = true)
+    private String modifier;
+
+    @Basic
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Basic
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
 }

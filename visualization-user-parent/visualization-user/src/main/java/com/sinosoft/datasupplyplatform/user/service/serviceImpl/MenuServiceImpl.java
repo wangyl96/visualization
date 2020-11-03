@@ -25,29 +25,29 @@ import java.util.List;
 @Service
 public class MenuServiceImpl implements MenuService {
 
-    @Autowired
-    private SysMenuRepository sysMenuRepository;
-
-    /**
-     * 获取菜单列表
-     * @return
-     */
-    @Override
-    public List<MenuDto> findUserMenu() {
-        List<MenuDto> menuDtoList = new ArrayList<>();
-        List<SysMenu> userMenus;
-        // 查询全部的菜单
-        List<SysMenu> allMenus = sysMenuRepository.findAll();
-        if (allMenus.size() > 0) {
-            allMenus.stream()
-                    // dto封装
-                    .map(MenuDto::new)
-                    // 去重
-                    .distinct().forEach(menuDtoList::add);
-            // 排序、构建树形关系
-            return TreeUtil.buildTree(CollUtil.sort(menuDtoList, Comparator.comparingInt(MenuDto::getSort)),
-                    "-1");
-        }
-        return Lists.newArrayList();
-    }
+//    @Autowired
+//    private SysMenuRepository sysMenuRepository;
+//
+//    /**
+//     * 获取菜单列表
+//     * @return
+//     */
+//    @Override
+//    public List<MenuDto> findUserMenu() {
+//        List<MenuDto> menuDtoList = new ArrayList<>();
+//        List<SysMenu> userMenus;
+//        // 查询全部的菜单
+//        List<SysMenu> allMenus = sysMenuRepository.findAll();
+//        if (allMenus.size() > 0) {
+//            allMenus.stream()
+//                    // dto封装
+//                    .map(MenuDto::new)
+//                    // 去重
+//                    .distinct().forEach(menuDtoList::add);
+//            // 排序、构建树形关系
+//            return TreeUtil.buildTree(CollUtil.sort(menuDtoList, Comparator.comparingInt(MenuDto::getSort)),
+//                    "-1");
+//        }
+//        return Lists.newArrayList();
+//    }
 }

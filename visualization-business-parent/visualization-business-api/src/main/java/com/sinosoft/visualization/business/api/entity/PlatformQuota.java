@@ -1,5 +1,6 @@
 package com.sinosoft.visualization.business.api.entity;
 
+import com.sinosoft.visualization.common.basic.entity.BasicEntity;
 import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "platform_quota")
-public class PlatformQuota  implements Serializable {
+public class PlatformQuota extends BasicEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

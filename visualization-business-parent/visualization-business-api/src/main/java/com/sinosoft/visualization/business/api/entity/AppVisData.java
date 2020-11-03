@@ -1,5 +1,6 @@
 package com.sinosoft.visualization.business.api.entity;
 
+import com.sinosoft.visualization.common.basic.entity.BasicEntity;
 import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,8 +8,9 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "app_vis_data")
-public class AppVisData  implements Serializable {
-
+public class AppVisData extends BasicEntity implements Serializable {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "app_vis_id")
 	private Long appVisId;
 
@@ -18,6 +20,9 @@ public class AppVisData  implements Serializable {
 	private Long appInstallation;
 
 	private Long registrations;
+
+	@Column(name = "life_day")
+	private Long lifeDay;
 
 	private Double product;
 
@@ -31,18 +36,5 @@ public class AppVisData  implements Serializable {
 
 	@Column(name = "vis_date")
 	private java.sql.Date visDate;
-
-	@Column(name = "is_active")
-	private Long isActive;
-
-	private String creator;
-
-	private String modifier;
-
-	@Column(name = "create_time")
-	private java.sql.Date createTime;
-
-	@Column(name = "modify_time")
-	private java.sql.Date modifyTime;
 
 }

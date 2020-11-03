@@ -4,17 +4,17 @@
       <a-card :title="platformInfo.platformName" :bordered="false" style="margin-left: 16px; margin-top: 16px">
         <div style="margin-top: -24px; margin-left: -18px">
           <a-row>
-            <a-col :sm="8" :xs="24" v-for="item in 3" :key="item">
+            <a-col :sm="8" :xs="24" v-for="item in platformInfo.platformContent" :key="item.contentName">
               <ul>
                 <li>
-                  <a-statistic :value="112324" :value-style="{fontSize: '16px', lineHeight: '20px' }">
+                  <a-statistic :value="item.contentData" :value-style="{fontSize: '16px', lineHeight: '20px' }">
                     <template v-slot:prefix>
-                      <span>注册量</span>
+                      <span>{{item.contentName}}</span>
                     </template>
                   </a-statistic>
                 </li>
                 <li style="margin-top: 8px;">
-                  <a-statistic :value="11.56" :value-style="{fontSize: '16px', lineHeight: '20px' }">
+                  <a-statistic :value="item.ratio" :value-style="{fontSize: '16px', lineHeight: '20px' }">
                     <template v-slot:prefix>
                       <span>环比</span><img src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
                     </template>

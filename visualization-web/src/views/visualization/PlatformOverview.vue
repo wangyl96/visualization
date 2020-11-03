@@ -5,7 +5,7 @@
         <!--  数据总览  -->
         <div class="account-center-detail" style="padding-left: 20px">
           <p>
-            <i class="title"></i>数据总览 2300-09-20
+            <i class="title"></i>数据总览 2020-09-20
           </p>
         </div>
         <!--分割线-->
@@ -156,50 +156,49 @@ export default {
   components: { PlatformOverview, RankList },
   data () {
     return {
-      platform: [
-        {
-          'platformName': 'APP',
-          'isEnd': false,
-          'platformContent': [{
-            'contentName': '注册量',
-            'contentData': '12,3120',
-            'ratio': '80%',
-            upOrDown: 'up'
-          },
-            {
-              'contentName': '注册量',
-              'contentData': '12312',
-              'ratio': '80%',
-              upOrDown: 'up'
-            },
-            {
-              'contentName': '注册量',
-              'contentData': '12312',
-              'ratio': '80%',
-              upOrDown: 'up'
-            }
-          ]
+      platform: [{
+        'platformName': 'APP',
+        'isEnd': false,
+        'platformContent': [{
+          'contentName': '注册量',
+          'contentData': '12,3120',
+          'ratio': '80',
+          'upOrDown': 'up'
         },
+          {
+            'contentName': '注册量',
+            'contentData': '12312',
+            'ratio': '80',
+            'upOrDown': 'up'
+          },
+          {
+            'contentName': '注册量',
+            'contentData': '12312',
+            'ratio': '80',
+            'upOrDown': 'up'
+          }
+        ]
+      },
         {
           'platformName': 'PC',
           'isEnd': true,
           'platformContent': [{
             'contentName': '注册量',
             'contentData': '12312',
-            'ratio': '80%',
-            upOrDown: 'up'
+            'ratio': '80',
+            'upOrDown': 'up'
           },
             {
               'contentName': '注册量',
               'contentData': '12312',
-              'ratio': '80%',
-              upOrDown: 'down'
+              'ratio': '80',
+              'upOrDown': 'up'
             },
             {
               'contentName': '注册量',
               'contentData': '12312',
-              'ratio': '80%',
-              upOrDown: 'up'
+              'ratio': '80',
+              'upOrDown': 'up'
             }
           ]
         },
@@ -209,20 +208,20 @@ export default {
           'platformContent': [{
             'contentName': '注册量',
             'contentData': '12312',
-            'ratio': '80%',
-            upOrDown: 'down'
+            'ratio': '80',
+            'upOrDown': 'up'
           },
             {
               'contentName': '注册量',
               'contentData': '12312',
-              'ratio': '80%',
-              upOrDown: 'up'
+              'ratio': '80',
+              'upOrDown': 'up'
             },
             {
               'contentName': '注册量',
               'contentData': '12312',
-              'ratio': '80%',
-              upOrDown: 'up'
+              'ratio': '80',
+              'upOrDown': 'up'
             }
           ]
         }
