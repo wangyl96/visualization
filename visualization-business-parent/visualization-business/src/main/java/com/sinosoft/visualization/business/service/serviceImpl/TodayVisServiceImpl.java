@@ -67,7 +67,7 @@ public class TodayVisServiceImpl implements TodayVisService {
             add(wapOverviewVO);
         }};
 
-        return List<TodayOverviewVO>;
+        return todayOverviewVOList;
     }
 
     /**
