@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.sinosoft.visualization.common.basic.constants.CommonConstants.*;
+
 /**
  * TodayVisServiceImpl
  *
@@ -42,63 +44,30 @@ public class TodayVisServiceImpl implements TodayVisService {
      * 获取T+1各平台各指标概览数据
      */
     @Override
-    public TodayOverviewVO getTodayOverview() {
+    public List<TodayOverviewVO> getTodayOverview() {
         // APP
-        List<AppVisData> appVisDataList = appVisDataRepository.getOverview();
-        TodayOverviewVO todayOverviewVO = new TodayOverviewVO();
-        todayOverviewVO.setVisDate(appVisDataList.get(0).getVisDate().toString());
-        List<Map> todayOverviewMap = new ArrayList<>();
-
-        Map<String, Object> appAzMap= new HashMap<>();
-        appAzMap.put("contentName", "安装量");
-        appAzMap.put("contentData",  appVisDataList.get(0).getAppInstallation());
-        appAzMap.put("ratio", getLinkRelative(appVisDataList.get(0).getAppInstallation(), appVisDataList.get(1).getAppInstallation()));
-        appAzMap.put("isUp", appVisDataList.get(0).getAppInstallation() >= appVisDataList.get(1).getAppInstallation());
-        todayOverviewMap.add(appAzMap);
-
-        Map<String, Object> appZcMap= new HashMap<>();
-        appZcMap.put("contentName", "注册量");
-        appZcMap.put("contentData",  appVisDataList.get(0).getRegistrations());
-        appZcMap.put("ratio", getLinkRelative(appVisDataList.get(0).getRegistrations(), appVisDataList.get(1).getRegistrations()));
-        appZcMap.put("isUp", appVisDataList.get(0).getRegistrations() >= appVisDataList.get(1).getRegistrations());
-        todayOverviewMap.add(appZcMap);
-
-        Map<String, Object> appRhMap= new HashMap<>();
-        appRhMap.put("contentName", "日活");
-        appRhMap.put("contentData",  appVisDataList.get(0).getLifeDay());
-        appRhMap.put("ratio", getLinkRelative(appVisDataList.get(0).getLifeDay(), appVisDataList.get(1).getLifeDay()));
-        appRhMap.put("isUp", appVisDataList.get(0).getLifeDay() >= appVisDataList.get(1).getLifeDay());
-        todayOverviewMap.add(appRhMap);
-
+        List<Map<String, Object>> appInfoList = appVisDataRepository.getAppInfo();
+        TodayOverviewVO appOverviewVO = new TodayOverviewVO();
+        appOverviewVO.setTodayOverviewMap(appInfoList);
+        appOverviewVO.setPlatformName(APP);
         // PC
-        List<PcVisData> pcVisDataList =  pcVisDataRepository.getOverview();
-        Map<String, Object> pcFwMap= new HashMap<>();
-        appAzMap.put("contentName", "访问量");
-        appAzMap.put("contentData",  pcVisDataList.get(0).getVisitsOld() + pcVisDataList.get(0).getVisitsNew());
-        appAzMap.put("ratio", getLinkRelative(pcVisDataList.get(0).getVisitsOld() + pcVisDataList.get(0).getVisitsNew(), pcVisDataList.get(1).getVisitsOld() + pcVisDataList.get(1).getVisitsNew()));
-        appAzMap.put("isUp", pcVisDataList.get(0).getVisitsOld() + pcVisDataList.get(0).getVisitsNew() >= pcVisDataList.get(1).getVisitsOld() + pcVisDataList.get(1).getVisitsNew());
-        todayOverviewMap.add(appAzMap);
-
-        Map<String, Object> pcZcMap= new HashMap<>();
-        appAzMap.put("contentName", "访问量");
-        appAzMap.put("contentData",  pcVisDataList.get(0).getVisitsOld() + pcVisDataList.get(0).getVisitsNew());
-        appAzMap.put("ratio", getLinkRelative(pcVisDataList.get(0).getVisitsOld() + pcVisDataList.get(0).getVisitsNew(), pcVisDataList.get(1).getVisitsOld() + pcVisDataList.get(1).getVisitsNew()));
-        appAzMap.put("isUp", pcVisDataList.get(0).getVisitsOld() + pcVisDataList.get(0).getVisitsNew() >= pcVisDataList.get(1).getVisitsOld() + pcVisDataList.get(1).getVisitsNew());
-        todayOverviewMap.add(appAzMap);
-
-        Map<String, Object> pcRhMap= new HashMap<>();
-        appRhMap.put("contentName", "注册量");
-        appRhMap.put("contentData",  appVisDataList.get(0).getLifeDay());
-        appRhMap.put("ratio", getLinkRelative(appVisDataList.get(0).getLifeDay(), appVisDataList.get(1).getLifeDay()));
-        appRhMap.put("isUp", appVisDataList.get(0).getLifeDay() >= appVisDataList.get(1).getLifeDay());
-        todayOverviewMap.add(appRhMap);
+        List<Map<String, Object>> pcInfoList = pcVisDataRepository.getPcInfo();
+        TodayOverviewVO pcOverviewVO = new TodayOverviewVO();
+        pcOverviewVO.setTodayOverviewMap(pcInfoList);
+        pcOverviewVO.setPlatformName(PC);
         // WAP
-        List<WapVisData> wapVisDataList = wapVisDataRepository.getOverview();
+        List<Map<String, Object>> wapInfoList = wapVisDataRepository.getWapInfo();
+        TodayOverviewVO wapOverviewVO = new TodayOverviewVO();
+        wapOverviewVO.setTodayOverviewMap(wapInfoList);
+        wapOverviewVO.setPlatformName(WAP);
         // 组装数据
-        List<TodayOverviewVO> todayOverviewVOList = new ArrayList<>();
+        List<TodayOverviewVO> todayOverviewVOList = new ArrayList<TodayOverviewVO>() {{
+            add(appOverviewVO);
+            add(pcOverviewVO);
+            add(wapOverviewVO);
+        }};
 
-        // 根据平台查
-        return null;
+        return List<TodayOverviewVO>;
     }
 
     /**

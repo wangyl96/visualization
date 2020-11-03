@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 /**
  * TodayVisController
@@ -31,10 +33,10 @@ public class TodayVisController {
     @ResponseBody
     @GetMapping(value = "/getTodayOverview")
     @ApiOperation(value="获取今日各平台各指标概览数据", tags={"获取今日各平台各指标概览数据"}, notes="此处今日指的是前一天,即已T+1时间表示")
-    public TodayOverviewVO getTodayOverview() {
+    public List<TodayOverviewVO> getTodayOverview() {
         log.info("------------------获取今日各平台各指标概览数据开始-----------------");
-        TodayOverviewVO todayOverviewVO = todayVisService.getTodayOverview();
+        List<TodayOverviewVO> todayOverviewVOList = todayVisService.getTodayOverview();
         log.info("------------------获取今日各平台各指标概览数据结束-----------------");
-        return todayOverviewVO;
+        return todayOverviewVOList;
     }
 }

@@ -5,9 +5,28 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Map;
 
+/**
+ * WapVisDataRepository
+ *
+ * @author wangyl
+ * Description:
+ * Created in: 2020/11/3
+ * Modified by:
+ */
 public interface WapVisDataRepository extends JpaRepository<WapVisData, Long> {
 
-    @Query(value = "SELECT visits_new,visits_old, visitors_new, visitors_old , registrations FROM pc_vis_data ORDER BY vis_date DESC LIMIT 2", nativeQuery = true)
-    List<WapVisData> getOverview();
+    @Query(value = "(SELECT '注册量' AS contentName, pvd.registrations contentData, (pvd.registrations - (SELECT registrations FROM (SELECT pvd.vis_date,pvd.registrations FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
+            "ORDER BY vis_date LIMIT 1))/(SELECT registrations FROM (SELECT pvd.vis_date,pvd.registrations FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
+            "ORDER BY vis_date LIMIT 1) AS ratio FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 1) \n" +
+            "UNION\n" +
+            "(SELECT '访问量' AS contentName, pvd.visits_new + pvd.visits_old contentData, (pvd.visits_new + pvd.visits_old - (SELECT visits FROM (SELECT pvd.vis_date, pvd.visits_new + pvd.visits_old visits FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
+            "ORDER BY vis_date LIMIT 1))/(SELECT  pvd.visits_new + pvd.visits_old FROM (SELECT pvd.vis_date, pvd.visits_new + pvd.visits_old FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
+            "ORDER BY vis_date LIMIT 1) AS ratio FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 1) \n" +
+            "UNION\n" +
+            "(SELECT '访客量' AS contentName, pvd.visitors_new + pvd.visitors_old contentData, (pvd.visitors_new + pvd.visitors_old - (SELECT visitors FROM (SELECT pvd.vis_date, pvd.visitors_new + pvd.visitors_old visitors FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
+            "ORDER BY vis_date LIMIT 1))/(SELECT  pvd.visitors_new + pvd.visitors_old FROM (SELECT pvd.vis_date, pvd.visitors_new + pvd.visitors_old FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
+            "ORDER BY vis_date LIMIT 1) AS ratio FROM wap_vis_data pvd ORDER BY vis_date DESC LIMIT 1) ", nativeQuery = true)
+    List<Map<String, Object>> getWapInfo();
 }

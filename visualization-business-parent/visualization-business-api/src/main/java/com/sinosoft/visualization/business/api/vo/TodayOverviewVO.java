@@ -21,10 +21,12 @@ public class TodayOverviewVO {
     /**
      * 今日数据概览返参map
      */
-    private List<Map> todayOverviewMap;
+    private List<Map<String, Object>> todayOverviewMap;
 
     /**
      * 数据展示日期
      */
     private String visDate;
+
+    private String platformName;
 }

@@ -2,6 +2,8 @@ package com.sinosoft.visualization.business.service;
 
 import com.sinosoft.visualization.business.api.vo.TodayOverviewVO;
 
+import java.util.List;
+
 /**
  * TodayVisService
  *
@@ -11,5 +13,5 @@ import com.sinosoft.visualization.business.api.vo.TodayOverviewVO;
  * Modified by:
  */
 public interface TodayVisService {
-    TodayOverviewVO getTodayOverview();
+    List<TodayOverviewVO> getTodayOverview();
 }

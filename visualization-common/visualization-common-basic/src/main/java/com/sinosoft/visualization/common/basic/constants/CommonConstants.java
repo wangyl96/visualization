@@ -18,4 +18,17 @@ public class CommonConstants {
      * 正常
      */
     public static final Integer STATUS_NORMAL = 0;
+
+    /**
+     * APP平台
+     */
+    public static final String APP = "APP";
+    /**
+     * PC平台
+     */
+    public static final String PC = "PC";
+    /**
+     * WAP平台
+     */
+    public static final String WAP = "WAP";
 }
