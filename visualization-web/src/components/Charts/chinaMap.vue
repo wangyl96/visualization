@@ -38,9 +38,6 @@
       }
     },
     mounted () {
-      console.log(this.chinaInfo)
-      const a = this.chinaInfo
-      console.log(JSON.stringify(a))
       this.drawLine()
     },
     methods: {
@@ -52,15 +49,15 @@
         }
         resizeMyChartContainer()
         const myChartChina = echarts.init(myChartContainer)
-
         // 指定高亮颜色
         let mapColor
+        const that = this
         // 绘制图表
         optionMap = {
           tooltip: {
             trigger: 'item',
             formatter: function (params) {
-              return params.name + '<br><b>安装量：' + params.value + '</b> '
+              return params.name + '<br><b>' + that.chinaInfo.quota.name + '：' + params.value + '</b> '
             }
           },
           legend: {
@@ -123,7 +120,7 @@
                   show: true
                 }
               },
-              data: this.chinaInfo
+              data: this.chinaInfo.map
             }
           ]
         }

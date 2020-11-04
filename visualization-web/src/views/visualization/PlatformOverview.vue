@@ -22,18 +22,12 @@
       <a-card style="margin-top: 20px" :bordered="false" :body-style="{padding: '0'}">
         <div class="salesCard">
           <a-tabs default-active-key="app" size="large" @change="callback" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-            <a-tab-pane v-for="(item) in mapData" :key="item.platform.code" :tab="item.platform.name" ></a-tab-pane>
+            <a-tab-pane v-for="(item) in tabData" :key="item.platform.code" :tab="item.platform.name" ></a-tab-pane>
             <div class="extra-wrapper" slot="tabBarExtraContent">
               <div class="extra-item">
-                <a-radio-group :value="size" style="margin-right: 20px" @change="handleSizeChange">
-                  <a-radio-button value="large">
-                    安装量
-                  </a-radio-button>
-                  <a-radio-button value="default">
-                    注册量
-                  </a-radio-button>
-                  <a-radio-button value="small">
-                    日活
+                <a-radio-group :value="quotaChecked" style="margin-right: 20px" @change="handleSizeChange">
+                  <a-radio-button v-for="item in quotaCheckedList" :key="item.code" :value="item.code">
+                    {{item.name}}
                   </a-radio-button>
                 </a-radio-group>
               </div>
@@ -41,7 +35,7 @@
           </a-tabs>
           <a-row>
             <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-              <china-map ref="chinaMap" :china="chinaData"></china-map>
+              <china-map ref="chinaMap" :china="mapData"></china-map>
             </a-col>
             <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
               <rank-list title="本年度注册量排名" :list="rankList"/>
@@ -183,12 +177,12 @@ export default {
       rankList: rankList,
       // 今日数据概览spin
       overviewSpin: true,
-      mapData: [
+      // 地图标签页和按钮
+      tabData: [
         {
-          'platform': {
-            'name': 'APP平台',
-            'code': 'app'
-          },
+        'platform': {
+          'name': 'APP平台',
+          'code': 'app',
           'quota': [{
             'name': '安装量',
             'code': 'app_installation'
@@ -201,510 +195,55 @@ export default {
               'name': '日活',
               'code': 'life_day'
             }
-          ],
-          'rankList': [{
-            'name': '北京',
-            'value': '1000'
-          },
-            {
-              'name': '北京',
-              'value': '1000'
-            },
-            {
-              'name': '北京',
-              'value': '1000'
-            },
-            {
-              'name': '北京',
-              'value': '1000'
-            }
-          ],
-          'map': [{
-            'name': '北京',
-            'value': '5555'
-          },
-            {
-              'name': '天津',
-              'value': '5555'
-            },
-            {
-              'name': '上海',
-              'value': '5555'
-            },
-            {
-              'name': '重庆',
-              'value': '5555'
-            },
-            {
-              'name': '河北',
-              'value': '5555'
-            },
-            {
-              'name': '河南',
-              'value': '5555'
-            },
-            {
-              'name': '云南',
-              'value': '5555'
-            },
-            {
-              'name': '辽宁',
-              'value': '5555'
-            },
-            {
-              'name': '黑龙江',
-              'value': '5555'
-            },
-            {
-              'name': '湖南',
-              'value': '5555'
-            },
-            {
-              'name': '安徽',
-              'value': '5555'
-            },
-            {
-              'name': '山东',
-              'value': '5555'
-            },
-            {
-              'name': '新疆',
-              'value': '5555'
-            },
-            {
-              'name': '江苏',
-              'value': '5555'
-            },
-            {
-              'name': '浙江',
-              'value': '5555'
-            },
-            {
-              'name': '江西',
-              'value': '5555'
-            },
-            {
-              'name': '湖北',
-              'value': '5555'
-            },
-            {
-              'name': '广西',
-              'value': '5555'
-            },
-            {
-              'name': '甘肃',
-              'value': '5555'
-            },
-            {
-              'name': '山西',
-              'value': '5555'
-            },
-            {
-              'name': '内蒙古',
-              'value': '5555'
-            },
-            {
-              'name': '陕西',
-              'value': '5555'
-            },
-            {
-              'name': '吉林',
-              'value': '5555'
-            },
-            {
-              'name': '福建',
-              'value': '5555'
-            },
-            {
-              'name': '贵州',
-              'value': '5555'
-            },
-            {
-              'name': '广东',
-              'value': '5555'
-            },
-            {
-              'name': '青海',
-              'value': '5555'
-            },
-            {
-              'name': '西藏',
-              'value': '5555'
-            },
-            {
-              'name': '四川',
-              'value': '5555'
-            },
-            {
-              'name': '宁夏',
-              'value': '5555'
-            },
-            {
-              'name': '海南',
-              'value': '5555'
-            },
-            {
-              'name': '台湾',
-              'value': '5555'
-            },
-            {
-              'name': '香港',
-              'value': '5555'
-            },
-            {
-              'name': '澳门',
-              'value': '5555'
-            }
           ]
-        },
+        }
+      },
         {
           'platform': {
             'name': 'PC平台',
-            'code': 'pc'
-          },
-          'quota': [{
-            'name': '注册量',
-            'code': 'registrations'
-          },
-            {
-              'name': '访问量',
-              'code': 'visits'
+            'code': 'pc',
+            'quota': [{
+              'name': '注册量',
+              'code': 'registrations'
             },
-            {
-              'name': '访客量',
-              'code': 'visitors'
-            }
-          ],
-          'rankList': [{
-            'name': '北京',
-            'value': '1000'
-          },
-            {
-              'name': '北京',
-              'value': '1000'
-            },
-            {
-              'name': '北京',
-              'value': '1000'
-            },
-            {
-              'name': '北京',
-              'value': '1000'
-            }
-          ],
-          'map': [{
-            'name': '北京',
-            'value': '5555'
-          },
-            {
-              'name': '天津',
-              'value': '2222'
-            },
-            {
-              'name': '上海',
-              'value': '3333'
-            },
-            {
-              'name': '重庆',
-              'value': '4444'
-            },
-            {
-              'name': '河北',
-              'value': '1111'
-            },
-            {
-              'name': '河南',
-              'value': '1234'
-            },
-            {
-              'name': '云南',
-              'value': '4321'
-            },
-            {
-              'name': '辽宁',
-              'value': '5555'
-            },
-            {
-              'name': '黑龙江',
-              'value': '5555'
-            },
-            {
-              'name': '湖南',
-              'value': '5555'
-            },
-            {
-              'name': '安徽',
-              'value': '5555'
-            },
-            {
-              'name': '山东',
-              'value': '5555'
-            },
-            {
-              'name': '新疆',
-              'value': '5555'
-            },
-            {
-              'name': '江苏',
-              'value': '5555'
-            },
-            {
-              'name': '浙江',
-              'value': '5555'
-            },
-            {
-              'name': '江西',
-              'value': '5555'
-            },
-            {
-              'name': '湖北',
-              'value': '5555'
-            },
-            {
-              'name': '广西',
-              'value': '5555'
-            },
-            {
-              'name': '甘肃',
-              'value': '5555'
-            },
-            {
-              'name': '山西',
-              'value': '5555'
-            },
-            {
-              'name': '内蒙古',
-              'value': '5555'
-            },
-            {
-              'name': '陕西',
-              'value': '5555'
-            },
-            {
-              'name': '吉林',
-              'value': '5555'
-            },
-            {
-              'name': '福建',
-              'value': '5555'
-            },
-            {
-              'name': '贵州',
-              'value': '5555'
-            },
-            {
-              'name': '广东',
-              'value': '5555'
-            },
-            {
-              'name': '青海',
-              'value': '5555'
-            },
-            {
-              'name': '西藏',
-              'value': '5555'
-            },
-            {
-              'name': '四川',
-              'value': '5555'
-            },
-            {
-              'name': '宁夏',
-              'value': '5555'
-            },
-            {
-              'name': '海南',
-              'value': '5555'
-            },
-            {
-              'name': '台湾',
-              'value': '5555'
-            },
-            {
-              'name': '香港',
-              'value': '5555'
-            },
-            {
-              'name': '澳门',
-              'value': '5555'
-            }
-          ]
+              {
+                'name': '访问量',
+                'code': 'visits'
+              },
+              {
+                'name': '访客量',
+                'code': 'visitors'
+              }
+            ]
+          }
         },
         {
           'platform': {
             'name': 'WAP平台',
-            'code': 'wap'
-          },
-          'quota': [{
-            'name': '注册量',
-            'code': 'registrations'
-          },
-            {
-              'name': '访问量',
-              'code': 'visits'
+            'code': 'wap',
+            'quota': [{
+              'name': '注册量',
+              'code': 'registrations'
             },
-            {
-              'name': '访客量',
-              'code': 'visitors'
-            }
-          ],
-          'rankList': [{
-            'name': '北京',
-            'value': '1000'
-          },
-            {
-              'name': '北京',
-              'value': '1000'
-            },
-            {
-              'name': '北京',
-              'value': '1000'
-            },
-            {
-              'name': '北京',
-              'value': '1000'
-            }
-          ],
-          'map': [{
-            'name': '北京',
-            'value': '5555'
-          },
-            {
-              'name': '天津',
-              'value': '5555'
-            },
-            {
-              'name': '上海',
-              'value': '5555'
-            },
-            {
-              'name': '重庆',
-              'value': '5555'
-            },
-            {
-              'name': '河北',
-              'value': '5555'
-            },
-            {
-              'name': '河南',
-              'value': '5555'
-            },
-            {
-              'name': '云南',
-              'value': '5555'
-            },
-            {
-              'name': '辽宁',
-              'value': '5555'
-            },
-            {
-              'name': '黑龙江',
-              'value': '5555'
-            },
-            {
-              'name': '湖南',
-              'value': '5555'
-            },
-            {
-              'name': '安徽',
-              'value': '5555'
-            },
-            {
-              'name': '山东',
-              'value': '5555'
-            },
-            {
-              'name': '新疆',
-              'value': '5555'
-            },
-            {
-              'name': '江苏',
-              'value': '5555'
-            },
-            {
-              'name': '浙江',
-              'value': '5555'
-            },
-            {
-              'name': '江西',
-              'value': '5555'
-            },
-            {
-              'name': '湖北',
-              'value': '5555'
-            },
-            {
-              'name': '广西',
-              'value': '5555'
-            },
-            {
-              'name': '甘肃',
-              'value': '5555'
-            },
-            {
-              'name': '山西',
-              'value': '5555'
-            },
-            {
-              'name': '内蒙古',
-              'value': '5555'
-            },
-            {
-              'name': '陕西',
-              'value': '5555'
-            },
-            {
-              'name': '吉林',
-              'value': '5555'
-            },
-            {
-              'name': '福建',
-              'value': '5555'
-            },
-            {
-              'name': '贵州',
-              'value': '5555'
-            },
-            {
-              'name': '广东',
-              'value': '5555'
-            },
-            {
-              'name': '青海',
-              'value': '5555'
-            },
-            {
-              'name': '西藏',
-              'value': '5555'
-            },
-            {
-              'name': '四川',
-              'value': '5555'
-            },
-            {
-              'name': '宁夏',
-              'value': '5555'
-            },
-            {
-              'name': '海南',
-              'value': '5555'
-            },
-            {
-              'name': '台湾',
-              'value': '5555'
-            },
-            {
-              'name': '香港',
-              'value': '5555'
-            },
-            {
-              'name': '澳门',
-              'value': '5555'
-            }
-          ]
+              {
+                'name': '访问量',
+                'code': 'visits'
+              },
+              {
+                'name': '访客量',
+                'code': 'visitors'
+              }
+            ]
+          }
         }
       ],
-      chinaData: []
+      mapData: {},
+      // 选中的指标列表
+      quotaCheckedList: [],
+      // 选中的标签页(平台)
+      platformChecked: '',
+      // 选中的按钮(指标)
+      quotaChecked: ''
     }
   },
   mounted () {
@@ -722,16 +261,23 @@ export default {
      * @param key, 选中的标签标志
      */
     callback (key) {
-      this.mapData.forEach(item => {
+      this.tabData.forEach(item => {
         if (item.platform.code === key) {
-          this.chinaData = item.map
-          console.log(this.chinaData)
+          // 根据平台code和指标code获取地图数据
+          const platformCode = key
+          const quotaCode = item.platform.quota[0].code
+          this.platformChecked = key
+          this.quotaChecked = quotaCode
+          // 调用后台
+          console.log('platformCode', platformCode)
+          console.log('quotaChecked', quotaCode)
           return false
         }
       })
     },
     handleSizeChange (e) {
-      this.size = e.target.value
+      this.quotaChecked = e.target.value
+      // 调用后台
     },
     getTodayOverview () {
       return new Promise((resolve, reject) => {
@@ -745,9 +291,173 @@ export default {
       })
     },
     drawLine () {
-      this.chinaData = this.mapData[0].map
-      console.log('传值', this.chinaData)
-      // this.chinaData.quotaName = this.mapData[0].platform.name
+      // 先调用后台获取tab页数据
+      const platform = JSON.parse(JSON.stringify(this.tabData[0]))
+      this.quotaCheckedList = platform.platform.quota
+      this.quotaChecked = platform.platform.quota[0].code
+      console.log('this.quotaChecked', this.quotaChecked)
+      // 再根据平台编码和指标编码获取地图数据
+      this.mapData = {
+        'quota': {
+          'name': '安装量',
+          'code': 'app_installation'
+        },
+        'rankList': [
+          {
+            'name': '北京',
+            'value': '1000'
+          },
+          {
+            'name': '北京',
+            'value': '1000'
+          },
+          {
+            'name': '北京',
+            'value': '1000'
+          },
+          {
+            'name': '北京',
+            'value': '1000'
+          }
+        ],
+        'map': [
+          {
+            'name': '北京',
+            'value': '5555'
+          },
+          {
+            'name': '天津',
+            'value': '5555'
+          },
+          {
+            'name': '上海',
+            'value': '5555'
+          },
+          {
+            'name': '重庆',
+            'value': '5555'
+          },
+          {
+            'name': '河北',
+            'value': '5555'
+          },
+          {
+            'name': '河南',
+            'value': '5555'
+          },
+          {
+            'name': '云南',
+            'value': '5555'
+          },
+          {
+            'name': '辽宁',
+            'value': '5555'
+          },
+          {
+            'name': '黑龙江',
+            'value': '5555'
+          },
+          {
+            'name': '湖南',
+            'value': '5555'
+          },
+          {
+            'name': '安徽',
+            'value': '5555'
+          },
+          {
+            'name': '山东',
+            'value': '5555'
+          },
+          {
+            'name': '新疆',
+            'value': '5555'
+          },
+          {
+            'name': '江苏',
+            'value': '5555'
+          },
+          {
+            'name': '浙江',
+            'value': '5555'
+          },
+          {
+            'name': '江西',
+            'value': '5555'
+          },
+          {
+            'name': '湖北',
+            'value': '5555'
+          },
+          {
+            'name': '广西',
+            'value': '5555'
+          },
+          {
+            'name': '甘肃',
+            'value': '5555'
+          },
+          {
+            'name': '山西',
+            'value': '5555'
+          },
+          {
+            'name': '内蒙古',
+            'value': '5555'
+          },
+          {
+            'name': '陕西',
+            'value': '5555'
+          },
+          {
+            'name': '吉林',
+            'value': '5555'
+          },
+          {
+            'name': '福建',
+            'value': '5555'
+          },
+          {
+            'name': '贵州',
+            'value': '5555'
+          },
+          {
+            'name': '广东',
+            'value': '5555'
+          },
+          {
+            'name': '青海',
+            'value': '5555'
+          },
+          {
+            'name': '西藏',
+            'value': '5555'
+          },
+          {
+            'name': '四川',
+            'value': '5555'
+          },
+          {
+            'name': '宁夏',
+            'value': '5555'
+          },
+          {
+            'name': '海南',
+            'value': '5555'
+          },
+          {
+            'name': '台湾',
+            'value': '5555'
+          },
+          {
+            'name': '香港',
+            'value': '5555'
+          },
+          {
+            'name': '澳门',
+            'value': '5555'
+          }]
+      }
     },
     drawPie () {
       // 初始化echarts实例
