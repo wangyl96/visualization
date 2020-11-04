@@ -1,13 +1,16 @@
 import { auth } from '@/api/auth'
+import storage from 'store'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 const oauth = {
   state: {
-    token: ''
+    access_token: ''
   },
 
   mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token
+    SET_ACCESS_TOKEN: (state, accessToken) => {
+      state.access_token = accessToken
+      storage.set(ACCESS_TOKEN, accessToken, 7 * 24 * 60 * 60 * 1000)
     },
     SET_NAME: (state, { name, welcome }) => {
       state.name = name
@@ -29,10 +32,9 @@ const oauth = {
     Auth ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         auth(userInfo).then(response => {
-          console.log(response)
           const result = response.data
-          commit('SET_TOKEN', result.tokenHead + result.token)
-          resolve()
+          commit('SET_ACCESS_TOKEN', result.tokenHead + result.token)
+          resolve(result.tokenHead + result.token)
         }).catch(error => {
           reject(error)
         })

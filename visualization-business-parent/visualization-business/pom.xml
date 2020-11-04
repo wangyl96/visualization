@@ -49,12 +49,6 @@
 
         <dependency>
             <groupId>com.sinosoft.visualization</groupId>
-            <artifactId>visualization-common-basic</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sinosoft.visualization</groupId>
             <artifactId>visualization-business-api</artifactId>
             <version>${project.version}</version>
         </dependency>

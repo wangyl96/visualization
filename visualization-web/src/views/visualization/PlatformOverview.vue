@@ -1,26 +1,28 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <page-header-wrapper :title=false>
+  <page-header-wrapper :title="false">
     <div class="vis-container">
-      <a-card :bordered="false">
-        <!--  数据总览  -->
-        <div class="account-center-detail" style="padding-left: 20px">
-          <p>
-            <i class="title"></i>数据总览 2020-09-20
-          </p>
-        </div>
-        <!--分割线-->
-        <a-divider style="background: #F0F2F5;" />
-        <!--  各平台卡片  -->
-        <a-row>
-          <div v-for="(item) in platform" :key="item.platformName">
-            <platform-overview ref="platformOverview" :platform="item"></platform-overview>
+      <a-spin :spinning="overviewSpin" tip="加载中...">
+        <a-card :bordered="false">
+          <!--  数据总览  -->
+          <div class="account-center-detail" style="padding-left: 20px">
+            <p>
+              <i class="title"></i>数据总览 2020-09-20
+            </p>
           </div>
-        </a-row>
-      </a-card>
-
+          <!--分割线-->
+          <a-divider style="background: #F0F2F5;" />
+          <!--  各平台卡片  -->
+          <a-row>
+            <div v-for="(item) in platform" :key="item.platformName">
+              <platform-overview ref="platformOverview" :platform="item"></platform-overview>
+            </div>
+          </a-row>
+        </a-card>
+      </a-spin>
       <a-card style="margin-top: 20px" :bordered="false" :body-style="{padding: '0'}">
         <div class="salesCard">
-          <a-tabs default-active-key="1" size="large" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
+          <a-tabs default-active-key="app" size="large" @change="callback" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
+            <a-tab-pane v-for="(item) in mapData" :key="item.platform.code" :tab="item.platform.name" ></a-tab-pane>
             <div class="extra-wrapper" slot="tabBarExtraContent">
               <div class="extra-item">
                 <a-radio-group :value="size" style="margin-right: 20px" @change="handleSizeChange">
@@ -36,40 +38,17 @@
                 </a-radio-group>
               </div>
             </div>
-            <a-tab-pane tab="APP平台" key="1">
-              <a-row>
-                <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                  <div id="myChartChina" :style="{height: '610px'}"></div>
-                </a-col>
-                <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                  <rank-list title="本年度注册量排名" :list="rankList"/>
-                </a-col>
-              </a-row>
-            </a-tab-pane>
-            <a-tab-pane tab="PC平台" key="2">
-              <a-row>
-                <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                  <div id="myChartChina2" :style="{width: '100%', height: '610px',}"></div>
-                </a-col>
-                <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                  <rank-list title="本年度注册量排名" :list="rankList"/>
-                </a-col>
-              </a-row>
-            </a-tab-pane>
-            <a-tab-pane tab="WAP平台" key="3">
-              <a-row>
-                <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                  <div id="myChartChina3" :style="{width: '100%', height: '610px',}"></div>
-                </a-col>
-                <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-                  <rank-list title="本年度注册量排名" :list="rankList"/>
-                </a-col>
-              </a-row>
-            </a-tab-pane>
           </a-tabs>
+          <a-row>
+            <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+              <china-map ref="chinaMap" :china="chinaData"></china-map>
+            </a-col>
+            <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+              <rank-list title="本年度注册量排名" :list="rankList"/>
+            </a-col>
+          </a-row>
         </div>
       </a-card>
-
       <a-card :bordered="false" style="margin-top: 20px;" >
         <div class="account-center-detail" style="padding-left: 20px">
           <p>
@@ -78,44 +57,30 @@
         </div>
         <!--  保费数据统计饼图  -->
         <a-row>
-          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
+          <div>
+            <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
               <div id="myPie" :style="{width: '300px', height: '200px'}"></div>
-          </a-col>
-          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
+            </a-col>
+            <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
               <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
                 <li style="font-size: 14px">¥792148.18</li>
                 <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>
               </ul>
               <ul style="margin-top: -8px">
-              <li v-for="item in 5" :key="item">
-              <a-divider type="vertical" />
-              <span>66.6{{ item }}%</span>
-              <span>¥582501.18</span>
-              </li>
+                <li v-for="item in 5" :key="item">
+                  <a-divider type="vertical" />
+                  <span>66.6{{ item }}%</span>
+                  <span>¥582501.18</span>
+                </li>
               </ul>
-          </a-col>
+            </a-col>
+          </div>
 
-          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
+          <div>
+            <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
               <div id="myPie2" :style="{width: '300px', height: '200px'}"></div>
-          </a-col>
-          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
-              <ul style="margin-left: -42px; margin-top: 5px;color: #333333">
-                <li style="font-size: 14px">¥792148.18</li>
-                <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>
-              </ul>
-              <ul style="margin-top: -8px">
-                <li v-for="item in 5" :key="item">
-                  <a-divider type="vertical" />
-                  <span>66.6{{ item }}%</span>
-                  <span>¥582501.18</span>
-                </li>
-              </ul>
-          </a-col>
-
-          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
-              <div id="myPie3" :style="{width: '300px', height: '200px'}"></div>
-          </a-col>
-          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
+            </a-col>
+            <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
               <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
                 <li style="font-size: 14px">¥792148.18</li>
                 <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>
@@ -127,7 +92,60 @@
                   <span>¥582501.18</span>
                 </li>
               </ul>
-          </a-col>
+            </a-col>
+          </div>
+
+          <div>
+            <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
+              <div id="myPie3" :style="{width: '300px', height: '200px'}"></div>
+            </a-col>
+            <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
+              <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
+                <li style="font-size: 14px">¥792148.18</li>
+                <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>
+              </ul>
+              <ul style="margin-top: -8px">
+                <li v-for="item in 5" :key="item">
+                  <a-divider type="vertical" />
+                  <span>66.6{{ item }}%</span>
+                  <span>¥582501.18</span>
+                </li>
+              </ul>
+            </a-col>
+          </div>
+<!--          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--            <div id="myPie2" :style="{width: '300px', height: '200px'}"></div>-->
+<!--          </a-col>-->
+<!--          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--            <ul style="margin-left: -42px; margin-top: 5px;color: #333333">-->
+<!--              <li style="font-size: 14px">¥792148.18</li>-->
+<!--              <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>-->
+<!--            </ul>-->
+<!--            <ul style="margin-top: -8px">-->
+<!--              <li v-for="item in 5" :key="item">-->
+<!--                <a-divider type="vertical" />-->
+<!--                <span>66.6{{ item }}%</span>-->
+<!--                <span>¥582501.18</span>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </a-col>-->
+
+<!--          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--            <div id="myPie3" :style="{width: '300px', height: '200px'}"></div>-->
+<!--          </a-col>-->
+<!--          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">-->
+<!--            <ul style="margin-left: -42px; margin-top: 5px; color: #333333">-->
+<!--              <li style="font-size: 14px">¥792148.18</li>-->
+<!--              <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>-->
+<!--            </ul>-->
+<!--            <ul style="margin-top: -8px">-->
+<!--              <li v-for="item in 5" :key="item">-->
+<!--                <a-divider type="vertical" />-->
+<!--                <span>66.6{{ item }}%</span>-->
+<!--                <span>¥582501.18</span>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </a-col>-->
 
         </a-row>
       </a-card>
@@ -142,9 +160,8 @@ import '../../../node_modules/echarts/map/js/china.js'
 import {
   RankList
 } from '@/components'
-import { mapActions } from 'vuex'
 import { getTodayOverview } from '@/api/business/visOverview'
-// import { getTodayOverview } from '@/api/business/visOverview'
+import ChinaMap from '@/components/Charts/chinaMap'
 const rankList = []
 for (let i = 0; i < 10; i++) {
   rankList.push({
@@ -155,7 +172,7 @@ for (let i = 0; i < 10; i++) {
 
 export default {
   name: 'Overview',
-  components: { PlatformOverview, RankList },
+  components: { ChinaMap, PlatformOverview, RankList },
   data () {
     return {
       platform: [],
@@ -163,7 +180,531 @@ export default {
       color: '',
       size: 'large',
       screenWidth: document.body.clientWidth / 3 + 'px',
-      rankList: rankList
+      rankList: rankList,
+      // 今日数据概览spin
+      overviewSpin: true,
+      mapData: [
+        {
+          'platform': {
+            'name': 'APP平台',
+            'code': 'app'
+          },
+          'quota': [{
+            'name': '安装量',
+            'code': 'app_installation'
+          },
+            {
+              'name': '注册量',
+              'code': 'registrations'
+            },
+            {
+              'name': '日活',
+              'code': 'life_day'
+            }
+          ],
+          'rankList': [{
+            'name': '北京',
+            'value': '1000'
+          },
+            {
+              'name': '北京',
+              'value': '1000'
+            },
+            {
+              'name': '北京',
+              'value': '1000'
+            },
+            {
+              'name': '北京',
+              'value': '1000'
+            }
+          ],
+          'map': [{
+            'name': '北京',
+            'value': '5555'
+          },
+            {
+              'name': '天津',
+              'value': '5555'
+            },
+            {
+              'name': '上海',
+              'value': '5555'
+            },
+            {
+              'name': '重庆',
+              'value': '5555'
+            },
+            {
+              'name': '河北',
+              'value': '5555'
+            },
+            {
+              'name': '河南',
+              'value': '5555'
+            },
+            {
+              'name': '云南',
+              'value': '5555'
+            },
+            {
+              'name': '辽宁',
+              'value': '5555'
+            },
+            {
+              'name': '黑龙江',
+              'value': '5555'
+            },
+            {
+              'name': '湖南',
+              'value': '5555'
+            },
+            {
+              'name': '安徽',
+              'value': '5555'
+            },
+            {
+              'name': '山东',
+              'value': '5555'
+            },
+            {
+              'name': '新疆',
+              'value': '5555'
+            },
+            {
+              'name': '江苏',
+              'value': '5555'
+            },
+            {
+              'name': '浙江',
+              'value': '5555'
+            },
+            {
+              'name': '江西',
+              'value': '5555'
+            },
+            {
+              'name': '湖北',
+              'value': '5555'
+            },
+            {
+              'name': '广西',
+              'value': '5555'
+            },
+            {
+              'name': '甘肃',
+              'value': '5555'
+            },
+            {
+              'name': '山西',
+              'value': '5555'
+            },
+            {
+              'name': '内蒙古',
+              'value': '5555'
+            },
+            {
+              'name': '陕西',
+              'value': '5555'
+            },
+            {
+              'name': '吉林',
+              'value': '5555'
+            },
+            {
+              'name': '福建',
+              'value': '5555'
+            },
+            {
+              'name': '贵州',
+              'value': '5555'
+            },
+            {
+              'name': '广东',
+              'value': '5555'
+            },
+            {
+              'name': '青海',
+              'value': '5555'
+            },
+            {
+              'name': '西藏',
+              'value': '5555'
+            },
+            {
+              'name': '四川',
+              'value': '5555'
+            },
+            {
+              'name': '宁夏',
+              'value': '5555'
+            },
+            {
+              'name': '海南',
+              'value': '5555'
+            },
+            {
+              'name': '台湾',
+              'value': '5555'
+            },
+            {
+              'name': '香港',
+              'value': '5555'
+            },
+            {
+              'name': '澳门',
+              'value': '5555'
+            }
+          ]
+        },
+        {
+          'platform': {
+            'name': 'PC平台',
+            'code': 'pc'
+          },
+          'quota': [{
+            'name': '注册量',
+            'code': 'registrations'
+          },
+            {
+              'name': '访问量',
+              'code': 'visits'
+            },
+            {
+              'name': '访客量',
+              'code': 'visitors'
+            }
+          ],
+          'rankList': [{
+            'name': '北京',
+            'value': '1000'
+          },
+            {
+              'name': '北京',
+              'value': '1000'
+            },
+            {
+              'name': '北京',
+              'value': '1000'
+            },
+            {
+              'name': '北京',
+              'value': '1000'
+            }
+          ],
+          'map': [{
+            'name': '北京',
+            'value': '5555'
+          },
+            {
+              'name': '天津',
+              'value': '2222'
+            },
+            {
+              'name': '上海',
+              'value': '3333'
+            },
+            {
+              'name': '重庆',
+              'value': '4444'
+            },
+            {
+              'name': '河北',
+              'value': '1111'
+            },
+            {
+              'name': '河南',
+              'value': '1234'
+            },
+            {
+              'name': '云南',
+              'value': '4321'
+            },
+            {
+              'name': '辽宁',
+              'value': '5555'
+            },
+            {
+              'name': '黑龙江',
+              'value': '5555'
+            },
+            {
+              'name': '湖南',
+              'value': '5555'
+            },
+            {
+              'name': '安徽',
+              'value': '5555'
+            },
+            {
+              'name': '山东',
+              'value': '5555'
+            },
+            {
+              'name': '新疆',
+              'value': '5555'
+            },
+            {
+              'name': '江苏',
+              'value': '5555'
+            },
+            {
+              'name': '浙江',
+              'value': '5555'
+            },
+            {
+              'name': '江西',
+              'value': '5555'
+            },
+            {
+              'name': '湖北',
+              'value': '5555'
+            },
+            {
+              'name': '广西',
+              'value': '5555'
+            },
+            {
+              'name': '甘肃',
+              'value': '5555'
+            },
+            {
+              'name': '山西',
+              'value': '5555'
+            },
+            {
+              'name': '内蒙古',
+              'value': '5555'
+            },
+            {
+              'name': '陕西',
+              'value': '5555'
+            },
+            {
+              'name': '吉林',
+              'value': '5555'
+            },
+            {
+              'name': '福建',
+              'value': '5555'
+            },
+            {
+              'name': '贵州',
+              'value': '5555'
+            },
+            {
+              'name': '广东',
+              'value': '5555'
+            },
+            {
+              'name': '青海',
+              'value': '5555'
+            },
+            {
+              'name': '西藏',
+              'value': '5555'
+            },
+            {
+              'name': '四川',
+              'value': '5555'
+            },
+            {
+              'name': '宁夏',
+              'value': '5555'
+            },
+            {
+              'name': '海南',
+              'value': '5555'
+            },
+            {
+              'name': '台湾',
+              'value': '5555'
+            },
+            {
+              'name': '香港',
+              'value': '5555'
+            },
+            {
+              'name': '澳门',
+              'value': '5555'
+            }
+          ]
+        },
+        {
+          'platform': {
+            'name': 'WAP平台',
+            'code': 'wap'
+          },
+          'quota': [{
+            'name': '注册量',
+            'code': 'registrations'
+          },
+            {
+              'name': '访问量',
+              'code': 'visits'
+            },
+            {
+              'name': '访客量',
+              'code': 'visitors'
+            }
+          ],
+          'rankList': [{
+            'name': '北京',
+            'value': '1000'
+          },
+            {
+              'name': '北京',
+              'value': '1000'
+            },
+            {
+              'name': '北京',
+              'value': '1000'
+            },
+            {
+              'name': '北京',
+              'value': '1000'
+            }
+          ],
+          'map': [{
+            'name': '北京',
+            'value': '5555'
+          },
+            {
+              'name': '天津',
+              'value': '5555'
+            },
+            {
+              'name': '上海',
+              'value': '5555'
+            },
+            {
+              'name': '重庆',
+              'value': '5555'
+            },
+            {
+              'name': '河北',
+              'value': '5555'
+            },
+            {
+              'name': '河南',
+              'value': '5555'
+            },
+            {
+              'name': '云南',
+              'value': '5555'
+            },
+            {
+              'name': '辽宁',
+              'value': '5555'
+            },
+            {
+              'name': '黑龙江',
+              'value': '5555'
+            },
+            {
+              'name': '湖南',
+              'value': '5555'
+            },
+            {
+              'name': '安徽',
+              'value': '5555'
+            },
+            {
+              'name': '山东',
+              'value': '5555'
+            },
+            {
+              'name': '新疆',
+              'value': '5555'
+            },
+            {
+              'name': '江苏',
+              'value': '5555'
+            },
+            {
+              'name': '浙江',
+              'value': '5555'
+            },
+            {
+              'name': '江西',
+              'value': '5555'
+            },
+            {
+              'name': '湖北',
+              'value': '5555'
+            },
+            {
+              'name': '广西',
+              'value': '5555'
+            },
+            {
+              'name': '甘肃',
+              'value': '5555'
+            },
+            {
+              'name': '山西',
+              'value': '5555'
+            },
+            {
+              'name': '内蒙古',
+              'value': '5555'
+            },
+            {
+              'name': '陕西',
+              'value': '5555'
+            },
+            {
+              'name': '吉林',
+              'value': '5555'
+            },
+            {
+              'name': '福建',
+              'value': '5555'
+            },
+            {
+              'name': '贵州',
+              'value': '5555'
+            },
+            {
+              'name': '广东',
+              'value': '5555'
+            },
+            {
+              'name': '青海',
+              'value': '5555'
+            },
+            {
+              'name': '西藏',
+              'value': '5555'
+            },
+            {
+              'name': '四川',
+              'value': '5555'
+            },
+            {
+              'name': '宁夏',
+              'value': '5555'
+            },
+            {
+              'name': '海南',
+              'value': '5555'
+            },
+            {
+              'name': '台湾',
+              'value': '5555'
+            },
+            {
+              'name': '香港',
+              'value': '5555'
+            },
+            {
+              'name': '澳门',
+              'value': '5555'
+            }
+          ]
+        }
+      ],
+      chinaData: []
     }
   },
   mounted () {
@@ -176,9 +717,18 @@ export default {
   },
 
   methods: {
-    ...mapActions(['TodayOverview']),
+    /**
+     * 标签页点击函数
+     * @param key, 选中的标签标志
+     */
     callback (key) {
-      console.log(key)
+      this.mapData.forEach(item => {
+        if (item.platform.code === key) {
+          this.chinaData = item.map
+          console.log(this.chinaData)
+          return false
+        }
+      })
     },
     handleSizeChange (e) {
       this.size = e.target.value
@@ -188,146 +738,16 @@ export default {
         getTodayOverview().then(response => {
           const result = response.data
           this.platform = result
+          this.overviewSpin = false
         }).catch(error => {
           reject(error)
         })
       })
     },
     drawLine () {
-      // 基于准备好的dom，初始化echarts实例
-      const myChartContainer = document.getElementById('myChartChina')
-      const resizeMyChartContainer = function () {
-        console.log(((document.body.offsetWidth - 250) / 3) * 2 + 'px')
-        // myChartContainer.style.width = ((document.body.offsetWidth) / 3 * 2) + 'px'// 页面一半的大小
-      }
-      resizeMyChartContainer()
-      const myChartChina = echarts.init(myChartContainer)
-
-      function randomData () {
-        return Math.round(Math.random() * 5000)
-      }
-
-      // 指定高亮颜色
-      let mapColor
-      // 绘制图表
-      const optionMap = {
-        tooltip: {
-          trigger: 'item',
-          formatter: function (params) {
-            console.log(params)
-            return params.name + '<br><b>安装量：' + params.value + '</b> '
-          }
-        },
-        legend: {
-          orient: 'horizontal',
-          left: 'left',
-          data: ['']
-        },
-        grid: {
-          left: '8%',
-          right: '0',
-          bottom: '50%',
-          containLabel: true
-        },
-        visualMap: {
-          min: 0,
-          max: 5000,
-          left: '10%',
-          top: 'bottom',
-          text: ['高', '低'],
-          calculable: true,
-          color: ['#336EBE', '#4BA0FB', '#82C7FB', '#33C6F7', '#6CD8FB', '#91E3FF']
-        },
-        selectedMode: 'single',
-        series: [
-          {
-            name: '',
-            type: 'map',
-            // 控制缩放和移动
-            roam: false,
-            mapType: 'china',
-            zoom: 1.25, // 地图大小
-            itemStyle: {
-              normal: {
-                // 分割线颜色
-                borderColor: '#fff'
-              },
-              emphasis: {
-                shadowOffsetX: 0,
-                shadowOffsetY: 0,
-                // 阴影深度
-                shadowBlur: 1,
-                // 分割线线宽
-                borderWidth: 2,
-                // 阴影颜色
-                shadowColor: '#fff',
-                // 高亮颜色
-                areaColor: mapColor
-              }
-            },
-            // 各省市小红点
-            showLegendSymbol: false,
-
-            label: {
-              normal: {
-                show: true
-                // 地图上的字体颜色
-                // color: '#fff'
-              },
-              emphasis: {
-                show: true
-              }
-            },
-            data: [
-              { name: '北京', value: randomData() },
-              { name: '天津', value: randomData() },
-              { name: '上海', value: randomData() },
-              { name: '重庆', value: randomData() },
-              { name: '河北', value: randomData() },
-              { name: '河南', value: randomData() },
-              { name: '云南', value: randomData() },
-              { name: '辽宁', value: randomData() },
-              { name: '黑龙江', value: randomData() },
-              { name: '湖南', value: randomData() },
-              { name: '安徽', value: randomData() },
-              { name: '山东', value: randomData() },
-              { name: '新疆', value: randomData() },
-              { name: '江苏', value: randomData() },
-              { name: '浙江', value: randomData() },
-              { name: '江西', value: randomData() },
-              { name: '湖北', value: randomData() },
-              { name: '广西', value: randomData() },
-              { name: '甘肃', value: randomData() },
-              { name: '山西', value: randomData() },
-              { name: '内蒙古', value: randomData() },
-              { name: '陕西', value: randomData() },
-              { name: '吉林', value: randomData() },
-              { name: '福建', value: randomData() },
-              { name: '贵州', value: randomData() },
-              { name: '广东', value: randomData() },
-              { name: '青海', value: randomData() },
-              { name: '西藏', value: randomData() },
-              { name: '四川', value: randomData() },
-              { name: '宁夏', value: randomData() },
-              { name: '海南', value: randomData() },
-              { name: '台湾', value: randomData() },
-              { name: '香港', value: randomData() },
-              { name: '澳门', value: randomData() }
-            ]
-          }
-        ]
-      }
-
-      myChartChina.setOption(optionMap)
-      window.addEventListener('resize', () => {
-        resizeMyChartContainer()
-        myChartChina.resize()
-      }, false)
-      // 设置鼠标移入指定省份后保持高亮颜色与原色相同
-      myChartChina.on('mouseover', function (params) {
-        // 指定高亮颜色
-        mapColor = '\'' + params.color + '\''
-      })
+      this.chinaData = this.mapData[0].map
+      console.log('传值', this.chinaData)
+      // this.chinaData.quotaName = this.mapData[0].platform.name
     },
     drawPie () {
       // 初始化echarts实例

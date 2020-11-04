@@ -193,13 +193,15 @@ export default {
           loginParams.password = md5(values.password)
           // 先去请求oauth2,获取认证token
           Auth(loginParams)
-            .then((res) => null)
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
+            .then((res) => {
+              loginParams.token = res
+                Login(loginParams)
+                .then((res) => this.loginSuccess(res))
+                .catch(err => this.requestFailed(err))
+                .finally(() => {
+                  state.loginBtn = false
+                })
             })
-          Login(loginParams)
-            .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
             .finally(() => {
               state.loginBtn = false

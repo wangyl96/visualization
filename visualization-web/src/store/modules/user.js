@@ -14,6 +14,10 @@ const user = {
   },
 
   mutations: {
+    SET_ACCESS_TOKEN: (state, accessToken) => {
+      state.token = accessToken
+      storage.set(ACCESS_TOKEN, accessToken, 7 * 24 * 60 * 60 * 1000)
+    },
     SET_TOKEN: (state, token) => {
       state.token = token
     },
@@ -37,9 +41,7 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          const result = response.data
-          storage.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
-          commit('SET_TOKEN', result.token)
+          commit('SET_ACCESS_TOKEN', userInfo.token)
           resolve()
         }).catch(error => {
           reject(error)

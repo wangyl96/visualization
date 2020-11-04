@@ -46,20 +46,7 @@
         type: Object,
         default: function () {
           return {
-            'platformName': '',
-            'todayOverviewMap': [{
-              'contentName': '',
-              'contentData': '',
-              'ratio': ''
-            }, {
-              'contentName': '',
-              'contentData': '',
-              'ratio': ''
-            }, {
-              'contentName': '',
-              'contentData': '',
-              'ratio': ''
-            }]
+
           }
         }
       },
