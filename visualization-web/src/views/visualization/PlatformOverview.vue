@@ -142,7 +142,9 @@ import '../../../node_modules/echarts/map/js/china.js'
 import {
   RankList
 } from '@/components'
+import { mapActions } from 'vuex'
 import { getTodayOverview } from '@/api/business/visOverview'
+// import { getTodayOverview } from '@/api/business/visOverview'
 const rankList = []
 for (let i = 0; i < 10; i++) {
   rankList.push({
@@ -156,76 +158,7 @@ export default {
   components: { PlatformOverview, RankList },
   data () {
     return {
-      platform: [{
-        'platformName': 'APP',
-        'isEnd': false,
-        'platformContent': [{
-          'contentName': '注册量',
-          'contentData': '12,3120',
-          'ratio': '80',
-          'upOrDown': 'up'
-        },
-          {
-            'contentName': '注册量',
-            'contentData': '12312',
-            'ratio': '80',
-            'upOrDown': 'up'
-          },
-          {
-            'contentName': '注册量',
-            'contentData': '12312',
-            'ratio': '80',
-            'upOrDown': 'up'
-          }
-        ]
-      },
-        {
-          'platformName': 'PC',
-          'isEnd': true,
-          'platformContent': [{
-            'contentName': '注册量',
-            'contentData': '12312',
-            'ratio': '80',
-            'upOrDown': 'up'
-          },
-            {
-              'contentName': '注册量',
-              'contentData': '12312',
-              'ratio': '80',
-              'upOrDown': 'up'
-            },
-            {
-              'contentName': '注册量',
-              'contentData': '12312',
-              'ratio': '80',
-              'upOrDown': 'up'
-            }
-          ]
-        },
-        {
-          'platformName': 'WAP',
-          'isEnd': true,
-          'platformContent': [{
-            'contentName': '注册量',
-            'contentData': '12312',
-            'ratio': '80',
-            'upOrDown': 'up'
-          },
-            {
-              'contentName': '注册量',
-              'contentData': '12312',
-              'ratio': '80',
-              'upOrDown': 'up'
-            },
-            {
-              'contentName': '注册量',
-              'contentData': '12312',
-              'ratio': '80',
-              'upOrDown': 'up'
-            }
-          ]
-        }
-      ],
+      platform: [],
       visCardHeadStyle: { 'border-bottom': '0px', 'margin-bottom': '-20px', 'font-size': '18px', 'color': '#333333' },
       color: '',
       size: 'large',
@@ -234,20 +167,31 @@ export default {
     }
   },
   mounted () {
+    // 数据总览
+    this.getTodayOverview()
+    // 地图
     this.drawLine()
+    // 饼图
     this.drawPie()
-    console.log(111)
-    getTodayOverview().then(() => {
-      console.log(222)
-    })
   },
 
   methods: {
+    ...mapActions(['TodayOverview']),
     callback (key) {
       console.log(key)
     },
     handleSizeChange (e) {
       this.size = e.target.value
+    },
+    getTodayOverview () {
+      return new Promise((resolve, reject) => {
+        getTodayOverview().then(response => {
+          const result = response.data
+          this.platform = result
+        }).catch(error => {
+          reject(error)
+        })
+      })
     },
     drawLine () {
       // 基于准备好的dom，初始化echarts实例
