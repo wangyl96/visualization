@@ -4,7 +4,7 @@
       <a-card :title="platformInfo.platformName" :bordered="false" style="margin-left: 16px; margin-top: 16px">
         <div style="margin-top: -24px; margin-left: -18px">
           <a-row>
-            <a-col :sm="8" :xs="24" v-for="item in platformInfo.platformContent" :key="item.contentName">
+            <a-col :sm="8" :xs="24" v-for="item in platformInfo.todayOverviewMap" :key="item.contentName">
               <ul>
                 <li>
                   <a-statistic :value="item.contentData" :value-style="{fontSize: '16px', lineHeight: '20px' }">
@@ -14,9 +14,11 @@
                   </a-statistic>
                 </li>
                 <li style="margin-top: 8px;">
-                  <a-statistic :value="item.ratio" :value-style="{fontSize: '16px', lineHeight: '20px' }">
+                  <a-statistic :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{fontSize: '16px', lineHeight: '20px' }">
                     <template v-slot:prefix>
-                      <span>环比</span><img src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
+                      <span>环比</span>
+                      <img v-if="item.ratio < 0" src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
+                      <img v-else src="../../../public/static/icon/up.png" style="margin-top: -3px; margin-left: 6px"/>
                     </template>
                     <template v-slot:suffix>
                       <span>%</span>
@@ -27,7 +29,7 @@
             </a-col>
           </a-row>
         </div>
-        <a-divider v-if="platformInfo.isEnd" type="vertical" style="height: 76px; margin-top: -120px; margin-left: -10px"/>
+        <a-divider v-if="platformInfo.platformName != 'APP'" type="vertical" style="height: 76px; margin-top: -120px; margin-left: -10px"/>
 
       </a-card>
 
@@ -45,22 +47,18 @@
         default: function () {
           return {
             'platformName': '',
-            'isEnd': '',
-            'platformContent': [{
+            'todayOverviewMap': [{
               'contentName': '',
               'contentData': '',
-              'ratio': '',
-              'upOrDown': ''
+              'ratio': ''
             }, {
               'contentName': '',
               'contentData': '',
-              'ratio': '',
-              'upOrDown': ''
+              'ratio': ''
             }, {
               'contentName': '',
               'contentData': '',
-              'ratio': '',
-              'upOrDown': ''
+              'ratio': ''
             }]
           }
         }
