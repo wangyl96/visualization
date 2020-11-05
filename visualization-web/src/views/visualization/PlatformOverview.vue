@@ -108,7 +108,7 @@
           </a-col>
           <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
               <ul style="margin-left: -42px; margin-top: 5px;color: #333333">
-                <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
+                <li  class= "total-amount-font">¥{{pieData.barViewMap[1].num}}</li>
                 <span  class="mom-font" >环比
                   <span v-if="((pieData.mom[1].num-1)*100) < 0" >
                     <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;"/>
@@ -152,7 +152,7 @@
           </a-col>
           <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
               <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-                <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
+                <li  class= "total-amount-font">¥{{pieData.barViewMap[2].num}}</li>
                 <span  class="mom-font" >环比
                   <span v-if="((pieData.mom[2].num-1)*100) < 0" >
                     <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;"/>

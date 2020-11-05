@@ -34,7 +34,6 @@ public class TodayVisController {
     @Autowired
     private TodayVisService todayVisService;
 
-
     @Autowired
     private AppVisDataService appVisDataService;
 
@@ -73,7 +72,7 @@ public class TodayVisController {
      */
     @ResponseBody
     @GetMapping(value = "/getTodayMapData")
-    @ApiOperation(value="获取各平台及指标地图数据", tags={"获取各平台及指标编码和名称"})
+    @ApiOperation(value="获取各平台及指标地图数据", tags={"获取各平台及指标地图数据"})
     public MapDataVO getTodayMapData(MapDataDTO mapDataDTO) {
         log.info("------------------获取各平台及指标地图数据开始-----------------");
         MapDataVO mapDataVO = todayVisService.getTodayMapData(mapDataDTO);

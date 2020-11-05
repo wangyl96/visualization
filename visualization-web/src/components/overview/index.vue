@@ -1,22 +1,22 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="header-info">
     <a-col :sm="8" :xs="24">
-      <a-card :title="platformInfo.platformName" :bordered="false" style="margin-left: 16px; margin-top: 16px">
+      <a-card :title="platformInfo.platformName" :bordered="false" style="font-size: 18px; color: #333333; margin-left: 16px; margin-top: 16px">
         <div style="margin-top: -24px; margin-left: -18px">
           <a-row>
             <a-col :sm="8" :xs="24" v-for="item in platformInfo.todayOverviewMap" :key="item.contentName">
               <ul>
                 <li>
-                  <a-statistic :value="item.contentData" :value-style="{fontSize: '16px', lineHeight: '20px' }">
+                  <a-statistic :value="item.contentData" :value-style="{fontSize: '18px', lineHeight: '20px' }">
                     <template v-slot:prefix>
-                      <span>{{item.contentName}}</span>
+                      <span style="font-size: 18px; color: #333333;">{{item.contentName}}</span>
                     </template>
                   </a-statistic>
                 </li>
                 <li style="margin-top: 8px;">
-                  <a-statistic :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{fontSize: '16px', lineHeight: '20px' }">
+                  <a-statistic :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{fontSize: '14px', lineHeight: '20px' }">
                     <template v-slot:prefix>
-                      <span>环比</span>
+                      <span style="font-size: 14px; color: #333333;">环比</span>
                       <img v-if="item.ratio < 0" src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
                       <img v-else src="../../../public/static/icon/up.png" style="margin-top: -3px; margin-left: 6px"/>
                     </template>
@@ -73,25 +73,6 @@
             money: '环比10',
             address: '环比10%',
             divider: '111'
-          }
-        ],
-        columns: [
-          {
-            title: 'Name',
-            dataIndex: 'name',
-            slots: { customRender: 'name' },
-            ellipsis: true
-          },
-          {
-            title: 'Cash Assets',
-            className: 'column-money',
-            dataIndex: 'money',
-            ellipsis: true
-          },
-          {
-            title: 'Address',
-            dataIndex: 'address',
-            ellipsis: true
           }
         ]
       }
