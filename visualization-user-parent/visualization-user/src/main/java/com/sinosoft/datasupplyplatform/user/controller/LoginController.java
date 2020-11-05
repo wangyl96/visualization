@@ -1,8 +1,11 @@
 package com.sinosoft.datasupplyplatform.user.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sinosoft.datasupplyplatform.user.api.dto.Oauth2TokenDto;
+import com.sinosoft.datasupplyplatform.user.api.feign.UserServiceClient;
 import com.sinosoft.visualization.common.basic.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,10 +23,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/user")
 public class LoginController {
 
+    @Autowired
+    private UserServiceClient userServiceClient;
+
     @ResponseBody
     @PostMapping(value = "/login")
     public JSONObject login() {
         log.info("----------------登录接口通畅-------------------");
+        // 使用OpenFeign进行微服务内部调用
+        Oauth2TokenDto oauth2TokenDto = userServiceClient.postAccessToken();
         return JSONObject.parseObject("{\n" +
                 "\t\"id\": \"1111\",\n" +
                 "\t\"name\": \"wyl\",\n" +

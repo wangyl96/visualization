@@ -16,26 +16,31 @@
         <module>visualization-common-util</module>
         <module>visualization-common-log</module>
         <module>visualization-common-exception</module>
+        <module>visualization-common-feign</module>
     </modules>
 
     <build>
-        <plugins>
-            <!--设置默认启用jdk1.8编译-->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
+        <pluginManagement>
+            <plugins>
+                <!--设置默认启用jdk1.8编译-->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
 
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-            </plugin>
-        </plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>
