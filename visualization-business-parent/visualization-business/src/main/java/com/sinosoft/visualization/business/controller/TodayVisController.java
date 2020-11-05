@@ -1,5 +1,7 @@
 package com.sinosoft.visualization.business.controller;
 
+import com.sinosoft.visualization.business.api.dto.MapDataDTO;
+import com.sinosoft.visualization.business.api.vo.MapDataVO;
 import com.sinosoft.visualization.business.api.vo.TodayOverviewVO;
 import com.sinosoft.visualization.business.service.TodayVisService;
 import com.sinosoft.visualization.common.basic.response.ResponseResult;
@@ -30,6 +32,10 @@ public class TodayVisController {
     @Autowired
     private TodayVisService todayVisService;
 
+    /**
+     * 获取今日各平台各指标概览数据
+     * @return
+     */
     @ResponseBody
     @GetMapping(value = "/getTodayOverview")
     @ApiOperation(value="获取今日各平台各指标概览数据", tags={"获取今日各平台各指标概览数据"}, notes="此处今日指的是前一天,即已T+1时间表示")
@@ -38,5 +44,34 @@ public class TodayVisController {
         List<TodayOverviewVO> todayOverviewVOList = todayVisService.getTodayOverview();
         log.info("------------------获取今日各平台各指标概览数据结束-----------------");
         return todayOverviewVOList;
+    }
+
+    /**
+     * 获取各平台及指标编码和名称
+     * @return
+     */
+    @ResponseBody
+    @GetMapping(value = "/getTabData")
+    @ApiOperation(value="获取各平台及指标编码和名称", tags={"获取各平台及指标编码和名称"})
+    public List<TodayOverviewVO> getTabData() {
+        log.info("------------------获取各平台及指标编码和名称开始-----------------");
+        List<TodayOverviewVO> todayOverviewVOList = todayVisService.getTabData();
+        log.info("------------------获取各平台及指标编码和名称结束-----------------");
+        return todayOverviewVOList;
+    }
+
+    /**
+     * 获取各平台及指标地图数据
+     * @param mapDataDTO
+     * @return
+     */
+    @ResponseBody
+    @GetMapping(value = "/getTodayMapData")
+    @ApiOperation(value="获取各平台及指标地图数据", tags={"获取各平台及指标编码和名称"})
+    public MapDataVO getTodayMapData(MapDataDTO mapDataDTO) {
+        log.info("------------------获取各平台及指标地图数据开始-----------------");
+        MapDataVO mapDataVO = todayVisService.getTodayMapData(mapDataDTO);
+        log.info("------------------获取各平台及指标地图数据结束-----------------");
+        return mapDataVO;
     }
 }

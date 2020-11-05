@@ -1,5 +1,7 @@
 package com.sinosoft.visualization.business.service;
 
+import com.sinosoft.visualization.business.api.dto.MapDataDTO;
+import com.sinosoft.visualization.business.api.vo.MapDataVO;
 import com.sinosoft.visualization.business.api.vo.TodayOverviewVO;
 
 import java.util.List;
@@ -14,4 +16,8 @@ import java.util.List;
  */
 public interface TodayVisService {
     List<TodayOverviewVO> getTodayOverview();
+
+    List<TodayOverviewVO> getTabData();
+
+    MapDataVO getTodayMapData(MapDataDTO mapDataDTO);
 }

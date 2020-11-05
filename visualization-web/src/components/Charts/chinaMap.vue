@@ -73,7 +73,7 @@
           },
           visualMap: {
             min: 0,
-            max: 5000,
+            max: this.chinaInfo.map[0].value,
             left: '10%',
             top: 'bottom',
             text: ['高', '低'],

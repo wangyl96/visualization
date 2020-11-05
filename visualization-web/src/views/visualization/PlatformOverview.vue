@@ -19,30 +19,32 @@
           </a-row>
         </a-card>
       </a-spin>
-      <a-card style="margin-top: 20px" :bordered="false" :body-style="{padding: '0'}">
-        <div class="salesCard">
-          <a-tabs default-active-key="app" size="large" @change="callback" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-            <a-tab-pane v-for="(item) in tabData" :key="item.platform.code" :tab="item.platform.name" ></a-tab-pane>
-            <div class="extra-wrapper" slot="tabBarExtraContent">
-              <div class="extra-item">
-                <a-radio-group :value="quotaChecked" style="margin-right: 20px" @change="handleSizeChange">
-                  <a-radio-button v-for="item in quotaCheckedList" :key="item.code" :value="item.code">
-                    {{item.name}}
-                  </a-radio-button>
-                </a-radio-group>
+      <a-spin :spinning="mapSpin" tip="加载中...">
+        <a-card style="margin-top: 20px" :bordered="false" :body-style="{padding: '0'}">
+          <div class="salesCard">
+            <a-tabs default-active-key="app" size="large" @change="callback" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
+              <a-tab-pane v-for="(item) in tabData" :key="item.platform.code" :tab="item.platform.name" :disabled="item.platform.code !== 'app'"></a-tab-pane>
+              <div class="extra-wrapper" slot="tabBarExtraContent">
+                <div class="extra-item">
+                  <a-radio-group :value="quotaChecked" style="margin-right: 20px" @change="handleSizeChange" >
+                    <a-radio-button v-for="item in quotaCheckedList" :key="item.code" :value="item.code" :disabled="item.code == 'life_day'">
+                      {{item.name}}
+                    </a-radio-button>
+                  </a-radio-group>
+                </div>
               </div>
-            </div>
-          </a-tabs>
-          <a-row>
-            <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-              <china-map ref="chinaMap" :china="mapData"></china-map>
-            </a-col>
-            <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-              <rank-list title="本年度注册量排名" :list="rankList"/>
-            </a-col>
-          </a-row>
-        </div>
-      </a-card>
+            </a-tabs>
+            <a-row>
+              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+                <china-map ref="chinaMap" :china="mapData"></china-map>
+              </a-col>
+              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+                <rank-list v-if="rankList.length > 0" :title="title" :list="rankList"/>
+              </a-col>
+            </a-row>
+          </div>
+        </a-card>
+      </a-spin>
       <a-card :bordered="false" style="margin-top: 20px;" >
         <div class="account-center-detail" style="padding-left: 20px">
           <p>
@@ -154,15 +156,8 @@ import '../../../node_modules/echarts/map/js/china.js'
 import {
   RankList
 } from '@/components'
-import { getTodayOverview } from '@/api/business/visOverview'
+import { getTodayMapData, getTodayOverview } from '@/api/business/visOverview'
 import ChinaMap from '@/components/Charts/chinaMap'
-const rankList = []
-for (let i = 0; i < 10; i++) {
-  rankList.push({
-    name: '北京',
-    total: 1234.56
-  })
-}
 
 export default {
   name: 'Overview',
@@ -174,7 +169,7 @@ export default {
       color: '',
       size: 'large',
       screenWidth: document.body.clientWidth / 3 + 'px',
-      rankList: rankList,
+      rankList: [],
       // 今日数据概览spin
       overviewSpin: true,
       // 地图标签页和按钮
@@ -243,7 +238,13 @@ export default {
       // 选中的标签页(平台)
       platformChecked: '',
       // 选中的按钮(指标)
-      quotaChecked: ''
+      quotaChecked: '',
+      // 选中按钮名称
+      quotaCheckedName: '',
+      // 排名标题
+      title: '',
+      // 地图加载spin
+      mapSpin: true
     }
   },
   mounted () {
@@ -261,203 +262,79 @@ export default {
      * @param key, 选中的标签标志
      */
     callback (key) {
+      this.mapSpin = true
       this.tabData.forEach(item => {
         if (item.platform.code === key) {
           // 根据平台code和指标code获取地图数据
-          const platformCode = key
           const quotaCode = item.platform.quota[0].code
+          this.quotaCheckedList = item.platform.quota
           this.platformChecked = key
           this.quotaChecked = quotaCode
-          // 调用后台
-          console.log('platformCode', platformCode)
-          console.log('quotaChecked', quotaCode)
+          this.quotaCheckedName = item.platform.quota[0].name
+          this.title = '本年度' + this.quotaCheckedName + '排名'
+          const query = {
+            'platformCode': this.platformChecked,
+            'quotaCode': this.quotaChecked,
+            'quotaName': this.quotaCheckedName
+          }
+          // 再根据平台编码和指标编码获取地图数据
+          this.getTodayMapData(query)
           return false
         }
       })
     },
     handleSizeChange (e) {
+      this.mapSpin = true
       this.quotaChecked = e.target.value
-      // 调用后台
+      this.quotaCheckedList.forEach(item => {
+        if (item.code === e.target.value) {
+          this.quotaCheckedName = item.name
+          return false
+        }
+      })
+      this.title = '本年度' + this.quotaCheckedName + '排名'
+      const query = {
+        'platformCode': this.platformChecked,
+        'quotaCode': this.quotaChecked,
+        'quotaName': this.quotaCheckedName
+      }
+      // 再根据平台编码和指标编码获取地图数据
+      this.getTodayMapData(query)
     },
     getTodayOverview () {
-      return new Promise((resolve, reject) => {
         getTodayOverview().then(response => {
           const result = response.data
           this.platform = result
           this.overviewSpin = false
-        }).catch(error => {
-          reject(error)
         })
-      })
     },
     drawLine () {
       // 先调用后台获取tab页数据
       const platform = JSON.parse(JSON.stringify(this.tabData[0]))
       this.quotaCheckedList = platform.platform.quota
       this.quotaChecked = platform.platform.quota[0].code
-      console.log('this.quotaChecked', this.quotaChecked)
-      // 再根据平台编码和指标编码获取地图数据
-      this.mapData = {
-        'quota': {
-          'name': '安装量',
-          'code': 'app_installation'
-        },
-        'rankList': [
-          {
-            'name': '北京',
-            'value': '1000'
-          },
-          {
-            'name': '北京',
-            'value': '1000'
-          },
-          {
-            'name': '北京',
-            'value': '1000'
-          },
-          {
-            'name': '北京',
-            'value': '1000'
-          }
-        ],
-        'map': [
-          {
-            'name': '北京',
-            'value': '5555'
-          },
-          {
-            'name': '天津',
-            'value': '5555'
-          },
-          {
-            'name': '上海',
-            'value': '5555'
-          },
-          {
-            'name': '重庆',
-            'value': '5555'
-          },
-          {
-            'name': '河北',
-            'value': '5555'
-          },
-          {
-            'name': '河南',
-            'value': '5555'
-          },
-          {
-            'name': '云南',
-            'value': '5555'
-          },
-          {
-            'name': '辽宁',
-            'value': '5555'
-          },
-          {
-            'name': '黑龙江',
-            'value': '5555'
-          },
-          {
-            'name': '湖南',
-            'value': '5555'
-          },
-          {
-            'name': '安徽',
-            'value': '5555'
-          },
-          {
-            'name': '山东',
-            'value': '5555'
-          },
-          {
-            'name': '新疆',
-            'value': '5555'
-          },
-          {
-            'name': '江苏',
-            'value': '5555'
-          },
-          {
-            'name': '浙江',
-            'value': '5555'
-          },
-          {
-            'name': '江西',
-            'value': '5555'
-          },
-          {
-            'name': '湖北',
-            'value': '5555'
-          },
-          {
-            'name': '广西',
-            'value': '5555'
-          },
-          {
-            'name': '甘肃',
-            'value': '5555'
-          },
-          {
-            'name': '山西',
-            'value': '5555'
-          },
-          {
-            'name': '内蒙古',
-            'value': '5555'
-          },
-          {
-            'name': '陕西',
-            'value': '5555'
-          },
-          {
-            'name': '吉林',
-            'value': '5555'
-          },
-          {
-            'name': '福建',
-            'value': '5555'
-          },
-          {
-            'name': '贵州',
-            'value': '5555'
-          },
-          {
-            'name': '广东',
-            'value': '5555'
-          },
-          {
-            'name': '青海',
-            'value': '5555'
-          },
-          {
-            'name': '西藏',
-            'value': '5555'
-          },
-          {
-            'name': '四川',
-            'value': '5555'
-          },
-          {
-            'name': '宁夏',
-            'value': '5555'
-          },
-          {
-            'name': '海南',
-            'value': '5555'
-          },
-          {
-            'name': '台湾',
-            'value': '5555'
-          },
-          {
-            'name': '香港',
-            'value': '5555'
-          },
-          {
-            'name': '澳门',
-            'value': '5555'
-          }]
+      this.quotaCheckedName = platform.platform.quota[0].name
+      this.platformChecked = platform.platform.code
+      this.title = '本年度' + this.quotaCheckedName + '排名'
+      const query = {
+        'platformCode': this.platformChecked,
+        'quotaCode': this.quotaChecked,
+        'quotaName': this.quotaCheckedName
       }
+      // 再根据平台编码和指标编码获取地图数据
+      this.getTodayMapData(query)
+    },
+    /**
+     * 调用后台获取地图数据
+     * @param query
+     */
+    getTodayMapData (query) {
+      getTodayMapData(query).then(response => {
+        const result = response.data
+        this.mapData = result
+        this.rankList = result.map.slice(0, 10)
+        this.mapSpin = false
+      })
     },
     drawPie () {
       // 初始化echarts实例
