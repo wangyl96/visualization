@@ -186,7 +186,6 @@
           </a-col>
 
         </a-row>
-          </a-spin>
       </a-card>
     </div>
   </page-header-wrapper>
@@ -201,13 +200,6 @@ import {
 } from '@/components'
 import { getTodayMapData, getPieView, getTodayOverview } from '@/api/business/visOverview'
 import ChinaMap from '@/components/Charts/chinaMap'
-const rankList = []
-for (let i = 0; i < 10; i++) {
-  rankList.push({
-    name: '北京',
-    total: 1234.56
-  })
-}
 
 export default {
   name: 'Overview',
@@ -341,7 +333,7 @@ export default {
     // 地图
     this.drawLine()
     // 饼图
-    this.drawPie()
+    this.getPieView()
   },
 
   methods: {
@@ -424,16 +416,31 @@ export default {
         this.mapSpin = false
       })
     },
-    drawPie () {
+    getPieView () {
       getPieView().then(response => {
         this.pieData = JSON.parse(JSON.stringify(response.data))
-        console.log(this.pieData)
+        this.drawPie()
+      })
+    },
+    /**
+     * 判读正负，正则返回原数 负数返回0
+     * @param e
+     * @returns {number|*}
+     * @constructor
+     */
+    JudgePositiveNegative (e) {
+      if (e >= 0) {
+        return e
+      } else {
+        return 0
+      }
+    },
+    drawPie () {
+      this.$nextTick(() => {
         // 初始化echarts实例
-        console.log(document.getElementById('myPie'))
         const myPie = echarts.init(document.getElementById('myPie'))
         const myPie2 = echarts.init(document.getElementById('myPie2'))
         const myPie3 = echarts.init(document.getElementById('myPie3'))
-        console.log(this.pieData.barViewMap[0].platForm)
         // 指定图标的配置和数据
         var option = {
           title: {
@@ -629,28 +636,6 @@ export default {
           // myPie2.resize()
           // myPie3.resize()
         }
-      })
-    },
-    /**
-     * 判读正负，正则返回原数 负数返回0
-     * @param e
-     * @returns {number|*}
-     * @constructor
-     */
-    JudgePositiveNegative (e) {
-      if (e >= 0) {
-        return e
-      } else {
-        return 0
-      }
-    },
-    getPieView () {
-      getPieView().then(response => {
-        this.pieData = JSON.parse(JSON.stringify(response.data))
-        console.log(this.pieData)
-        // this.overviewSpin = false
-        // 饼图
-        this.drawPie()
       })
     }
   }
