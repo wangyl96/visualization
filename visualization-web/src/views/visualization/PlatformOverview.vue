@@ -53,97 +53,140 @@
         </div>
         <!--  保费数据统计饼图  -->
         <a-row>
-          <div>
-            <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
+          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
               <div id="myPie" :style="{width: '300px', height: '200px'}"></div>
-            </a-col>
-            <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
+          </a-col>
+          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
               <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-                <li style="font-size: 14px">¥792148.18</li>
-                <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>
+                <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
+                <span  class="mom-font" >环比
+                  <span v-if="((pieData.mom[0].num-1)*100) < 0" >
+                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;"/>
+                     <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[0].num-1)*100)).toFixed(2)}}%</span>
+                  </span>
+                  <span v-else>
+                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;"/>
+                    <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[0].num-1)*100)).toFixed(2)}}%</span></span>
+                  </span>
               </ul>
               <ul style="margin-top: -8px">
-                <li v-for="item in 5" :key="item">
+              <li >
+              <a-divider type="vertical" />
+              <span class="per-data" v-if="pieData.barViewMap[0].product/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].product/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                <span v-else class="per-data">0%</span>
+              <span class="premium-data">¥{{ pieData.barViewMap[0].product }}</span>
+              </li>
+                <li >
                   <a-divider type="vertical" />
-                  <span>66.6{{ item }}%</span>
-                  <span>¥582501.18</span>
+                  <span class="per-data"v-if="pieData.barViewMap[0].life/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].life/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                  <span class="per-data" v-else>0%</span>
+                  <span class="premium-data">¥{{ pieData.barViewMap[0].life }}</span>
+                </li>
+                <li >
+                  <a-divider type="vertical" />
+                  <span class="per-data" v-if="pieData.barViewMap[0].health/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].health/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                  <span class="per-data" v-else>0%</span>
+                  <span class="premium-data">¥{{ pieData.barViewMap[0].health }}</span>
+                </li>
+                <li >
+                  <a-divider type="vertical" />
+                  <span class="per-data" v-if="pieData.barViewMap[0].wealth/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].wealth/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                  <span class="per-data" v-else>0%</span>
+                  <span class="premium-data">¥{{ pieData.barViewMap[0].wealth }}</span>
+                </li>
+                <li >
+                  <a-divider type="vertical" />
+                  <span class="per-data" v-if="pieData.barViewMap[0].gold/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].gold/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                  <span  class="per-data" v-else>0%</span>
+                  <span class="premium-data">¥{{ pieData.barViewMap[0].gold }}</span>
                 </li>
               </ul>
-            </a-col>
-          </div>
+          </a-col>
 
-          <div>
-            <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
+          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
               <div id="myPie2" :style="{width: '300px', height: '200px'}"></div>
-            </a-col>
-            <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
-              <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-                <li style="font-size: 14px">¥792148.18</li>
-                <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>
+          </a-col>
+          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
+              <ul style="margin-left: -42px; margin-top: 5px;color: #333333">
+                <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
+                <span  class="mom-font" >环比
+                  <span v-if="((pieData.mom[1].num-1)*100) < 0" >
+                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;"/>
+                     <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[1].num-1)*100)).toFixed(2)}}%</span>
+                  </span>
+                  <span v-else>
+                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;"/>
+                    <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[1].num-1)*100)).toFixed(2)}}%</span></span>
+                  </span>
               </ul>
-              <ul style="margin-top: -8px">
-                <li v-for="item in 5" :key="item">
-                  <a-divider type="vertical" />
-                  <span>66.6{{ item }}%</span>
-                  <span>¥582501.18</span>
-                </li>
+            <ul style="margin-top: -8px">
+              <li >
+                <a-divider type="vertical" />
+                <span class="per-data" v-if="pieData.barViewMap[1].product/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].product/pieData.barViewMap[1].num)*100).toFixed(2) }}%</span>
+                <span v-else class="per-data">0%</span>
+                <span class="premium-data">¥{{ pieData.barViewMap[1].product }}</span>
+              </li>
+              <li >
+                <a-divider type="vertical" />
+                <span class="per-data"v-if="pieData.barViewMap[1].life/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].life/pieData.barViewMap[1].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-else>0%</span>
+                <span class="premium-data">¥{{ pieData.barViewMap[1].life }}</span>
+              </li>
+              <li >
+                <a-divider type="vertical" />
+                <span class="per-data" v-if="pieData.barViewMap[1].health/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[0].health/pieData.barViewMap[1].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-else>0%</span>
+                <span class="premium-data">¥{{ pieData.barViewMap[1].health }}</span>
+              </li>
+              <li >
+                <a-divider type="vertical" />
+                <span class="per-data" v-if="pieData.barViewMap[1].wealth/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[0].wealth/pieData.barViewMap[1].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-else>0%</span>
+                <span class="premium-data">¥{{ pieData.barViewMap[1].wealth }}</span>
+              </li>
               </ul>
-            </a-col>
-          </div>
+          </a-col>
 
-          <div>
-            <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
+          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
               <div id="myPie3" :style="{width: '300px', height: '200px'}"></div>
-            </a-col>
-            <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
+          </a-col>
+          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
               <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-                <li style="font-size: 14px">¥792148.18</li>
-                <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>
+                <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
+                <span  class="mom-font" >环比
+                  <span v-if="((pieData.mom[2].num-1)*100) < 0" >
+                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;"/>
+                     <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[2].num-1)*100)).toFixed(2)}}%</span>
+                  </span>
+                  <span v-else>
+                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;"/>
+                    <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[2].num-1)*100)).toFixed(2)}}%</span></span>
+                  </span>
               </ul>
-              <ul style="margin-top: -8px">
-                <li v-for="item in 5" :key="item">
-                  <a-divider type="vertical" />
-                  <span>66.6{{ item }}%</span>
-                  <span>¥582501.18</span>
-                </li>
+            <ul style="margin-top: -8px">
+              <li >
+                <a-divider type="vertical" />
+                <span class="per-data" v-if="pieData.barViewMap[2].product/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[2].product/pieData.barViewMap[2].num)*100).toFixed(2) }}%</span>
+                <span v-else class="per-data">0%</span>
+                <span class="premium-data">¥{{ pieData.barViewMap[2].product }}</span>
+              </li>
+              <li >
+                <a-divider type="vertical" />
+                <span class="per-data"v-if="pieData.barViewMap[2].life/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].life/pieData.barViewMap[2].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-else>0%</span>
+                <span class="premium-data">¥{{ pieData.barViewMap[2].life }}</span>
+              </li>
+              <li >
+                <a-divider type="vertical" />
+                <span class="per-data" v-if="pieData.barViewMap[2].health/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].health/pieData.barViewMap[2].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-else>0%</span>
+                <span class="premium-data">¥{{ pieData.barViewMap[2].health }}</span>
+              </li>
               </ul>
-            </a-col>
-          </div>
-<!--          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">-->
-<!--            <div id="myPie2" :style="{width: '300px', height: '200px'}"></div>-->
-<!--          </a-col>-->
-<!--          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">-->
-<!--            <ul style="margin-left: -42px; margin-top: 5px;color: #333333">-->
-<!--              <li style="font-size: 14px">¥792148.18</li>-->
-<!--              <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>-->
-<!--            </ul>-->
-<!--            <ul style="margin-top: -8px">-->
-<!--              <li v-for="item in 5" :key="item">-->
-<!--                <a-divider type="vertical" />-->
-<!--                <span>66.6{{ item }}%</span>-->
-<!--                <span>¥582501.18</span>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </a-col>-->
-
-<!--          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">-->
-<!--            <div id="myPie3" :style="{width: '300px', height: '200px'}"></div>-->
-<!--          </a-col>-->
-<!--          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">-->
-<!--            <ul style="margin-left: -42px; margin-top: 5px; color: #333333">-->
-<!--              <li style="font-size: 14px">¥792148.18</li>-->
-<!--              <li style="font-size: 12px">环比<img src="../../../public/static/icon/up.png" style="margin-top: -3px" />30%</li>-->
-<!--            </ul>-->
-<!--            <ul style="margin-top: -8px">-->
-<!--              <li v-for="item in 5" :key="item">-->
-<!--                <a-divider type="vertical" />-->
-<!--                <span>66.6{{ item }}%</span>-->
-<!--                <span>¥582501.18</span>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </a-col>-->
+          </a-col>
 
         </a-row>
+          </a-spin>
       </a-card>
     </div>
   </page-header-wrapper>
@@ -156,8 +199,15 @@ import '../../../node_modules/echarts/map/js/china.js'
 import {
   RankList
 } from '@/components'
-import { getTodayMapData, getTodayOverview } from '@/api/business/visOverview'
+import { getTodayMapData, getPieView, getTodayOverview } from '@/api/business/visOverview'
 import ChinaMap from '@/components/Charts/chinaMap'
+const rankList = []
+for (let i = 0; i < 10; i++) {
+  rankList.push({
+    name: '北京',
+    total: 1234.56
+  })
+}
 
 export default {
   name: 'Overview',
@@ -170,6 +220,44 @@ export default {
       size: 'large',
       screenWidth: document.body.clientWidth / 3 + 'px',
       rankList: [],
+      pieData: {},
+      // pieData: {
+      //   'barViewMap': [{
+      //     'wealth': '0',
+      //     'life': -959,
+      //     'product': 432296.23,
+      //     'gold': '371000',
+      //     'health': 622,
+      //     'platForm': 'app',
+      //     'num': 802959.23
+      //   }, {
+      //     'wealth': '0',
+      //     'health': 0,
+      //     'product': 181674.12,
+      //     'gold': 'nan',
+      //     'life': 9290,
+      //     'platForm': 'pc',
+      //     'num': 190964.12
+      //   }, {
+      //     'num': 274856.45,
+      //     'health': 0,
+      //     'platForm': 'wap',
+      //     'product': 265490.45,
+      //     'wealth': 'nan',
+      //     'gold': 'nan',
+      //     'life': 9366
+      //   }],
+      //   'mom': [{
+      //     'num': 0.4569334074517331,
+      //     'platform': 'app'
+      //   }, {
+      //     'num': 1.4438188820610052,
+      //     'platform': 'pc'
+      //   }, {
+      //     'num': 1.1699560371080828,
+      //     'platform': 'wap'
+      //   }]
+      // },
       // 今日数据概览spin
       overviewSpin: true,
       // 地图标签页和按钮
@@ -337,82 +425,233 @@ export default {
       })
     },
     drawPie () {
-      // 初始化echarts实例
-      const myPie = echarts.init(document.getElementById('myPie'))
-      const myPie2 = echarts.init(document.getElementById('myPie2'))
-      const myPie3 = echarts.init(document.getElementById('myPie3'))
-      // 指定图标的配置和数据
-      var option = {
-        title: {
-          text: 'APP',
-          left: 20
-        },
-        tooltip: {
-          // 悬浮框提示相关
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          // legend 图例相关
-          type: 'scroll',
-          orient: 'vertical',
-          left: '60%',
-          top: 50,
-          itemWidth: 8,
-          itemHeight: 8,
-          data: [
-            { name: '产', icon: 'circle' },
-            { name: '寿', icon: 'circle' },
-            { name: '健', icon: 'circle' },
-            { name: '资', icon: 'circle' },
-            { name: '金服', icon: 'circle' }
-          ]
-        },
-        series: {
-          name: 'APP平台',
-          type: 'pie',
-          center: ['35%', '50%'],
-          selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
-          data: [
-            { name: '产', value: 600 },
-            { name: '寿', value: 310 },
-            { name: '健', value: 200 },
-            { name: '资', value: 800 },
-            { name: '金服', value: 800 }
-          ],
-          label: {
-            normal: {
-              position: 'inner',
-              show: false
-            }
+      getPieView().then(response => {
+        this.pieData = JSON.parse(JSON.stringify(response.data))
+        console.log(this.pieData)
+        // 初始化echarts实例
+        console.log(document.getElementById('myPie'))
+        const myPie = echarts.init(document.getElementById('myPie'))
+        const myPie2 = echarts.init(document.getElementById('myPie2'))
+        const myPie3 = echarts.init(document.getElementById('myPie3'))
+        console.log(this.pieData.barViewMap[0].platForm)
+        // 指定图标的配置和数据
+        var option = {
+          title: {
+            text: this.pieData.barViewMap[0].platForm,
+            left: 20,
+            button: 100
           },
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
+          tooltip: {
+            // 悬浮框提示相关
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            // legend 图例相关
+            type: 'scroll',
+            orient: 'vertical',
+            left: '60%',
+            top: 55,
+            itemWidth: 8,
+            itemHeight: 8,
+            data: [
+              { name: '产', icon: 'circle' },
+              { name: '寿', icon: 'circle' },
+              { name: '健', icon: 'circle' },
+              { name: '资', icon: 'circle' },
+              { name: '金服', icon: 'circle' }
+            ]
+          },
+          series: {
+            name: this.pieData.barViewMap[0].platForm,
+            type: 'pie',
+            center: ['35%', '50%'],
+            selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
+            data: [
+              { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].product) },
+              { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].life) },
+              { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].health) },
+              { name: '资', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].wealth) },
+              { name: '金服', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].gold) }
+            ],
+            label: {
+              normal: {
+                position: 'inner',
+                show: false
+              }
             },
-            normal: {
-              color: function (params) {
-                // 自定义颜色
-                var colorList = [
-                  '#22BAED', '#FFAF30', '#1FC519', '#F362A5', '#B16DC2'
-                ]
-                return colorList[params.dataIndex]
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              },
+              normal: {
+                color: function (params) {
+                  // 自定义颜色
+                  var colorList = [
+                    '#DDCB67', '#7CBC5C', '#C6736C', '#5680BB', '#9CAAB3'
+                  ]
+                  return colorList[params.dataIndex]
+                }
               }
             }
           }
         }
+
+        var option1 = {
+          title: {
+            text: this.pieData.barViewMap[1].platForm,
+            left: 20,
+            button: 100
+          },
+          tooltip: {
+            // 悬浮框提示相关
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            // legend 图例相关
+            type: 'scroll',
+            orient: 'vertical',
+            left: '60%',
+            top: 55,
+            itemWidth: 8,
+            itemHeight: 8,
+            data: [
+              { name: '产', icon: 'circle' },
+              { name: '寿', icon: 'circle' },
+              { name: '健', icon: 'circle' },
+              { name: '资', icon: 'circle' }
+            ]
+          },
+          series: {
+            name: this.pieData.barViewMap[1].platForm + '平台',
+            type: 'pie',
+            center: ['35%', '50%'],
+            selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
+            data: [
+              { name: '产', value: this.pieData.barViewMap[1].product },
+              { name: '寿', value: this.pieData.barViewMap[1].life },
+              { name: '健', value: this.pieData.barViewMap[1].health },
+              { name: '资', value: this.pieData.barViewMap[1].wealth }
+            ],
+            label: {
+              normal: {
+                position: 'inner',
+                show: false
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              },
+              normal: {
+                color: function (params) {
+                  // 自定义颜色
+                  var colorList = [
+                    '#DDCB67', '#7CBC5C', '#C6736C', '#5680BB', '#9CAAB3'
+                  ]
+                  return colorList[params.dataIndex]
+                }
+              }
+            }
+          }
+        }
+
+        var option2 = {
+          title: {
+            text: this.pieData.barViewMap[2].platForm,
+            left: 20,
+            button: 100
+          },
+          tooltip: {
+            // 悬浮框提示相关
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+            // legend 图例相关
+            type: 'scroll',
+            orient: 'vertical',
+            left: '60%',
+            top: 55,
+            itemWidth: 8,
+            itemHeight: 8,
+            data: [
+              { name: '产', icon: 'circle' },
+              { name: '寿', icon: 'circle' },
+              { name: '健', icon: 'circle' }
+            ]
+          },
+          series: {
+            name: this.pieData.barViewMap[2].platForm + '平台',
+            type: 'pie',
+            center: ['35%', '50%'],
+            selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
+            data: [
+              { name: '产', value: this.pieData.barViewMap[2].product },
+              { name: '寿', value: this.pieData.barViewMap[2].life },
+              { name: '健', value: this.pieData.barViewMap[2].health }
+            ],
+            label: {
+              normal: {
+                position: 'inner',
+                show: false
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              },
+              normal: {
+                color: function (params) {
+                  // 自定义颜色
+                  var colorList = [
+                    '#DDCB67', '#7CBC5C', '#C6736C', '#5680BB', '#9CAAB3'
+                  ]
+                  return colorList[params.dataIndex]
+                }
+              }
+            }
+          }
+        }
+        // 使用制定的配置项和数据显示图表
+        myPie.setOption(option)
+        myPie2.setOption(option1)
+        myPie3.setOption(option2)
+        window.onresize = function () {
+          // myPie.resize()
+          // myPie2.resize()
+          // myPie3.resize()
+        }
+      })
+    },
+    /**
+     * 判读正负，正则返回原数 负数返回0
+     * @param e
+     * @returns {number|*}
+     * @constructor
+     */
+    JudgePositiveNegative (e) {
+      if (e >= 0) {
+        return e
+      } else {
+        return 0
       }
-      // 使用制定的配置项和数据显示图表
-      myPie.setOption(option)
-      myPie2.setOption(option)
-      myPie3.setOption(option)
-      window.onresize = function () {
-        // myPie.resize()
-        // myPie2.resize()
-        // myPie3.resize()
-      }
+    },
+    getPieView () {
+      getPieView().then(response => {
+        this.pieData = JSON.parse(JSON.stringify(response.data))
+        console.log(this.pieData)
+        // this.overviewSpin = false
+        // 饼图
+        this.drawPie()
+      })
     }
   }
 }
@@ -522,6 +761,63 @@ export default {
   display: flex;
   display: block;
   flex-flow: row wrap;
+}
+
+.total-amount-font{
+  width: 94px;
+  height: 24px;
+  font-size: 16px;
+  font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
+  font-weight: bold;
+  color: #333333;
+  line-height: 24px;
+
+}
+
+.mom-font{
+  width: 28px;
+  height: 19px;
+  font-size: 14px;
+  font-family: MicrosoftYaHei;
+  color: #333333;
+  line-height: 19px;
+}
+
+.mom-font-num{
+  width: 52px;
+  height: 19px;
+  font-size: 14px;
+  font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
+  font-weight: bold;
+  color: #3CB800;
+  line-height: 19px;
+
+}
+
+.premium-data{
+  width: 73px;
+  height: 15px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #333333;
+  line-height: 17px;
+  position: absolute;
+  left: 105px;
+  /* top: 46px; */
+  margin-top: 3px;
+
+}
+
+.per-data{
+  width: 36px;
+  height: 17px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
+  line-height: 17px;
+
 }
 
 </style>

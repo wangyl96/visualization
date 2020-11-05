@@ -29,4 +29,9 @@ public class TodayOverviewVO {
     private String visDate;
 
     private String platformName;
+
+    /**
+     * 环比
+     */
+    private String mom;
 }
