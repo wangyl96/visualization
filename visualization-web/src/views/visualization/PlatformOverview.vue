@@ -72,31 +72,31 @@
               <ul style="margin-top: -8px">
               <li >
               <a-divider type="vertical" />
-              <span class="per-data" v-if="pieData.barViewMap[0].product/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].product/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+              <span class="per-data" v-if="pieData.barViewMap[0].product/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].product/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
                 <span v-else class="per-data">0%</span>
               <span class="premium-data">¥{{ pieData.barViewMap[0].product }}</span>
               </li>
                 <li >
                   <a-divider type="vertical" />
-                  <span class="per-data"v-if="pieData.barViewMap[0].life/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].life/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                  <span class="per-data"v-if="pieData.barViewMap[0].life/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].life/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
                   <span class="per-data" v-else>0%</span>
                   <span class="premium-data">¥{{ pieData.barViewMap[0].life }}</span>
                 </li>
                 <li >
                   <a-divider type="vertical" />
-                  <span class="per-data" v-if="pieData.barViewMap[0].health/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].health/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                  <span class="per-data" v-if="pieData.barViewMap[0].health/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].health/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
                   <span class="per-data" v-else>0%</span>
                   <span class="premium-data">¥{{ pieData.barViewMap[0].health }}</span>
                 </li>
                 <li >
                   <a-divider type="vertical" />
-                  <span class="per-data" v-if="pieData.barViewMap[0].wealth/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].wealth/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                  <span class="per-data" v-if="pieData.barViewMap[0].wealth/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].wealth/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
                   <span class="per-data" v-else>0%</span>
                   <span class="premium-data">¥{{ pieData.barViewMap[0].wealth }}</span>
                 </li>
                 <li >
                   <a-divider type="vertical" />
-                  <span class="per-data" v-if="pieData.barViewMap[0].gold/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].gold/pieData.barViewMap[0].num)*100).toFixed(2) }}%</span>
+                  <span class="per-data" v-if="pieData.barViewMap[0].gold/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].gold/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
                   <span  class="per-data" v-else>0%</span>
                   <span class="premium-data">¥{{ pieData.barViewMap[0].gold }}</span>
                 </li>
@@ -122,25 +122,25 @@
             <ul style="margin-top: -8px">
               <li >
                 <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[1].product/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].product/pieData.barViewMap[1].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-if="pieData.barViewMap[1].product/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].product/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health)+this.JudgePositiveNegative(pieData.barViewMap[1].wealth))*100)).toFixed(2) }}%</span>
                 <span v-else class="per-data">0%</span>
                 <span class="premium-data">¥{{ pieData.barViewMap[1].product }}</span>
               </li>
               <li >
                 <a-divider type="vertical" />
-                <span class="per-data"v-if="pieData.barViewMap[1].life/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].life/pieData.barViewMap[1].num)*100).toFixed(2) }}%</span>
+                <span class="per-data"v-if="pieData.barViewMap[1].life/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].life/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health)+this.JudgePositiveNegative(pieData.barViewMap[1].wealth))*100)).toFixed(2) }}%</span>
                 <span class="per-data" v-else>0%</span>
                 <span class="premium-data">¥{{ pieData.barViewMap[1].life }}</span>
               </li>
               <li >
                 <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[1].health/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[0].health/pieData.barViewMap[1].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-if="pieData.barViewMap[1].health/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].health/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health)+this.JudgePositiveNegative(pieData.barViewMap[1].wealth))*100)).toFixed(2) }}%</span>
                 <span class="per-data" v-else>0%</span>
                 <span class="premium-data">¥{{ pieData.barViewMap[1].health }}</span>
               </li>
               <li >
                 <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[1].wealth/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[0].wealth/pieData.barViewMap[1].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-if="pieData.barViewMap[1].wealth/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].wealth/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health)+this.JudgePositiveNegative(pieData.barViewMap[1].wealth))*100)).toFixed(2) }}%</span>
                 <span class="per-data" v-else>0%</span>
                 <span class="premium-data">¥{{ pieData.barViewMap[1].wealth }}</span>
               </li>
@@ -166,19 +166,19 @@
             <ul style="margin-top: -8px">
               <li >
                 <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[2].product/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].product/pieData.barViewMap[2].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-if="pieData.barViewMap[2].product/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].product/(this.JudgePositiveNegative(pieData.barViewMap[2].product)+this.JudgePositiveNegative(pieData.barViewMap[2].life)+this.JudgePositiveNegative(pieData.barViewMap[2].health))*100)).toFixed(2) }}%</span>
                 <span v-else class="per-data">0%</span>
                 <span class="premium-data">¥{{ pieData.barViewMap[2].product }}</span>
               </li>
               <li >
                 <a-divider type="vertical" />
-                <span class="per-data"v-if="pieData.barViewMap[2].life/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].life/pieData.barViewMap[2].num)*100).toFixed(2) }}%</span>
+                <span class="per-data"v-if="pieData.barViewMap[2].life/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].life/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health))*100)).toFixed(2) }}%</span>
                 <span class="per-data" v-else>0%</span>
                 <span class="premium-data">¥{{ pieData.barViewMap[2].life }}</span>
               </li>
               <li >
                 <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[2].health/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].health/pieData.barViewMap[2].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-if="pieData.barViewMap[2].health/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].health/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health))*100)).toFixed(2) }}%</span>
                 <span class="per-data" v-else>0%</span>
                 <span class="premium-data">¥{{ pieData.barViewMap[2].health }}</span>
               </li>
