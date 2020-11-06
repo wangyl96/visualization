@@ -7,18 +7,26 @@
             <a-col :sm="8" :xs="24" v-for="item in platformInfo.todayOverviewMap" :key="item.contentName">
               <ul>
                 <li>
-                  <a-statistic :value="item.contentData" :value-style="{fontSize: '18px', lineHeight: '20px' }">
+                  <a-statistic :value="item.contentData" :value-style="{fontSize: '18px', lineHeight: '20px', fontFamily: 'MicrosoftYaHei' }">
                     <template v-slot:prefix>
-                      <span style="font-size: 18px; color: #333333;">{{item.contentName}}</span>
+                      <span style="font-size: 18px; color: #333333; font-family: MicrosoftYaHei">{{item.contentName}}</span>
                     </template>
                   </a-statistic>
                 </li>
                 <li style="margin-top: 8px;">
-                  <a-statistic :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{fontSize: '14px', lineHeight: '20px' }">
+                  <a-statistic v-if="item.ratio < 0" :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#3CB800', fontSize: '14px', fontFamily: 'MicrosoftYaHei'}">
                     <template v-slot:prefix>
                       <span style="font-size: 14px; color: #333333;">环比</span>
-                      <img v-if="item.ratio < 0" src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
-                      <img v-else src="../../../public/static/icon/up.png" style="margin-top: -3px; margin-left: 6px"/>
+                      <img  src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
+                    </template>
+                    <template v-slot:suffix>
+                      <span>%</span>
+                    </template>
+                  </a-statistic>
+                  <a-statistic v-else :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#F44242', fontSize: '14px', fontFamily: 'MicrosoftYaHei'}">
+                    <template v-slot:prefix>
+                      <span style="font-size: 14px; color: #333333;">环比</span>
+                      <img src="../../../public/static/icon/up.png" style="margin-top: -3px; margin-left: 6px"/>
                     </template>
                     <template v-slot:suffix>
                       <span>%</span>
@@ -81,6 +89,9 @@
 </script>
 <style lang="less">
   @import "~ant-design-vue/es/style/themes/default.less";
+  .ant-statistic-content-value-decimal {
+    font-size: 14px;
+  }
 
   .vis_main {
     font-family: MicrosoftYaHei;

@@ -31,7 +31,7 @@ public class LoginController {
     public JSONObject login() {
         log.info("----------------登录接口通畅-------------------");
         // 使用OpenFeign进行微服务内部调用
-        Oauth2TokenDto oauth2TokenDto = userServiceClient.postAccessToken();
+//        Oauth2TokenDto oauth2TokenDto = userServiceClient.postAccessToken();
         return JSONObject.parseObject("{\n" +
                 "\t\"id\": \"1111\",\n" +
                 "\t\"name\": \"wyl\",\n" +

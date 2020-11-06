@@ -20,7 +20,7 @@ import java.util.Map;
 @Configuration
 public class CustomFeignConfig implements RequestInterceptor {
 
-    private static final String TOKEN_HEADER = "authorization";
+    private static final String TOKEN_HEADER = "Authorization";
 
 
     @Override

@@ -30,7 +30,6 @@ public class AppVisDataServiceIpml implements AppVisDataService {
     @Autowired
     private AppVisDataRepository appVisDataRepository;
 
-
     @Override
     public List<TodayOverviewVO> getAppMoney() {
 

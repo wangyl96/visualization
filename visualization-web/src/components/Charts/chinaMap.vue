@@ -54,10 +54,17 @@
         const that = this
         // 绘制图表
         optionMap = {
+          title: {
+            text: '分省平台和指标数据趋势情况',
+            left: 20
+          },
           tooltip: {
             trigger: 'item',
+            backgroundColor: 'none',
             formatter: function (params) {
-              return params.name + '<br><b>' + that.chinaInfo.quota.name + '：' + params.value + '</b> '
+              const value = params.value.toString() === 'NaN' ? 0 : params.value
+              const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.name + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + that.chinaInfo.quota.name + '</span> <sapn class="tooltip-title-right"> ' + value + ' </sapn> </div> </div>'
+              return str
             }
           },
           legend: {
@@ -139,3 +146,36 @@
     }
   }
 </script>
+<style>
+.tooltip {
+  border-radius: 4px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
+  background: #fff;
+
+}
+
+.tooltip-title {
+  padding: 0 10px;
+  width: 128px;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #ebf0f5;
+  color: #333;
+}
+
+.tooltip-content {
+  padding: 5px 10px;
+  height: 32px;
+}
+
+.tooltip-title-right {
+  float: right;
+  font-size: 16px;
+  color: #30a8e7;
+}
+
+.tooltip-title-left {
+
+  color: #333;
+}
+</style>

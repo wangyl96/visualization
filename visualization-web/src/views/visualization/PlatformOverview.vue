@@ -451,7 +451,11 @@ export default {
           tooltip: {
             // 悬浮框提示相关
             trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
+            backgroundColor: 'none',
+            formatter: function (params) {
+              const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
+              return str
+            }
           },
           legend: {
             // legend 图例相关
@@ -515,7 +519,11 @@ export default {
           tooltip: {
             // 悬浮框提示相关
             trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
+            backgroundColor: 'none',
+            formatter: function (params) {
+              const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
+              return str
+            }
           },
           legend: {
             // legend 图例相关
@@ -577,7 +585,11 @@ export default {
           tooltip: {
             // 悬浮框提示相关
             trigger: 'item',
-            formatter: '{a} <br/>{b} : {c} ({d}%)'
+            backgroundColor: 'none',
+            formatter: function (params) {
+              const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
+              return str
+            }
           },
           legend: {
             // legend 图例相关
@@ -802,7 +814,38 @@ export default {
   font-weight: 400;
   color: #999999;
   line-height: 17px;
+}
 
+.tooltip {
+  border-radius: 4px;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
+  background: #fff;
+
+}
+
+.tooltip-title {
+  padding: 0 10px;
+  width: 128px;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #ebf0f5;
+  color: #333;
+}
+
+.tooltip-content {
+  padding: 5px 10px;
+  height: 32px;
+}
+
+.tooltip-title-right {
+  float: right;
+  font-size: 16px;
+  color: #30a8e7;
+}
+
+.tooltip-title-left {
+
+  color: #333;
 }
 
 </style>
