@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author wangb
- * @date 2020/11/5 17:35
+ * @date 2020/11/6 13:21
  */
 @Data
 public class OldPieDataViewVo {

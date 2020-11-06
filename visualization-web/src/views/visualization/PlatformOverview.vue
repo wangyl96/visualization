@@ -474,7 +474,7 @@ export default {
             ]
           },
           series: {
-            name: this.pieData.barViewMap[0].platForm+ '平台',
+            name: this.pieData.barViewMap[0].platForm + '平台',
             type: 'pie',
             center: ['35%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
@@ -546,10 +546,10 @@ export default {
             center: ['35%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
-              { name: '产', value: this.pieData.barViewMap[1].product },
-              { name: '寿', value: this.pieData.barViewMap[1].life },
-              { name: '健', value: this.pieData.barViewMap[1].health },
-              { name: '资', value: this.pieData.barViewMap[1].wealth }
+              { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].product) },
+              { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].life) },
+              { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].health) },
+              { name: '资', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].wealth) }
             ],
             label: {
               normal: {
@@ -611,9 +611,9 @@ export default {
             center: ['35%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
-              { name: '产', value: this.pieData.barViewMap[2].product },
-              { name: '寿', value: this.pieData.barViewMap[2].life },
-              { name: '健', value: this.pieData.barViewMap[2].health }
+              { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].product) },
+              { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].life) },
+              { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].health) }
             ],
             label: {
               normal: {

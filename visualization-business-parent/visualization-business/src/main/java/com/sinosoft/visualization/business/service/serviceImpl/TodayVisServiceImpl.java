@@ -2,12 +2,11 @@ package com.sinosoft.visualization.business.service.serviceImpl;
 
 import com.sinosoft.visualization.business.api.dto.MapDataDTO;
 import com.sinosoft.visualization.business.api.entity.AppComVisData;
+import com.sinosoft.visualization.business.api.vo.BarDataViewVo;
 import com.sinosoft.visualization.business.api.vo.MapDataVO;
+import com.sinosoft.visualization.business.api.vo.OldPieDataViewVo;
 import com.sinosoft.visualization.business.api.vo.TodayOverviewVO;
-import com.sinosoft.visualization.business.repository.AppComVisDataRepository;
-import com.sinosoft.visualization.business.repository.AppVisDataRepository;
-import com.sinosoft.visualization.business.repository.PcVisDataRepository;
-import com.sinosoft.visualization.business.repository.WapVisDataRepository;
+import com.sinosoft.visualization.business.repository.*;
 import com.sinosoft.visualization.business.service.TodayVisService;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
@@ -19,10 +18,11 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.*;
+
 import static com.sinosoft.visualization.common.basic.constants.CommonConstants.*;
 
 /**
@@ -48,6 +48,9 @@ public class TodayVisServiceImpl implements TodayVisService {
     @Autowired
     private AppComVisDataRepository appComVisDataRepository;
 
+
+    @Autowired
+    private SysDictRepository sysDictRepository;
 
 
     /**
@@ -120,6 +123,107 @@ public class TodayVisServiceImpl implements TodayVisService {
             }
         };
         return new MapDataVO().setMap(mapData).setQuota(quotaMap);
+    }
+
+    /**
+     * 获取各个饼图的数据（弃用）
+     *
+     * @return
+     */
+    @Override
+    public List<OldPieDataViewVo> getAppMoney() {
+
+        // 获取昨天的日期
+        // LocalDate yestDay = LocalDate.now().plusDays(-1);
+        // 测试昨天日期
+        LocalDate yestDay = LocalDate.of(2020, 01, 05);
+
+        // 获取前天的日期
+        //LocalDate beforeYestDay = LocalDate.now().plusDays(-2);
+
+        // 测试前天日期
+        LocalDate beforeYestDay = LocalDate.of(2020, 01, 05);
+
+        List<OldPieDataViewVo> data = new ArrayList<>();
+
+        //获取所有的平台
+        List<String> platFroms = sysDictRepository.getPlatFrom();
+
+        if ( ! Objects.isNull(platFroms)) {
+            for (String platForm : platFroms) {
+                List<Map<String, Object>> appMoneys = new ArrayList<>();
+                OldPieDataViewVo oldPieDataViewVo = new OldPieDataViewVo();
+                oldPieDataViewVo.setPlatformName(platForm);
+                oldPieDataViewVo.setVisDate(yestDay.toString());
+                appMoneys = appVisDataRepository.getAppMoney(platForm, yestDay);
+                oldPieDataViewVo.setTodayOverviewMap(appMoneys);
+
+                // 获取环比值
+                if (appMoneys.size() > 0) {
+
+                    // 昨天的总和
+                    Map<String, Double> yestDayData = appVisDataRepository.getSumMoney(platForm, yestDay);
+                    // 前天的总和
+                    Map<String, Double> beforeYestDayData = appVisDataRepository.getSumMoney(platForm, beforeYestDay);
+
+                    if (!Objects.isNull(yestDayData) && !Objects.isNull(beforeYestDayData)) {
+
+                        BigDecimal beforeDayValue = new BigDecimal(beforeYestDayData.get("value"));
+                        BigDecimal yestDayValue = new BigDecimal(yestDayData.get("value"));
+                        // 获取比较值
+
+                        if (beforeDayValue.compareTo(yestDayValue) >= -1 || beforeDayValue.compareTo(yestDayValue) == 1) {
+                            String divide = yestDayValue.divide(beforeDayValue, 2, RoundingMode.HALF_UP).toString();
+                            oldPieDataViewVo.setMom(divide);
+                            data.add(oldPieDataViewVo);
+                        } else {
+                            String divide = yestDayValue.divide(beforeDayValue, 2, RoundingMode.HALF_UP).toString();
+                            oldPieDataViewVo.setMom("-" + divide);
+                            data.add(oldPieDataViewVo);
+                        }
+
+                    }
+
+
+                }
+
+            }
+
+
+        }
+        return data;
+    }
+
+    /**
+     * 获取饼图的数据
+     *
+     * @return
+     */
+    @Override
+    public BarDataViewVo getAppData() {
+
+        BarDataViewVo barDataViewVo = new BarDataViewVo();
+        List<Map<String, Object>> appDatas = appVisDataRepository.getAppData();
+        List<Map<String, Object>> mom = appVisDataRepository.getMom();
+        if (appDatas.size() > 0 && mom.size() > 0) {
+
+//            appDatas.forEach(appData->{
+//                Iterator<Map.Entry<String, Object>> it = appData.entrySet().iterator();
+//                while (it.hasNext()){
+//                    Map.Entry<String, Object> entry = it.next();
+//                    if (entry.getValue().toString().equals("nan")){
+//                        it.remove();
+//                    }
+//                }
+//            });
+
+            barDataViewVo.setBarViewMap(appDatas);
+            barDataViewVo.setMom(mom);
+            return barDataViewVo;
+        } else {
+            return barDataViewVo;
+        }
+
     }
 
 }
