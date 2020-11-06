@@ -567,7 +567,7 @@ export default {
                 color: function (params) {
                   // 自定义颜色
                   var colorList = [
-                    '#5680BB', '#9CAAB3', '#7CBC5C', '#DDCB67', '#C6736C'
+                    '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
                   ]
                   return colorList[params.dataIndex]
                 }
@@ -631,7 +631,7 @@ export default {
                 color: function (params) {
                   // 自定义颜色
                   var colorList = [
-                    '#5680BB', '#9CAAB3', '#7CBC5C', '#DDCB67', '#C6736C'
+                    '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
                   ]
                   return colorList[params.dataIndex]
                 }
