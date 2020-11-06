@@ -166,7 +166,7 @@
             <ul style="margin-top: -8px">
               <li >
                 <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[2].product/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[2].product/pieData.barViewMap[2].num)*100).toFixed(2) }}%</span>
+                <span class="per-data" v-if="pieData.barViewMap[2].product/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].product/pieData.barViewMap[2].num)*100).toFixed(2) }}%</span>
                 <span v-else class="per-data">0%</span>
                 <span class="premium-data">¥{{ pieData.barViewMap[2].product }}</span>
               </li>
@@ -474,7 +474,7 @@ export default {
             ]
           },
           series: {
-            name: this.pieData.barViewMap[0].platForm,
+            name: this.pieData.barViewMap[0].platForm+ '平台',
             type: 'pie',
             center: ['35%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
@@ -501,7 +501,7 @@ export default {
                 color: function (params) {
                   // 自定义颜色
                   var colorList = [
-                    '#DDCB67', '#7CBC5C', '#C6736C', '#5680BB', '#9CAAB3'
+                    '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
                   ]
                   return colorList[params.dataIndex]
                 }
@@ -567,7 +567,7 @@ export default {
                 color: function (params) {
                   // 自定义颜色
                   var colorList = [
-                    '#DDCB67', '#7CBC5C', '#C6736C', '#5680BB', '#9CAAB3'
+                    '#5680BB', '#9CAAB3', '#7CBC5C', '#DDCB67', '#C6736C'
                   ]
                   return colorList[params.dataIndex]
                 }
@@ -631,7 +631,7 @@ export default {
                 color: function (params) {
                   // 自定义颜色
                   var colorList = [
-                    '#DDCB67', '#7CBC5C', '#C6736C', '#5680BB', '#9CAAB3'
+                    '#5680BB', '#9CAAB3', '#7CBC5C', '#DDCB67', '#C6736C'
                   ]
                   return colorList[params.dataIndex]
                 }
