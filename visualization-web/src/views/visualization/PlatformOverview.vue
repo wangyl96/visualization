@@ -1,12 +1,12 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <page-header-wrapper :title="false">
     <div class="vis-container">
-      <a-spin :spinning="overviewSpin" tip="加载中...">
+      <a-spin :spinning="overviewSpin">
         <a-card :bordered="false">
           <!--  数据总览  -->
           <div class="account-center-detail" style="padding-left: 20px">
             <p>
-              <i class="title"></i>数据总览 2020-09-20
+              <i class="title"></i>数据总览 2020-10-09
             </p>
           </div>
           <!--分割线-->
@@ -19,7 +19,7 @@
           </a-row>
         </a-card>
       </a-spin>
-      <a-spin :spinning="mapSpin" tip="加载中...">
+      <a-spin :spinning="mapSpin">
         <a-card style="margin-top: 20px" :bordered="false" :body-style="{padding: '0'}">
           <div class="salesCard">
             <a-tabs default-active-key="app" size="large" @change="callback" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
@@ -35,158 +35,82 @@
               </div>
             </a-tabs>
             <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="19" :lg="12" :md="12" :sm="24" :xs="24">
                 <china-map ref="chinaMap" :china="mapData"></china-map>
               </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list v-if="rankList.length > 0" :title="title" :list="rankList"/>
               </a-col>
             </a-row>
           </div>
         </a-card>
       </a-spin>
-      <a-card :bordered="false" style="margin-top: 20px;" >
-        <div class="account-center-detail" style="padding-left: 20px">
-          <p>
-            <i class="title"></i>保费数据统计
-          </p>
-        </div>
-        <!--  保费数据统计饼图  -->
-        <a-row>
-          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
-              <div id="myPie" :style="{width: '300px', height: '200px'}"></div>
-          </a-col>
-          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
-              <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-                <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
-                <span  class="mom-font" >环比
+      <a-spin :spinning="pieSpin">
+        <a-card :bordered="false" style="margin-top: 20px;" >
+          <div class="account-center-detail" style="padding-left: 20px">
+            <p>
+              <i class="title"></i>保费数据统计
+            </p>
+          </div>
+          <!--  保费数据统计饼图  -->
+          <a-row>
+            <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+              <div id="myPie" :style="{height: '200px'}"></div>
+              <div style="float: left; margin-top: -200px; margin-left: 41%">
+                <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
+                  <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
+                  <span  class="mom-font" >环比
                   <span v-if="((pieData.mom[0].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;"/>
+                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;margin-top: -3px"/>
                      <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[0].num-1)*100)).toFixed(2)}}%</span>
                   </span>
                   <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;"/>
+                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;margin-top: -3px"/>
                     <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[0].num-1)*100)).toFixed(2)}}%</span></span>
                   </span>
-              </ul>
-              <ul style="margin-top: -8px">
-              <li >
-              <a-divider type="vertical" />
-              <span class="per-data" v-if="pieData.barViewMap[0].product/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].product/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
-                <span v-else class="per-data">0%</span>
-              <span class="premium-data">¥{{ pieData.barViewMap[0].product }}</span>
-              </li>
-                <li >
-                  <a-divider type="vertical" />
-                  <span class="per-data"v-if="pieData.barViewMap[0].life/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].life/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
-                  <span class="per-data" v-else>0%</span>
-                  <span class="premium-data">¥{{ pieData.barViewMap[0].life }}</span>
-                </li>
-                <li >
-                  <a-divider type="vertical" />
-                  <span class="per-data" v-if="pieData.barViewMap[0].health/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].health/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
-                  <span class="per-data" v-else>0%</span>
-                  <span class="premium-data">¥{{ pieData.barViewMap[0].health }}</span>
-                </li>
-                <li >
-                  <a-divider type="vertical" />
-                  <span class="per-data" v-if="pieData.barViewMap[0].wealth/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].wealth/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
-                  <span class="per-data" v-else>0%</span>
-                  <span class="premium-data">¥{{ pieData.barViewMap[0].wealth }}</span>
-                </li>
-                <li >
-                  <a-divider type="vertical" />
-                  <span class="per-data" v-if="pieData.barViewMap[0].gold/pieData.barViewMap[0].num>0">{{ ((pieData.barViewMap[0].gold/(this.JudgePositiveNegative(pieData.barViewMap[0].product)+this.JudgePositiveNegative(pieData.barViewMap[0].life)+this.JudgePositiveNegative(pieData.barViewMap[0].health)+this.JudgePositiveNegative(pieData.barViewMap[0].wealth)+this.JudgePositiveNegative((pieData.barViewMap[0].gold)))*100)).toFixed(2) }}%</span>
-                  <span  class="per-data" v-else>0%</span>
-                  <span class="premium-data">¥{{ pieData.barViewMap[0].gold }}</span>
-                </li>
-              </ul>
-          </a-col>
+                </ul>
+              </div>
+            </a-col>
 
-          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
-              <div id="myPie2" :style="{width: '300px', height: '200px'}"></div>
-          </a-col>
-          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
-              <ul style="margin-left: -42px; margin-top: 5px;color: #333333">
-                <li  class= "total-amount-font">¥{{pieData.barViewMap[1].num}}</li>
-                <span  class="mom-font" >环比
+            <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+              <div id="myPie2" :style="{height: '200px'}"></div>
+              <div style="float: left; margin-top: -200px; margin-left: 41%">
+                <ul style="margin-left: -42px; margin-top: 5px;color: #333333">
+                  <li  class= "total-amount-font">¥{{pieData.barViewMap[1].num}}</li>
+                  <span  class="mom-font" >环比
                   <span v-if="((pieData.mom[1].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;"/>
+                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;margin-top: -3px"/>
                      <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[1].num-1)*100)).toFixed(2)}}%</span>
                   </span>
                   <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;"/>
+                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;margin-top: -3px"/>
                     <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[1].num-1)*100)).toFixed(2)}}%</span></span>
                   </span>
-              </ul>
-            <ul style="margin-top: -8px">
-              <li >
-                <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[1].product/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].product/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health)+this.JudgePositiveNegative(pieData.barViewMap[1].wealth))*100)).toFixed(2) }}%</span>
-                <span v-else class="per-data">0%</span>
-                <span class="premium-data">¥{{ pieData.barViewMap[1].product }}</span>
-              </li>
-              <li >
-                <a-divider type="vertical" />
-                <span class="per-data"v-if="pieData.barViewMap[1].life/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].life/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health)+this.JudgePositiveNegative(pieData.barViewMap[1].wealth))*100)).toFixed(2) }}%</span>
-                <span class="per-data" v-else>0%</span>
-                <span class="premium-data">¥{{ pieData.barViewMap[1].life }}</span>
-              </li>
-              <li >
-                <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[1].health/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].health/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health)+this.JudgePositiveNegative(pieData.barViewMap[1].wealth))*100)).toFixed(2) }}%</span>
-                <span class="per-data" v-else>0%</span>
-                <span class="premium-data">¥{{ pieData.barViewMap[1].health }}</span>
-              </li>
-              <li >
-                <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[1].wealth/pieData.barViewMap[1].num>0">{{ ((pieData.barViewMap[1].wealth/(this.JudgePositiveNegative(pieData.barViewMap[1].product)+this.JudgePositiveNegative(pieData.barViewMap[1].life)+this.JudgePositiveNegative(pieData.barViewMap[1].health)+this.JudgePositiveNegative(pieData.barViewMap[1].wealth))*100)).toFixed(2) }}%</span>
-                <span class="per-data" v-else>0%</span>
-                <span class="premium-data">¥{{ pieData.barViewMap[1].wealth }}</span>
-              </li>
-              </ul>
-          </a-col>
+                </ul>
+              </div>
+            </a-col>
 
-          <a-col :xl="3" :lg="12" :md="12" :sm="24" :xs="24">
-              <div id="myPie3" :style="{width: '300px', height: '200px'}"></div>
-          </a-col>
-          <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
-              <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-                <li  class= "total-amount-font">¥{{pieData.barViewMap[2].num}}</li>
-                <span  class="mom-font" >环比
+            <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+              <div id="myPie3" :style="{height: '200px'}"></div>
+              <div style="float: left; margin-top: -200px; margin-left: 41%">
+                <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
+                  <li  class= "total-amount-font">¥{{pieData.barViewMap[2].num}}</li>
+                  <span  class="mom-font" >环比
                   <span v-if="((pieData.mom[2].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;"/>
+                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;margin-top: -3px"/>
                      <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[2].num-1)*100)).toFixed(2)}}%</span>
                   </span>
                   <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;"/>
+                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;margin-top: -3px"/>
                     <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[2].num-1)*100)).toFixed(2)}}%</span></span>
                   </span>
-              </ul>
-            <ul style="margin-top: -8px">
-              <li >
-                <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[2].product/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].product/(this.JudgePositiveNegative(pieData.barViewMap[2].product)+this.JudgePositiveNegative(pieData.barViewMap[2].life)+this.JudgePositiveNegative(pieData.barViewMap[2].health))*100)).toFixed(2) }}%</span>
-                <span v-else class="per-data">0%</span>
-                <span class="premium-data">¥{{ pieData.barViewMap[2].product }}</span>
-              </li>
-              <li >
-                <a-divider type="vertical" />
-                <span class="per-data"v-if="pieData.barViewMap[2].life/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].life/(this.JudgePositiveNegative(pieData.barViewMap[2].product)+this.JudgePositiveNegative(pieData.barViewMap[2].life)+this.JudgePositiveNegative(pieData.barViewMap[2].health))*100)).toFixed(2) }}%</span>
-                <span class="per-data" v-else>0%</span>
-                <span class="premium-data">¥{{ pieData.barViewMap[2].life }}</span>
-              </li>
-              <li >
-                <a-divider type="vertical" />
-                <span class="per-data" v-if="pieData.barViewMap[2].health/pieData.barViewMap[2].num>0">{{ ((pieData.barViewMap[2].health/(this.JudgePositiveNegative(pieData.barViewMap[2].product)+this.JudgePositiveNegative(pieData.barViewMap[2].life)+this.JudgePositiveNegative(pieData.barViewMap[2].health))*100)).toFixed(2) }}%</span>
-                <span class="per-data" v-else>0%</span>
-                <span class="premium-data">¥{{ pieData.barViewMap[2].health }}</span>
-              </li>
-              </ul>
-          </a-col>
+                </ul>
+              </div>
+            </a-col>
+          </a-row>
+        </a-card>
+      </a-spin>
 
-        </a-row>
-      </a-card>
     </div>
   </page-header-wrapper>
 </template>
@@ -213,43 +137,6 @@ export default {
       screenWidth: document.body.clientWidth / 3 + 'px',
       rankList: [],
       pieData: {},
-      // pieData: {
-      //   'barViewMap': [{
-      //     'wealth': '0',
-      //     'life': -959,
-      //     'product': 432296.23,
-      //     'gold': '371000',
-      //     'health': 622,
-      //     'platForm': 'app',
-      //     'num': 802959.23
-      //   }, {
-      //     'wealth': '0',
-      //     'health': 0,
-      //     'product': 181674.12,
-      //     'gold': 'nan',
-      //     'life': 9290,
-      //     'platForm': 'pc',
-      //     'num': 190964.12
-      //   }, {
-      //     'num': 274856.45,
-      //     'health': 0,
-      //     'platForm': 'wap',
-      //     'product': 265490.45,
-      //     'wealth': 'nan',
-      //     'gold': 'nan',
-      //     'life': 9366
-      //   }],
-      //   'mom': [{
-      //     'num': 0.4569334074517331,
-      //     'platform': 'app'
-      //   }, {
-      //     'num': 1.4438188820610052,
-      //     'platform': 'pc'
-      //   }, {
-      //     'num': 1.1699560371080828,
-      //     'platform': 'wap'
-      //   }]
-      // },
       // 今日数据概览spin
       overviewSpin: true,
       // 地图标签页和按钮
@@ -324,7 +211,9 @@ export default {
       // 排名标题
       title: '',
       // 地图加载spin
-      mapSpin: true
+      mapSpin: true,
+      // 饼图加载spin
+      pieSpin: true
     }
   },
   mounted () {
@@ -441,6 +330,7 @@ export default {
         const myPie = echarts.init(document.getElementById('myPie'))
         const myPie2 = echarts.init(document.getElementById('myPie2'))
         const myPie3 = echarts.init(document.getElementById('myPie3'))
+        const that = this
         // 指定图标的配置和数据
         var option = {
           title: {
@@ -453,7 +343,7 @@ export default {
             trigger: 'item',
             backgroundColor: 'none',
             formatter: function (params) {
-              const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
+              const str = '<div class="tooltip"><div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
               return str
             }
           },
@@ -461,7 +351,7 @@ export default {
             // legend 图例相关
             type: 'scroll',
             orient: 'vertical',
-            left: '60%',
+            left: '40%',
             top: 55,
             itemWidth: 8,
             itemHeight: 8,
@@ -471,12 +361,66 @@ export default {
               { name: '健', icon: 'circle' },
               { name: '资', icon: 'circle' },
               { name: '金服', icon: 'circle' }
-            ]
+            ],
+            textStyle: {
+              rich: {
+                a: {
+                  lineHeight: 10,
+                  width: 24,
+                  color: '#333'
+                },
+                b: {
+                  color: '#999',
+                  lineHeight: 10,
+                  width: 74
+                },
+                c: {
+                  color: '#333'
+                }
+              }
+            },
+            formatter: function (name) {
+              const barViewMap = that.pieData.barViewMap[0]
+              let ratio = ''
+              let value = ''
+              switch (name) {
+                case '产':
+                  ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.product
+                  break
+
+                case '寿':
+                  ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.life
+                  break
+
+                case '健':
+                  ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.health
+                  break
+
+                case '资':
+                  ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.wealth
+                  break
+
+                case '金服':
+                  ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.gold
+                  break
+              }
+              var arr = [
+                '{a|' + name + '}' +
+                '{b|' + '  |   ' + ratio + '}' +
+                '{c|' + value + '}'
+              ]
+              return arr
+            }
           },
           series: {
             name: this.pieData.barViewMap[0].platForm + '平台',
             type: 'pie',
-            center: ['35%', '50%'],
+            center: ['20%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
               { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].product) },
@@ -529,7 +473,7 @@ export default {
             // legend 图例相关
             type: 'scroll',
             orient: 'vertical',
-            left: '60%',
+            left: '40%',
             top: 55,
             itemWidth: 8,
             itemHeight: 8,
@@ -538,12 +482,66 @@ export default {
               { name: '寿', icon: 'circle' },
               { name: '健', icon: 'circle' },
               { name: '资', icon: 'circle' }
-            ]
+            ],
+            textStyle: {
+              rich: {
+                a: {
+                  lineHeight: 10,
+                  color: '#333',
+                  width: 24
+                },
+                b: {
+                  color: '#999999',
+                  lineHeight: 10,
+                  width: 74
+                },
+                c: {
+                  color: '#333'
+                }
+              }
+            },
+            formatter: function (name) {
+              const barViewMap = that.pieData.barViewMap[1]
+              let ratio = ''
+              let value = ''
+              switch (name) {
+                case '产':
+                  ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.product
+                  break
+
+                case '寿':
+                  ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.life
+                  break
+
+                case '健':
+                  ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.health
+                  break
+
+                case '资':
+                  ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.wealth
+                  break
+
+                case '金服':
+                  ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.gold
+                  break
+              }
+              var arr = [
+                '{a|' + name + '}' +
+                '{b|' + '  |   ' + ratio + '}' +
+                '{c|' + value + '}'
+              ]
+              return arr
+            }
           },
           series: {
             name: this.pieData.barViewMap[1].platForm + '平台',
             type: 'pie',
-            center: ['35%', '50%'],
+            center: ['20%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
               { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].product) },
@@ -595,7 +593,7 @@ export default {
             // legend 图例相关
             type: 'scroll',
             orient: 'vertical',
-            left: '60%',
+            left: '40%',
             top: 55,
             itemWidth: 8,
             itemHeight: 8,
@@ -603,12 +601,66 @@ export default {
               { name: '产', icon: 'circle' },
               { name: '寿', icon: 'circle' },
               { name: '健', icon: 'circle' }
-            ]
+            ],
+            textStyle: {
+              rich: {
+                a: {
+                  color: '#333',
+                  lineHeight: 10,
+                  width: 24
+                },
+                b: {
+                  color: '#999999',
+                  lineHeight: 10,
+                  width: 74
+                },
+                c: {
+                  color: '#333'
+                }
+              }
+            },
+            formatter: function (name) {
+              const barViewMap = that.pieData.barViewMap[2]
+              let ratio = ''
+              let value = ''
+              switch (name) {
+                case '产':
+                  ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.product
+                  break
+
+                case '寿':
+                  ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.life
+                  break
+
+                case '健':
+                  ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.health
+                  break
+
+                case '资':
+                  ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.wealth
+                  break
+
+                case '金服':
+                  ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
+                  value = '¥' + barViewMap.gold
+                  break
+              }
+              var arr = [
+                '{a|' + name + '}' +
+                '{b|' + '  |   ' + ratio + '}' +
+                '{c|' + value + '}'
+              ]
+              return arr
+            }
           },
           series: {
             name: this.pieData.barViewMap[2].platForm + '平台',
             type: 'pie',
-            center: ['35%', '50%'],
+            center: ['20%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
               { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].product) },
@@ -643,6 +695,7 @@ export default {
         myPie.setOption(option)
         myPie2.setOption(option1)
         myPie3.setOption(option2)
+        this.pieSpin = false
         window.onresize = function () {
           // myPie.resize()
           // myPie2.resize()

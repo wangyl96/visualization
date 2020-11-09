@@ -25,8 +25,8 @@
         <h1>{{ title }}</h1>
       </div>
     </template>
-
-    <setting-drawer :settings="settings" @change="handleSettingChange" />
+    <!--  页面风格, 打开注释后会在页面右边固定按钮  -->
+<!--    <setting-drawer :settings="settings" @change="handleSettingChange" />-->
     <template v-slot:rightContentRender>
       <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
     </template>

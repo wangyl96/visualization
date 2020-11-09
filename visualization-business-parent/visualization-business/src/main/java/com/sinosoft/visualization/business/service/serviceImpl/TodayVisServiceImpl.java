@@ -106,9 +106,9 @@ public class TodayVisServiceImpl implements TodayVisService {
             case "app":
                 // 查APP分公司数据表
                 if (StringUtils.equals("app_installation", mapDataDTO.getQuotaCode())) {
-                    mapData = appComVisDataRepository.getInstallMapData("2020-09-18");
+                    mapData = appComVisDataRepository.getInstallMapData("2020-10-09");
                 } else if (StringUtils.equals("registrations", mapDataDTO.getQuotaCode())) {
-                    mapData = appComVisDataRepository.getRegistMapData( "2020-09-18");
+                    mapData = appComVisDataRepository.getRegistMapData( "2020-10-09");
                 }
                 break;
             default:
