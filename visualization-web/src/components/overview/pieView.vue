@@ -1,22 +1,22 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <!--  <a-spin :spinning="pieSpin">-->
   <!--  保费数据统计饼图  -->
-  <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-    <div :id="this.pieData.platForm" :style="{height: '200px'}"></div>
-    <!--          <div style="float: left; margin-top: -200px; margin-left: 45%">-->
-    <!--            <ul style="margin-left: -42px; margin-top: 5px; color: #333333">-->
-    <!--              <li  class= "total-amount-font">¥{{pieData.barViewMap.realSum}}</li>-->
-    <!--              <span  class="mom-font" >环比-->
-    <!--                  <span v-if="((pieData.mom)*100) < 0" >-->
-    <!--                    <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>-->
-    <!--                     <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom)*100)).toFixed(2)}}%</span>-->
-    <!--                  </span>-->
-    <!--                  <span v-else>-->
-    <!--                    <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>-->
-    <!--                    <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom)*100)).toFixed(2)}}%</span></span>-->
-    <!--                  </span>-->
-    <!--            </ul>-->
-    <!--          </div>-->
+  <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24" >
+    <div :id="this.pieData.platForm" :style="{height: '240px'}"></div>
+    <div style="position: absolute; margin-top: -220px ;margin-left: 43%">
+      <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
+        <li  class= "total-amount-font">¥{{pieData.barViewMap[0].realSum}}</li>
+        <span  class="mom-font" >环比
+            <span v-if="((pieData.mom)*100) < 0" >
+              <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
+               <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom)*100)).toFixed(2)}}%</span>
+            </span>
+            <span v-else>
+              <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
+              <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom)*100)).toFixed(2)}}%</span></span>
+            </span>
+      </ul>
+    </div>
   </a-col>
   <!--  </a-spin>-->
 </template>
@@ -76,12 +76,12 @@ export default {
         // 初始化echarts实例
         const myPie = echarts.init(document.getElementById(this.pieData.platForm))
         const that = this
-        console.log(this.pieData)
         // 指定图标的配置和数据
         var option = {
           title: {
             text: this.pieData.platForm,
             left: 20,
+            top: 28,
             button: 100
           },
           tooltip: {
@@ -97,8 +97,8 @@ export default {
             // legend 图例相关
             type: 'scroll',
             orient: 'vertical',
-            left: '44%',
-            top: 55,
+            x: '44%',
+            y: '80',
             itemWidth: 8,
             itemHeight: 8,
             data: [
@@ -119,7 +119,7 @@ export default {
                 },
                 b: {
                   color: '#999',
-                  width: 74,
+                  width: 56,
                   fontSize: 12,
                   fontWeight: 400,
                   fontFamily: 'apple-system BlinkMacSystemFont'
@@ -164,7 +164,7 @@ export default {
               }
               var arr = [
                 '{a|' + name + '}' +
-                '{b|' + '  |   ' + ratio + '}' +
+                '{b|' + '|  ' + ratio + '}' +
                 '{c|' + value + '}'
               ]
               return arr
@@ -173,7 +173,8 @@ export default {
           series: {
             name: this.pieData.platForm + '平台',
             type: 'pie',
-            center: ['24%', '50%'],
+            center: ['22%', '60%'],
+            radius: '56%',
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
               { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].product) },
@@ -208,11 +209,9 @@ export default {
         }
         myPie.setOption(option)
         this.pieSpin = false
-        window.onresize = function () {
-          // myPie.resize()
-          // myPie2.resize()
-          // myPie3.resize()
-        }
+        window.addEventListener('resize', () => {
+          myPie.resize()
+        }, false)
       })
     }
   }
