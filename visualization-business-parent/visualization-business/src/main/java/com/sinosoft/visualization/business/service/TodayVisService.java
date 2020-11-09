@@ -1,11 +1,13 @@
 package com.sinosoft.visualization.business.service;
 
 import com.sinosoft.visualization.business.api.dto.MapDataDTO;
+import com.sinosoft.visualization.business.api.dto.PieDataDto;
 import com.sinosoft.visualization.business.api.vo.BarDataViewVo;
 import com.sinosoft.visualization.business.api.vo.MapDataVO;
 import com.sinosoft.visualization.business.api.vo.OldPieDataViewVo;
 import com.sinosoft.visualization.business.api.vo.TodayOverviewVO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -25,5 +27,5 @@ public interface TodayVisService {
 
     List<OldPieDataViewVo> getAppMoney();
 
-    BarDataViewVo getAppData();
+    List<BarDataViewVo> getAppData(PieDataDto pieDataDto);
 }

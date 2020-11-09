@@ -2,6 +2,7 @@ package com.sinosoft.visualization.business.api.vo;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import springfox.documentation.service.ApiListing;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,14 @@ public class BarDataViewVo {
     private List<Map<String, Object>> barViewMap;
 
     /**
-     * 环比
+     *环比
      */
-    private List<Map<String,Object>> mom;
+    private Double mom;
+
+    /**
+     * 平台
+     */
+    private String platForm;
+
+
 }

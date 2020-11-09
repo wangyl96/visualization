@@ -47,89 +47,38 @@
           </div>
         </a-card>
       </a-spin>
-      <a-spin :spinning="pieSpin">
-        <a-card :bordered="false" style="margin-top: 20px;" >
-          <div class="account-center-detail" style="padding-left: 20px">
-            <p>
-              <i class="title"></i>保费数据统计
-            </p>
+      <a-card :bordered="false" style="margin-top: 20px;" >
+        <div class="account-center-detail" style="padding-left: 20px">
+          <p>
+            <i class="title"></i>保费数据统计
+          </p>
+        </div>
+        <a-row>
+          <div v-for="(item) in pieDatas" :key="item.platForm" >
+            <pie-view ref="pieView" :pieDataInfo="item"></pie-view>
           </div>
-          <!--  保费数据统计饼图  -->
-          <a-row>
-            <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-              <div id="myPie" :style="{height: '200px'}"></div>
-              <div style="float: left; margin-top: -200px; margin-left: 45%">
-                <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-                  <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
-                  <span  class="mom-font" >环比
-                  <span v-if="((pieData.mom[0].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
-                     <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[0].num-1)*100)).toFixed(2)}}%</span>
-                  </span>
-                  <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
-                    <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[0].num-1)*100)).toFixed(2)}}%</span></span>
-                  </span>
-                </ul>
-              </div>
-            </a-col>
-
-            <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-              <div id="myPie2" :style="{height: '200px'}"></div>
-              <div style="float: left; margin-top: -200px; margin-left: 45%">
-                <ul style="margin-left: -42px; margin-top: 5px;color: #333333">
-                  <li  class= "total-amount-font">¥{{pieData.barViewMap[1].num}}</li>
-                  <span  class="mom-font" >环比
-                  <span v-if="((pieData.mom[1].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
-                     <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[1].num-1)*100)).toFixed(2)}}%</span>
-                  </span>
-                  <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
-                    <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[1].num-1)*100)).toFixed(2)}}%</span></span>
-                  </span>
-                </ul>
-              </div>
-            </a-col>
-
-            <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
-              <div id="myPie3" :style="{height: '200px'}"></div>
-              <div style="float: left; margin-top: -200px; margin-left: 45%">
-                <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-                  <li  class= "total-amount-font">¥{{pieData.barViewMap[2].num}}</li>
-                  <span  class="mom-font" >环比
-                  <span v-if="((pieData.mom[2].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
-                     <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[2].num-1)*100)).toFixed(2)}}%</span>
-                  </span>
-                  <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
-                    <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[2].num-1)*100)).toFixed(2)}}%</span></span>
-                  </span>
-                </ul>
-              </div>
-            </a-col>
-          </a-row>
-        </a-card>
-      </a-spin>
+        </a-row>
+      </a-card>
     </div>
   </page-header-wrapper>
 </template>
 
 <script>
 import PlatformOverview from '@/components/overview/index'
-import echarts from 'echarts'
+// import echarts from 'echarts'
 import '../../../node_modules/echarts/map/js/china.js'
 import {
   RankList
 } from '@/components'
 import { getTodayMapData, getPieView, getTodayOverview } from '@/api/business/visOverview'
+// import { getTodayMapData, getTodayOverview } from '@/api/business/visOverview'
 import ChinaMap from '@/components/Charts/chinaMap'
+import PieView from '@/components/overview/pieView'
 import moment from 'moment'
 
 export default {
   name: 'Overview',
-  components: { ChinaMap, PlatformOverview, RankList },
+  components: { PieView, ChinaMap, PlatformOverview, RankList },
   data () {
     return {
       platform: [],
@@ -138,7 +87,7 @@ export default {
       size: 'large',
       screenWidth: document.body.clientWidth / 3 + 'px',
       rankList: [],
-      pieData: {},
+      pieDatas: {},
       // 今日数据概览spin
       overviewSpin: true,
       // 地图标签页和按钮
@@ -324,412 +273,401 @@ export default {
      */
     getPieView () {
       getPieView().then(response => {
-        this.pieData = JSON.parse(JSON.stringify(response.data))
-        this.drawPie()
-      })
-    },
-    /**
-     * 判读正负，正则返回原数 负数返回0
-     * @param e
-     * @returns {number|*}
-     * @constructor
-     */
-    JudgePositiveNegative (e) {
-      if (e >= 0) {
-        return e
-      } else {
-        return 0
-      }
-    },
-    /**
-     * 绘制饼图
-     */
-    drawPie () {
-      this.$nextTick(() => {
-        // 初始化echarts实例
-        const myPie = echarts.init(document.getElementById('myPie'))
-        const myPie2 = echarts.init(document.getElementById('myPie2'))
-        const myPie3 = echarts.init(document.getElementById('myPie3'))
-        const that = this
-        // 指定图标的配置和数据
-        var option = {
-          title: {
-            text: this.pieData.barViewMap[0].platForm,
-            left: 20,
-            button: 100
-          },
-          tooltip: {
-            // 悬浮框提示相关
-            trigger: 'item',
-            backgroundColor: 'none',
-            formatter: function (params) {
-              const str = '<div class="tooltip"><div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
-              return str
-            }
-          },
-          legend: {
-            // legend 图例相关
-            type: 'scroll',
-            orient: 'vertical',
-            left: '44%',
-            top: 55,
-            itemWidth: 8,
-            itemHeight: 8,
-            data: [
-              { name: '产', icon: 'circle' },
-              { name: '寿', icon: 'circle' },
-              { name: '健', icon: 'circle' },
-              { name: '资', icon: 'circle' },
-              { name: '金服', icon: 'circle' }
-            ],
-            textStyle: {
-              rich: {
-                a: {
-                  width: 24,
-                  color: '#333',
-                  fontSize: 12,
-                  fontWeight: 400,
-                  fontFamily: 'apple-system BlinkMacSystemFont'
-                },
-                b: {
-                  color: '#999',
-                  width: 74,
-                  fontSize: 12,
-                  fontWeight: 400,
-                  fontFamily: 'apple-system BlinkMacSystemFont'
-                },
-                c: {
-                  color: '#333',
-                  fontSize: 12,
-                  fontWeight: 400,
-                  fontFamily: 'apple-system BlinkMacSystemFont'
-                }
-              }
-            },
-            formatter: function (name) {
-              const barViewMap = that.pieData.barViewMap[0]
-              let ratio = ''
-              let value = ''
-              switch (name) {
-                case '产':
-                  ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.product
-                  break
-
-                case '寿':
-                  ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.life
-                  break
-
-                case '健':
-                  ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.health
-                  break
-
-                case '资':
-                  ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.wealth
-                  break
-
-                case '金服':
-                  ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.gold
-                  break
-              }
-              var arr = [
-                '{a|' + name + '}' +
-                '{b|' + '  |   ' + ratio + '}' +
-                '{c|' + value + '}'
-              ]
-              return arr
-            }
-          },
-          series: {
-            name: this.pieData.barViewMap[0].platForm + '平台',
-            type: 'pie',
-            center: ['24%', '50%'],
-            selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
-            data: [
-              { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].product) },
-              { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].life) },
-              { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].health) },
-              { name: '资', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].wealth) },
-              { name: '金服', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].gold) }
-            ],
-            label: {
-              normal: {
-                position: 'inner',
-                show: false
-              }
-            },
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              },
-              normal: {
-                color: function (params) {
-                  // 自定义颜色
-                  var colorList = [
-                    '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
-                  ]
-                  return colorList[params.dataIndex]
-                }
-              }
-            }
-          }
-        }
-
-        var option1 = {
-          title: {
-            text: this.pieData.barViewMap[1].platForm,
-            left: 20,
-            button: 100
-          },
-          tooltip: {
-            // 悬浮框提示相关
-            trigger: 'item',
-            backgroundColor: 'none',
-            formatter: function (params) {
-              const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
-              return str
-            }
-          },
-          legend: {
-            // legend 图例相关
-            type: 'scroll',
-            orient: 'vertical',
-            left: '44%',
-            top: 55,
-            itemWidth: 8,
-            itemHeight: 8,
-            data: [
-              { name: '产', icon: 'circle' },
-              { name: '寿', icon: 'circle' },
-              { name: '健', icon: 'circle' },
-              { name: '资', icon: 'circle' }
-            ],
-            textStyle: {
-              rich: {
-                a: {
-                  lineHeight: 10,
-                  color: '#333',
-                  width: 24
-                },
-                b: {
-                  color: '#999999',
-                  lineHeight: 10,
-                  width: 74
-                },
-                c: {
-                  color: '#333'
-                }
-              }
-            },
-            formatter: function (name) {
-              const barViewMap = that.pieData.barViewMap[1]
-              let ratio = ''
-              let value = ''
-              switch (name) {
-                case '产':
-                  ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.product
-                  break
-
-                case '寿':
-                  ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.life
-                  break
-
-                case '健':
-                  ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.health
-                  break
-
-                case '资':
-                  ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.wealth
-                  break
-
-                case '金服':
-                  ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.gold
-                  break
-              }
-              var arr = [
-                '{a|' + name + '}' +
-                '{b|' + '  |   ' + ratio + '}' +
-                '{c|' + value + '}'
-              ]
-              return arr
-            }
-          },
-          series: {
-            name: this.pieData.barViewMap[1].platForm + '平台',
-            type: 'pie',
-            center: ['24%', '50%'],
-            selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
-            data: [
-              { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].product) },
-              { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].life) },
-              { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].health) },
-              { name: '资', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].wealth) }
-            ],
-            label: {
-              normal: {
-                position: 'inner',
-                show: false
-              }
-            },
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              },
-              normal: {
-                color: function (params) {
-                  // 自定义颜色
-                  var colorList = [
-                    '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
-                  ]
-                  return colorList[params.dataIndex]
-                }
-              }
-            }
-          }
-        }
-
-        var option2 = {
-          title: {
-            text: this.pieData.barViewMap[2].platForm,
-            left: 20,
-            button: 100
-          },
-          tooltip: {
-            // 悬浮框提示相关
-            trigger: 'item',
-            backgroundColor: 'none',
-            formatter: function (params) {
-              const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
-              return str
-            }
-          },
-          legend: {
-            // legend 图例相关
-            type: 'scroll',
-            orient: 'vertical',
-            left: '44%',
-            top: 55,
-            itemWidth: 8,
-            itemHeight: 8,
-            data: [
-              { name: '产', icon: 'circle' },
-              { name: '寿', icon: 'circle' },
-              { name: '健', icon: 'circle' }
-            ],
-            textStyle: {
-              rich: {
-                a: {
-                  color: '#333',
-                  lineHeight: 10,
-                  width: 24
-                },
-                b: {
-                  color: '#999999',
-                  lineHeight: 10,
-                  width: 74
-                },
-                c: {
-                  color: '#333'
-                }
-              }
-            },
-            formatter: function (name) {
-              const barViewMap = that.pieData.barViewMap[2]
-              let ratio = ''
-              let value = ''
-              switch (name) {
-                case '产':
-                  ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.product
-                  break
-
-                case '寿':
-                  ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.life
-                  break
-
-                case '健':
-                  ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.health
-                  break
-
-                case '资':
-                  ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.wealth
-                  break
-
-                case '金服':
-                  ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
-                  value = '¥' + barViewMap.gold
-                  break
-              }
-              var arr = [
-                '{a|' + name + '}' +
-                '{b|' + '  |   ' + ratio + '}' +
-                '{c|' + value + '}'
-              ]
-              return arr
-            }
-          },
-          series: {
-            name: this.pieData.barViewMap[2].platForm + '平台',
-            type: 'pie',
-            center: ['24%', '50%'],
-            selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
-            data: [
-              { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].product) },
-              { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].life) },
-              { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].health) }
-            ],
-            label: {
-              normal: {
-                position: 'inner',
-                show: false
-              }
-            },
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              },
-              normal: {
-                color: function (params) {
-                  // 自定义颜色
-                  var colorList = [
-                    '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
-                  ]
-                  return colorList[params.dataIndex]
-                }
-              }
-            }
-          }
-        }
-        // 使用制定的配置项和数据显示图表
-        myPie.setOption(option)
-        myPie2.setOption(option1)
-        myPie3.setOption(option2)
-        this.pieSpin = false
-        window.onresize = function () {
-          // myPie.resize()
-          // myPie2.resize()
-          // myPie3.resize()
-        }
+        this.pieDatas = JSON.parse(JSON.stringify(response.data))
       })
     }
+    // /**
+    //  * 判读正负，正则返回原数 负数返回0
+    //  * @param e
+    //  * @returns {number|*}
+    //  * @constructor
+    //  */
+    // JudgePositiveNegative (e) {
+    //   if (e >= 0) {
+    //     return e
+    //   } else {
+    //     return 0
+    //   }
+    // },
+    // drawPie () {
+    //   this.$nextTick(() => {
+    //     // 初始化echarts实例
+    //     const myPie = echarts.init(document.getElementById('myPie'))
+    //     const myPie2 = echarts.init(document.getElementById('myPie2'))
+    //     const myPie3 = echarts.init(document.getElementById('myPie3'))
+    //     const that = this
+    //     // 指定图标的配置和数据
+    //     var option = {
+    //       title: {
+    //         text: this.pieData.barViewMap[0].platForm,
+    //         left: 20,
+    //         button: 100
+    //       },
+    //       tooltip: {
+    //         // 悬浮框提示相关
+    //         trigger: 'item',
+    //         backgroundColor: 'none',
+    //         formatter: function (params) {
+    //           const str = '<div class="tooltip"><div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
+    //           return str
+    //         }
+    //       },
+    //       legend: {
+    //         // legend 图例相关
+    //         type: 'scroll',
+    //         orient: 'vertical',
+    //         left: '40%',
+    //         top: 55,
+    //         itemWidth: 8,
+    //         itemHeight: 8,
+    //         data: [
+    //           { name: '产', icon: 'circle' },
+    //           { name: '寿', icon: 'circle' },
+    //           { name: '健', icon: 'circle' },
+    //           { name: '资', icon: 'circle' },
+    //           { name: '金服', icon: 'circle' }
+    //         ],
+    //         textStyle: {
+    //           rich: {
+    //             a: {
+    //               lineHeight: 10,
+    //               width: 24,
+    //               color: '#333'
+    //             },
+    //             b: {
+    //               color: '#999',
+    //               lineHeight: 10,
+    //               width: 74
+    //             },
+    //             c: {
+    //               color: '#333'
+    //             }
+    //           }
+    //         },
+    //         formatter: function (name) {
+    //           const barViewMap = that.pieData.barViewMap[0]
+    //           let ratio = ''
+    //           let value = ''
+    //           switch (name) {
+    //             case '产':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.product
+    //               break
+    //
+    //             case '寿':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.life
+    //               break
+    //
+    //             case '健':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.health
+    //               break
+    //
+    //             case '资':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.wealth
+    //               break
+    //
+    //             case '金服':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.gold
+    //               break
+    //           }
+    //           var arr = [
+    //             '{a|' + name + '}' +
+    //             '{b|' + '  |   ' + ratio + '}' +
+    //             '{c|' + value + '}'
+    //           ]
+    //           return arr
+    //         }
+    //       },
+    //       series: {
+    //         name: this.pieData.barViewMap[0].platForm + '平台',
+    //         type: 'pie',
+    //         center: ['20%', '50%'],
+    //         selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
+    //         data: [
+    //           { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].product) },
+    //           { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].life) },
+    //           { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].health) },
+    //           { name: '资', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].wealth) },
+    //           { name: '金服', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].gold) }
+    //         ],
+    //         label: {
+    //           normal: {
+    //             position: 'inner',
+    //             show: false
+    //           }
+    //         },
+    //         itemStyle: {
+    //           emphasis: {
+    //             shadowBlur: 10,
+    //             shadowOffsetX: 0,
+    //             shadowColor: 'rgba(0, 0, 0, 0.5)'
+    //           },
+    //           normal: {
+    //             color: function (params) {
+    //               // 自定义颜色
+    //               var colorList = [
+    //                 '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
+    //               ]
+    //               return colorList[params.dataIndex]
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //
+    //     var option1 = {
+    //       title: {
+    //         text: this.pieData.barViewMap[1].platForm,
+    //         left: 20,
+    //         button: 100
+    //       },
+    //       tooltip: {
+    //         // 悬浮框提示相关
+    //         trigger: 'item',
+    //         backgroundColor: 'none',
+    //         formatter: function (params) {
+    //           const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
+    //           return str
+    //         }
+    //       },
+    //       legend: {
+    //         // legend 图例相关
+    //         type: 'scroll',
+    //         orient: 'vertical',
+    //         left: '40%',
+    //         top: 55,
+    //         itemWidth: 8,
+    //         itemHeight: 8,
+    //         data: [
+    //           { name: '产', icon: 'circle' },
+    //           { name: '寿', icon: 'circle' },
+    //           { name: '健', icon: 'circle' },
+    //           { name: '资', icon: 'circle' }
+    //         ],
+    //         textStyle: {
+    //           rich: {
+    //             a: {
+    //               lineHeight: 10,
+    //               color: '#333',
+    //               width: 24
+    //             },
+    //             b: {
+    //               color: '#999999',
+    //               lineHeight: 10,
+    //               width: 74
+    //             },
+    //             c: {
+    //               color: '#333'
+    //             }
+    //           }
+    //         },
+    //         formatter: function (name) {
+    //           const barViewMap = that.pieData.barViewMap[1]
+    //           let ratio = ''
+    //           let value = ''
+    //           switch (name) {
+    //             case '产':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.product
+    //               break
+    //
+    //             case '寿':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.life
+    //               break
+    //
+    //             case '健':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.health
+    //               break
+    //
+    //             case '资':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.wealth
+    //               break
+    //
+    //             case '金服':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.gold
+    //               break
+    //           }
+    //           var arr = [
+    //             '{a|' + name + '}' +
+    //             '{b|' + '  |   ' + ratio + '}' +
+    //             '{c|' + value + '}'
+    //           ]
+    //           return arr
+    //         }
+    //       },
+    //       series: {
+    //         name: this.pieData.barViewMap[1].platForm + '平台',
+    //         type: 'pie',
+    //         center: ['20%', '50%'],
+    //         selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
+    //         data: [
+    //           { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].product) },
+    //           { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].life) },
+    //           { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].health) },
+    //           { name: '资', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].wealth) }
+    //         ],
+    //         label: {
+    //           normal: {
+    //             position: 'inner',
+    //             show: false
+    //           }
+    //         },
+    //         itemStyle: {
+    //           emphasis: {
+    //             shadowBlur: 10,
+    //             shadowOffsetX: 0,
+    //             shadowColor: 'rgba(0, 0, 0, 0.5)'
+    //           },
+    //           normal: {
+    //             color: function (params) {
+    //               // 自定义颜色
+    //               var colorList = [
+    //                 '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
+    //               ]
+    //               return colorList[params.dataIndex]
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //
+    //     var option2 = {
+    //       title: {
+    //         text: this.pieData.barViewMap[2].platForm,
+    //         left: 20,
+    //         button: 100
+    //       },
+    //       tooltip: {
+    //         // 悬浮框提示相关
+    //         trigger: 'item',
+    //         backgroundColor: 'none',
+    //         formatter: function (params) {
+    //           const str = '<div class="tooltip"> <div class="tooltip-title note-circle-blue">' + params.seriesName + '</div> <div class="tooltip-content"> <span class="tooltip-title-left">' + params.name + '</span> <sapn class="tooltip-title-right">' + params.value + '</sapn> </div><div class="tooltip-content"> <span class="tooltip-title-left">比例</span> <sapn class="tooltip-title-right">' + params.percent + '%</sapn> </div> </div>'
+    //           return str
+    //         }
+    //       },
+    //       legend: {
+    //         // legend 图例相关
+    //         type: 'scroll',
+    //         orient: 'vertical',
+    //         left: '40%',
+    //         top: 55,
+    //         itemWidth: 8,
+    //         itemHeight: 8,
+    //         data: [
+    //           { name: '产', icon: 'circle' },
+    //           { name: '寿', icon: 'circle' },
+    //           { name: '健', icon: 'circle' }
+    //         ],
+    //         textStyle: {
+    //           rich: {
+    //             a: {
+    //               color: '#333',
+    //               lineHeight: 10,
+    //               width: 24
+    //             },
+    //             b: {
+    //               color: '#999999',
+    //               lineHeight: 10,
+    //               width: 74
+    //             },
+    //             c: {
+    //               color: '#333'
+    //             }
+    //           }
+    //         },
+    //         formatter: function (name) {
+    //           const barViewMap = that.pieData.barViewMap[2]
+    //           let ratio = ''
+    //           let value = ''
+    //           switch (name) {
+    //             case '产':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.product
+    //               break
+    //
+    //             case '寿':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.life
+    //               break
+    //
+    //             case '健':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.health
+    //               break
+    //
+    //             case '资':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.wealth
+    //               break
+    //
+    //             case '金服':
+    //               ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.num) * 100).toFixed(2)) + '%'
+    //               value = '¥' + barViewMap.gold
+    //               break
+    //           }
+    //           var arr = [
+    //             '{a|' + name + '}' +
+    //             '{b|' + '  |   ' + ratio + '}' +
+    //             '{c|' + value + '}'
+    //           ]
+    //           return arr
+    //         }
+    //       },
+    //       series: {
+    //         name: this.pieData.barViewMap[2].platForm + '平台',
+    //         type: 'pie',
+    //         center: ['20%', '50%'],
+    //         selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
+    //         data: [
+    //           { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].product) },
+    //           { name: '寿', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].life) },
+    //           { name: '健', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].health) }
+    //         ],
+    //         label: {
+    //           normal: {
+    //             position: 'inner',
+    //             show: false
+    //           }
+    //         },
+    //         itemStyle: {
+    //           emphasis: {
+    //             shadowBlur: 10,
+    //             shadowOffsetX: 0,
+    //             shadowColor: 'rgba(0, 0, 0, 0.5)'
+    //           },
+    //           normal: {
+    //             color: function (params) {
+    //               // 自定义颜色
+    //               var colorList = [
+    //                 '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
+    //               ]
+    //               return colorList[params.dataIndex]
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //     // 使用制定的配置项和数据显示图表
+    //     myPie.setOption(option)
+    //     myPie2.setOption(option1)
+    //     myPie3.setOption(option2)
+    //     this.pieSpin = false
+    //     window.onresize = function () {
+    //       // myPie.resize()
+    //       // myPie2.resize()
+    //       // myPie3.resize()
+    //     }
+    //   })
+    // }
   }
 }
 </script>

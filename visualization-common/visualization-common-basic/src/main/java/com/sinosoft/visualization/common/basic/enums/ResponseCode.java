@@ -16,6 +16,7 @@ public enum ResponseCode {
     SUCCESS(1, "成功"),
     /* 参数错误：10001-19999 */
     PARAM_IS_INVALID(10001, "参数无效"),
+    PARAM_IS_NULL(10002,"参数为空"),
     APPLICATIONCONTEXY_IS_EMPTY(10002, "applicationContext为空"),
     /* 系统错误：40001-49999 */
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),

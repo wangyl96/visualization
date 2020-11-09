@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -70,31 +71,14 @@ public interface AppVisDataRepository extends JpaRepository<AppVisData, Long> {
             "\t) bc" ,nativeQuery = true)
     Map<String, Double> getSumMoney(String platForm, LocalDate testDay);
 
-    @Query(value = "select a.*, a.product + a.life + a.wealth + a.gold + a.health num from \n" +
-            "(SELECT 'app' as platForm ,product ,life,health,wealth,gold \n" +
-            "from app_vis_data WHERE is_active = 1 ORDER BY vis_date desc LIMIT 1 ) a\n" +
-            "UNION all\n" +
-            "select p.* , p.product + p.life + p.health + p.wealth num from \n" +
-            "(SELECT 'pc' as platForm ,product ,life,health,wealth ,\"nan\" gold FROM pc_vis_data WHERE is_active = 1  ORDER BY vis_date desc LIMIT 1) p\n" +
-            "UNION all\n" +
-            "SELECT w.* , w.product +w.life + w.health FROM\n" +
-            "(SELECT 'wap' as platForm ,product ,life,health,\"nan\" wealth ,\"nan\" gold FROM wap_vis_data WHERE is_active = 1 ORDER BY vis_date LIMIT 1 ) w",nativeQuery = true)
-    List<Map<String, Object>> getAppData();
 
-    @Query(value = " SELECT 'app' platform ,(SELECT product + life + health + wealth + gold  mum from app_vis_data WHERE is_active = 1 ORDER BY vis_date desc LIMIT 1)\n" +
-            " /(\n" +
-            " SELECT table1.mum from\n" +
-            " (SELECT  vis_date,product + life + health + wealth + gold  mum from app_vis_data WHERE is_active = 1 ORDER BY vis_date desc LIMIT 2) table1 ORDER BY table1.vis_date LIMIT 1) num\n" +
-            " UNION all \n" +
-            " SELECT 'pc' platform ,(SELECT product + life + health + wealth   mum from pc_vis_data WHERE is_active = 1 ORDER BY vis_date desc LIMIT 1)\n" +
-            " /(\n" +
-            " SELECT table2.mum from\n" +
-            " (SELECT  vis_date,product + life + health + wealth   mum from pc_vis_data WHERE is_active = 1 ORDER BY vis_date desc LIMIT 2) table2 ORDER BY table2.vis_date LIMIT 1)\n" +
-            " \n" +
-            " UNION all \n" +
-            " SELECT 'wap' platform ,(SELECT product + life + health  mum from wap_vis_data WHERE is_active = 1 ORDER BY vis_date desc LIMIT 1)\n" +
-            " /(\n" +
-            " SELECT table3.mum from\n" +
-            " (SELECT  vis_date,product + life + health  mum from wap_vis_data WHERE is_active = 1 ORDER BY vis_date desc LIMIT 2) table3 ORDER BY table3.vis_date LIMIT 1)",nativeQuery = true)
-    List<Map<String, Object>> getMom();
+    @Query(value = "select product ,life,health,wealth,gold,SUM(product\n" +
+            "+ life + health + wealth+ gold) realSum, SUM(ABS(product)+ABS(life)+ABS(health)+ABS(wealth)+ABS(gold)) falseSum  from app_vis_data where vis_date between ?1 and ?2 and is_active = 1",nativeQuery = true)
+    List<Map<String,Object>> getAppDatas(LocalDate dateBefore, LocalDate dateAfter);
+
+    @Query(value = "SELECT SUM(product+ life + health + wealth+ gold) mom FROM app_vis_data WHERE is_active =1\n" +
+            "AND vis_date = ?1",nativeQuery = true)
+    Double getMom(LocalDate date);
+
+
 }

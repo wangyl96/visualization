@@ -4,6 +4,7 @@ import com.sinosoft.visualization.business.api.entity.PcVisData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -30,4 +31,12 @@ public interface PcVisDataRepository extends JpaRepository<PcVisData, Long> {
             "ORDER BY vis_date LIMIT 1) AS ratio FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 1) ", nativeQuery = true)
     List<Map<String, Object>> getPcInfo();
 
+
+    @Query(value = "select product ,life,health,wealth,SUM(product\n" +
+            "+ life + health + wealth) realSum, SUM(ABS(product)+ABS(life)+ABS(health)+ABS(wealth)) falseSum  from pc_vis_data where vis_date between ?1 and ?2 and is_active = 1",nativeQuery = true)
+    List<Map<String,Object>> getPcDatas(LocalDate dateBefore, LocalDate dateAfter);
+
+    @Query(value = "SELECT SUM(product+ life + health + wealth) mom FROM pc_vis_data WHERE is_active =1\n" +
+            "AND vis_date = ?1",nativeQuery = true)
+    Double getPcMom(LocalDate date);
 }

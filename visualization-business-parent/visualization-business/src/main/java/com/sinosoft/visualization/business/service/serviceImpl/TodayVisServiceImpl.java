@@ -1,7 +1,7 @@
 package com.sinosoft.visualization.business.service.serviceImpl;
 
 import com.sinosoft.visualization.business.api.dto.MapDataDTO;
-import com.sinosoft.visualization.business.api.entity.AppComVisData;
+import com.sinosoft.visualization.business.api.dto.PieDataDto;
 import com.sinosoft.visualization.business.api.vo.BarDataViewVo;
 import com.sinosoft.visualization.business.api.vo.MapDataVO;
 import com.sinosoft.visualization.business.api.vo.OldPieDataViewVo;
@@ -9,15 +9,9 @@ import com.sinosoft.visualization.business.api.vo.TodayOverviewVO;
 import com.sinosoft.visualization.business.repository.*;
 import com.sinosoft.visualization.business.service.TodayVisService;
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -85,6 +79,7 @@ public class TodayVisServiceImpl implements TodayVisService {
 
     /**
      * 获取各平台及指标编码和名称
+     *
      * @return
      */
     @Override
@@ -94,6 +89,7 @@ public class TodayVisServiceImpl implements TodayVisService {
 
     /**
      * 获取各平台及指标地图数据
+     *
      * @param mapDataDTO
      * @return
      */
@@ -108,7 +104,7 @@ public class TodayVisServiceImpl implements TodayVisService {
                 if (StringUtils.equals("app_installation", mapDataDTO.getQuotaCode())) {
                     mapData = appComVisDataRepository.getInstallMapData("2020-10-09");
                 } else if (StringUtils.equals("registrations", mapDataDTO.getQuotaCode())) {
-                    mapData = appComVisDataRepository.getRegistMapData( "2020-10-09");
+                    mapData = appComVisDataRepository.getRegistMapData("2020-10-09");
                 }
                 break;
             default:
@@ -116,7 +112,7 @@ public class TodayVisServiceImpl implements TodayVisService {
                 break;
         }
         // 指标MAP
-        HashMap<String, String> quotaMap =new HashMap<String, String>() {
+        HashMap<String, String> quotaMap = new HashMap<String, String>() {
             {
                 put("name", mapDataDTO.getQuotaName());
                 put("code", mapDataDTO.getQuotaCode());
@@ -149,7 +145,7 @@ public class TodayVisServiceImpl implements TodayVisService {
         //获取所有的平台
         List<String> platFroms = sysDictRepository.getPlatFrom();
 
-        if ( ! Objects.isNull(platFroms)) {
+        if (!Objects.isNull(platFroms)) {
             for (String platForm : platFroms) {
                 List<Map<String, Object>> appMoneys = new ArrayList<>();
                 OldPieDataViewVo oldPieDataViewVo = new OldPieDataViewVo();
@@ -200,29 +196,62 @@ public class TodayVisServiceImpl implements TodayVisService {
      * @return
      */
     @Override
-    public BarDataViewVo getAppData() {
+    public List<BarDataViewVo> getAppData(PieDataDto pieDataDto) {
 
-        BarDataViewVo barDataViewVo = new BarDataViewVo();
-        List<Map<String, Object>> appDatas = appVisDataRepository.getAppData();
-        List<Map<String, Object>> mom = appVisDataRepository.getMom();
-        if (appDatas.size() > 0 && mom.size() > 0) {
-
-//            appDatas.forEach(appData->{
-//                Iterator<Map.Entry<String, Object>> it = appData.entrySet().iterator();
-//                while (it.hasNext()){
-//                    Map.Entry<String, Object> entry = it.next();
-//                    if (entry.getValue().toString().equals("nan")){
-//                        it.remove();
-//                    }
-//                }
-//            });
-
+        // 获取昨天的日期
+        // LocalDate yestDay = LocalDate.now().plusDays(-1);
+        // 测试昨天日期
+        LocalDate yestDay = LocalDate.of(2020, 01, 03);
+        // 获取前天的日期
+        //LocalDate beforeYestDay = LocalDate.now().plusDays(-2);
+        // 测试前天日期
+        LocalDate beforeYestDay = LocalDate.of(2020, 01, 02);
+        List<BarDataViewVo> barDataViewVoList = new ArrayList<>();
+        List<Map<String, Object>> appDatas = appVisDataRepository.getAppDatas(yestDay, yestDay);
+        // 加入app的数据
+        if (appDatas.size() > 0) {
+            BarDataViewVo barDataViewVo = new BarDataViewVo();
             barDataViewVo.setBarViewMap(appDatas);
+            barDataViewVo.setPlatForm("APP");
+            // 获取环比
+            BigDecimal yestDaySum = new BigDecimal(appVisDataRepository.getMom(yestDay).toString());
+            BigDecimal beforeDaySum = new BigDecimal(appVisDataRepository.getMom(beforeYestDay).toString());
+            double mom = ((yestDaySum.subtract(beforeDaySum)).divide(beforeDaySum, 2, BigDecimal.ROUND_HALF_UP)).doubleValue();
             barDataViewVo.setMom(mom);
-            return barDataViewVo;
-        } else {
-            return barDataViewVo;
+            barDataViewVoList.add(barDataViewVo);
         }
+
+        // 获取pc数据
+        List<Map<String, Object>> pcDatas = pcVisDataRepository.getPcDatas(yestDay, yestDay);
+        // 加入pc的数据
+        if (pcDatas.size() > 0) {
+            BarDataViewVo barDataViewVo = new BarDataViewVo();
+            barDataViewVo.setBarViewMap(pcDatas);
+            barDataViewVo.setPlatForm("PC");
+            // 获取环比
+            BigDecimal yestDaySum = new BigDecimal(pcVisDataRepository.getPcMom(yestDay).toString());
+            BigDecimal beforeDaySum = new BigDecimal(pcVisDataRepository.getPcMom(beforeYestDay).toString());
+            double mom = ((yestDaySum.subtract(beforeDaySum)).divide(beforeDaySum, 2, BigDecimal.ROUND_HALF_UP)).doubleValue();
+            barDataViewVo.setMom(mom);
+            barDataViewVoList.add(barDataViewVo);
+        }
+
+        //获取wap的数据
+        List<Map<String, Object>> wapDatas = wapVisDataRepository.getWapDatas(yestDay, yestDay);
+        // 加入wap的数据
+        if (wapDatas.size() > 0) {
+            BarDataViewVo barDataViewVo = new BarDataViewVo();
+            barDataViewVo.setBarViewMap(wapDatas);
+            barDataViewVo.setPlatForm("WAP");
+            // 获取环比
+            BigDecimal yestDaySum = new BigDecimal(wapVisDataRepository.getWapMom(yestDay).toString());
+            BigDecimal beforeDaySum = new BigDecimal(wapVisDataRepository.getWapMom(beforeYestDay).toString());
+            double mom = ((yestDaySum.subtract(beforeDaySum)).divide(beforeDaySum, 2, BigDecimal.ROUND_HALF_UP)).doubleValue();
+            barDataViewVo.setMom(mom);
+            barDataViewVoList.add(barDataViewVo);
+        }
+        return barDataViewVoList;
+
 
     }
 
