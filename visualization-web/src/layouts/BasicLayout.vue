@@ -21,7 +21,7 @@
     -->
     <template v-slot:menuHeaderRender>
       <div>
-        <img src="../../public/static/icon/picc_icon.png" class="logo" alt="logo">
+        <img src="../../public/static/icon/picc_nav.png" class="logo" alt="logo">
         <h1>{{ title }}</h1>
       </div>
     </template>
@@ -168,8 +168,8 @@ export default {
 @import "./BasicLayout.less";
 
 .ant-pro-sider-menu-logo svg, .ant-pro-sider-menu-logo img {
-  height: 25px;
-  width: 40px;
+  height: 22px;
+  width: 54px;
   vertical-align: middle;
 }
 </style>

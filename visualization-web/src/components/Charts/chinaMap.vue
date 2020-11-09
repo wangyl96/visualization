@@ -56,7 +56,12 @@
         optionMap = {
           title: {
             text: '分省平台和指标数据趋势情况',
-            left: 20
+            left: 20,
+            textStyle: {
+              fontWeight: 'normal',
+              fontSize: '18',
+              color: '#333'
+            }
           },
           tooltip: {
             trigger: 'item',

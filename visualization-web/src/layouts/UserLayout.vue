@@ -4,7 +4,7 @@
       <div class="top">
         <div class="header">
           <a href="/">
-            <img src="../../public/static/icon/picc_icon.png" class="logo" alt="logo">
+            <img src="../../public/static/icon/picc_login.png" class="logo" alt="logo">
             <span class="title">数据可视化</span>
           </a>
         </div>
@@ -86,10 +86,10 @@ export default {
           }
 
           .logo {
-            height: 44px;
             vertical-align: top;
             margin-right: 16px;
             border-style: none;
+            margin-top: 5.5px;
           }
 
           .title {

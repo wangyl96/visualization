@@ -29,7 +29,6 @@ router.beforeEach((to, from, next) => {
         store
           .dispatch('GetInfo')
           .then(res => {
-            console.log(res)
             const roles = res.data && res.data.role
             // generate dynamic router
             store.dispatch('GenerateRoutes', { roles }).then(() => {
@@ -66,6 +65,7 @@ router.beforeEach((to, from, next) => {
       // 在免登录名单，直接进入
       next()
     } else {
+      console.log('无token')
       next({ path: loginRoutePath, query: { redirect: to.fullPath } })
       NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
     }

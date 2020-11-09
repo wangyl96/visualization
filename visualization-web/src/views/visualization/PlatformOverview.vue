@@ -35,11 +35,13 @@
               </div>
             </a-tabs>
             <a-row>
-              <a-col :xl="19" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
                 <china-map ref="chinaMap" :china="mapData"></china-map>
               </a-col>
-              <a-col :xl="5" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list v-if="rankList.length > 0" :title="title" :list="rankList"/>
+              </a-col>
+              <a-col :xl="2" :lg="12" :md="12" :sm="24" :xs="24">
               </a-col>
             </a-row>
           </div>
@@ -56,16 +58,16 @@
           <a-row>
             <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
               <div id="myPie" :style="{height: '200px'}"></div>
-              <div style="float: left; margin-top: -200px; margin-left: 41%">
+              <div style="float: left; margin-top: -200px; margin-left: 45%">
                 <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
                   <li  class= "total-amount-font">¥{{pieData.barViewMap[0].num}}</li>
                   <span  class="mom-font" >环比
                   <span v-if="((pieData.mom[0].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;margin-top: -3px"/>
+                    <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
                      <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[0].num-1)*100)).toFixed(2)}}%</span>
                   </span>
                   <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;margin-top: -3px"/>
+                    <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
                     <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[0].num-1)*100)).toFixed(2)}}%</span></span>
                   </span>
                 </ul>
@@ -74,16 +76,16 @@
 
             <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
               <div id="myPie2" :style="{height: '200px'}"></div>
-              <div style="float: left; margin-top: -200px; margin-left: 41%">
+              <div style="float: left; margin-top: -200px; margin-left: 45%">
                 <ul style="margin-left: -42px; margin-top: 5px;color: #333333">
                   <li  class= "total-amount-font">¥{{pieData.barViewMap[1].num}}</li>
                   <span  class="mom-font" >环比
                   <span v-if="((pieData.mom[1].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;margin-top: -3px"/>
+                    <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
                      <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[1].num-1)*100)).toFixed(2)}}%</span>
                   </span>
                   <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;margin-top: -3px"/>
+                    <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
                     <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[1].num-1)*100)).toFixed(2)}}%</span></span>
                   </span>
                 </ul>
@@ -92,16 +94,16 @@
 
             <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
               <div id="myPie3" :style="{height: '200px'}"></div>
-              <div style="float: left; margin-top: -200px; margin-left: 41%">
+              <div style="float: left; margin-top: -200px; margin-left: 45%">
                 <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
                   <li  class= "total-amount-font">¥{{pieData.barViewMap[2].num}}</li>
                   <span  class="mom-font" >环比
                   <span v-if="((pieData.mom[2].num-1)*100) < 0" >
-                    <img src="../../../public/static/icon/drop.png" style="width: 7px;height: 14px;margin-top: -3px"/>
+                    <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
                      <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[2].num-1)*100)).toFixed(2)}}%</span>
                   </span>
                   <span v-else>
-                    <img src="../../../public/static/icon/up.png" style="width: 7px;height: 14px;margin-top: -3px"/>
+                    <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
                     <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom[2].num-1)*100)).toFixed(2)}}%</span></span>
                   </span>
                 </ul>
@@ -110,7 +112,6 @@
           </a-row>
         </a-card>
       </a-spin>
-
     </div>
   </page-header-wrapper>
 </template>
@@ -124,6 +125,7 @@ import {
 } from '@/components'
 import { getTodayMapData, getPieView, getTodayOverview } from '@/api/business/visOverview'
 import ChinaMap from '@/components/Charts/chinaMap'
+import moment from 'moment'
 
 export default {
   name: 'Overview',
@@ -217,6 +219,8 @@ export default {
     }
   },
   mounted () {
+    // 获取当前日期和前一天日期
+    console.log('日期', moment().format('YYYY-MM-DD'))
     // 数据总览
     this.getTodayOverview()
     // 地图
@@ -252,6 +256,10 @@ export default {
         }
       })
     },
+    /**
+     * 按钮点击函数
+     * @param e, 选中的按钮
+     */
     handleSizeChange (e) {
       this.mapSpin = true
       this.quotaChecked = e.target.value
@@ -270,6 +278,9 @@ export default {
       // 再根据平台编码和指标编码获取地图数据
       this.getTodayMapData(query)
     },
+    /**
+     * 获取今日概览数据函数
+     */
     getTodayOverview () {
         getTodayOverview().then(response => {
           const result = response.data
@@ -277,6 +288,9 @@ export default {
           this.overviewSpin = false
         })
     },
+    /**
+     * 绘制地图
+     */
     drawLine () {
       // 先调用后台获取tab页数据
       const platform = JSON.parse(JSON.stringify(this.tabData[0]))
@@ -305,6 +319,9 @@ export default {
         this.mapSpin = false
       })
     },
+    /**
+     * 获取饼图所需数据
+     */
     getPieView () {
       getPieView().then(response => {
         this.pieData = JSON.parse(JSON.stringify(response.data))
@@ -324,6 +341,9 @@ export default {
         return 0
       }
     },
+    /**
+     * 绘制饼图
+     */
     drawPie () {
       this.$nextTick(() => {
         // 初始化echarts实例
@@ -351,7 +371,7 @@ export default {
             // legend 图例相关
             type: 'scroll',
             orient: 'vertical',
-            left: '40%',
+            left: '44%',
             top: 55,
             itemWidth: 8,
             itemHeight: 8,
@@ -365,17 +385,24 @@ export default {
             textStyle: {
               rich: {
                 a: {
-                  lineHeight: 10,
                   width: 24,
-                  color: '#333'
+                  color: '#333',
+                  fontSize: 12,
+                  fontWeight: 400,
+                  fontFamily: 'apple-system BlinkMacSystemFont'
                 },
                 b: {
                   color: '#999',
-                  lineHeight: 10,
-                  width: 74
+                  width: 74,
+                  fontSize: 12,
+                  fontWeight: 400,
+                  fontFamily: 'apple-system BlinkMacSystemFont'
                 },
                 c: {
-                  color: '#333'
+                  color: '#333',
+                  fontSize: 12,
+                  fontWeight: 400,
+                  fontFamily: 'apple-system BlinkMacSystemFont'
                 }
               }
             },
@@ -420,7 +447,7 @@ export default {
           series: {
             name: this.pieData.barViewMap[0].platForm + '平台',
             type: 'pie',
-            center: ['20%', '50%'],
+            center: ['24%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
               { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[0].product) },
@@ -473,7 +500,7 @@ export default {
             // legend 图例相关
             type: 'scroll',
             orient: 'vertical',
-            left: '40%',
+            left: '44%',
             top: 55,
             itemWidth: 8,
             itemHeight: 8,
@@ -541,7 +568,7 @@ export default {
           series: {
             name: this.pieData.barViewMap[1].platForm + '平台',
             type: 'pie',
-            center: ['20%', '50%'],
+            center: ['24%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
               { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[1].product) },
@@ -593,7 +620,7 @@ export default {
             // legend 图例相关
             type: 'scroll',
             orient: 'vertical',
-            left: '40%',
+            left: '44%',
             top: 55,
             itemWidth: 8,
             itemHeight: 8,
@@ -660,7 +687,7 @@ export default {
           series: {
             name: this.pieData.barViewMap[2].platForm + '平台',
             type: 'pie',
-            center: ['20%', '50%'],
+            center: ['24%', '50%'],
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
               { name: '产', value: this.JudgePositiveNegative(this.pieData.barViewMap[2].product) },
@@ -817,7 +844,6 @@ export default {
   width: 94px;
   height: 24px;
   font-size: 16px;
-  font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
   font-weight: bold;
   color: #333333;
   line-height: 24px;
@@ -828,7 +854,6 @@ export default {
   width: 28px;
   height: 19px;
   font-size: 14px;
-  font-family: MicrosoftYaHei;
   color: #333333;
   line-height: 19px;
 }
@@ -837,7 +862,6 @@ export default {
   width: 52px;
   height: 19px;
   font-size: 14px;
-  font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
   font-weight: bold;
   color: #3CB800;
   line-height: 19px;

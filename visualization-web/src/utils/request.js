@@ -15,6 +15,7 @@ const request = axios.create({
 
 // 异常拦截处理器
 const errorHandler = (error) => {
+  console.log('error', error)
   if (error.response) {
     const data = error.response.data
     // 从 localstorage 获取 token
@@ -26,10 +27,6 @@ const errorHandler = (error) => {
       })
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
-      })
       if (token) {
         store.dispatch('Logout').then(() => {
           setTimeout(() => {
@@ -42,10 +39,9 @@ const errorHandler = (error) => {
   return Promise.reject(error)
 }
 
-// request interceptor
+// request interceptor 请求拦截器, 通过拦截请求,从而给每个请求带上请求头
 request.interceptors.request.use(config => {
   const token = storage.get(ACCESS_TOKEN)
-  console.log(token)
   // 如果 token 存在
   // 让每个请求携带自定义 token 请根据实际情况自行修改
   if (token) {
@@ -56,6 +52,22 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
+  if (response.data.code === 401) {
+    console.log('身份过期来, 来人啊----------')
+    notification.warn({
+      message: '用户身份已过期, 请重新登录',
+      duration: 5
+    })
+    setTimeout(() => {
+      storage.remove(ACCESS_TOKEN)
+      window.location.reload()
+    }, 5000)
+    // store.dispatch('Logout').then(() => {
+    //   setTimeout(() => {
+    //     window.location.reload()
+    //   }, 1500)
+    // })
+  }
   return response.data
 }, errorHandler)
 

@@ -12,7 +12,7 @@
             <a-statistic v-if="item.ratio < 0" :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#3CB800', fontSize: '14px', fontWeight: 'bold'}">
               <template v-slot:prefix>
                 <span style="font-size: 14px; color: #333333; font-weight: normal">环比</span>
-                <img  src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
+                <img src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
               </template>
               <template v-slot:suffix>
                 <span>%</span>
