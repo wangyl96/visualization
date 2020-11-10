@@ -1,6 +1,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <page-header-wrapper :title="false">
     <div class="vis-container">
+      <!--   概览   -->
       <a-spin :spinning="overviewSpin">
         <a-card :bordered="false">
           <!--  数据总览  -->
@@ -9,18 +10,20 @@
               <i class="title"></i>数据总览 2020-10-09
             </p>
           </div>
+        </a-card>
           <!--分割线-->
-          <a-divider style="background: #F0F2F5;" />
+<!--          <a-divider style="background: #F0F2F5;" />-->
           <!--  各平台卡片  -->
-          <a-row>
+          <a-row :gutter="10">
             <div v-for="(item) in platform" :key="item.platformName" >
               <platform-overview ref="platformOverview" :platform="item"></platform-overview>
             </div>
           </a-row>
-        </a-card>
+
       </a-spin>
+      <!--   地图   -->
       <a-spin :spinning="mapSpin">
-        <a-card style="margin-top: 20px" :bordered="false" :body-style="{padding: '0'}">
+        <a-card :bordered="false" :body-style="{padding: '0'}">
           <div class="salesCard">
             <a-tabs default-active-key="app" size="large" @change="callback" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
               <a-tab-pane v-for="(item) in tabData" :key="item.platform.code" :tab="item.platform.name" :disabled="item.platform.code !== 'app'"></a-tab-pane>
@@ -47,6 +50,7 @@
           </div>
         </a-card>
       </a-spin>
+      <!--   饼图   -->
       <a-spin :spinning="pieSpin">
         <a-card :bordered="false" style="margin-top: 20px;" >
           <div class="account-center-detail" style="padding-left: 20px">
@@ -54,14 +58,15 @@
               <i class="title"></i>保费数据统计
             </p>
           </div>
+        </a-card>
           <!--分割线-->
-          <a-divider style="background: #F0F2F5;" />
-          <a-row>
+<!--          <a-divider style="background: #F0F2F5;" />-->
+          <a-row :gutter="10">
             <div v-for="(item) in pieDatas" :key="item.platForm" >
               <pie-view ref="pieView" :pieDataInfo="item"></pie-view>
             </div>
           </a-row>
-        </a-card>
+
       </a-spin>
     </div>
   </page-header-wrapper>
@@ -78,7 +83,7 @@ import { getTodayMapData, getPieView, getTodayOverview } from '@/api/business/vi
 // import { getTodayMapData, getTodayOverview } from '@/api/business/visOverview'
 import ChinaMap from '@/components/Charts/chinaMap'
 import PieView from '@/components/overview/pieView'
-import moment from 'moment'
+// import { beforeYesterday, yesterday } from '@/utils/dateUtil'
 
 export default {
   name: 'Overview',
@@ -168,12 +173,16 @@ export default {
       // 地图加载spin
       mapSpin: true,
       // 饼图加载spin
-      pieSpin: true
+      pieSpin: true,
+      // 数据展示日期
+      // yesterday: yesterday,
+      yesterday: '2020-10-09',
+      // 环比日期
+      beforeYesterday: '2020-10-08'
+      // beforeYesterday: beforeYesterday
     }
   },
   mounted () {
-    // 获取当前日期和前一天日期
-    console.log('日期', moment().format('YYYY-MM-DD'))
     // 数据总览
     this.getTodayOverview()
     // 地图
@@ -181,7 +190,6 @@ export default {
     // 饼图
     this.getPieView()
   },
-
   methods: {
     /**
      * 标签页点击函数
@@ -201,7 +209,8 @@ export default {
           const query = {
             'platformCode': this.platformChecked,
             'quotaCode': this.quotaChecked,
-            'quotaName': this.quotaCheckedName
+            'quotaName': this.quotaCheckedName,
+            'queryDate': this.yesterday
           }
           // 再根据平台编码和指标编码获取地图数据
           this.getTodayMapData(query)
@@ -226,7 +235,8 @@ export default {
       const query = {
         'platformCode': this.platformChecked,
         'quotaCode': this.quotaChecked,
-        'quotaName': this.quotaCheckedName
+        'quotaName': this.quotaCheckedName,
+        'queryDate': this.yesterday
       }
       // 再根据平台编码和指标编码获取地图数据
       this.getTodayMapData(query)
@@ -235,7 +245,11 @@ export default {
      * 获取今日概览数据函数
      */
     getTodayOverview () {
-        getTodayOverview().then(response => {
+        const query = {
+          'queryDate': this.yesterday,
+          'ratioDate': this.beforeYesterday
+        }
+        getTodayOverview(query).then(response => {
           const result = response.data
           this.platform = result
           this.overviewSpin = false
@@ -255,7 +269,8 @@ export default {
       const query = {
         'platformCode': this.platformChecked,
         'quotaCode': this.quotaChecked,
-        'quotaName': this.quotaCheckedName
+        'quotaName': this.quotaCheckedName,
+        'queryDate': this.yesterday
       }
       // 再根据平台编码和指标编码获取地图数据
       this.getTodayMapData(query)
@@ -472,8 +487,11 @@ export default {
 }
 
 .tooltip-title-left {
-
   color: #333;
+}
+
+.ant-layout-footer {
+  padding: 0 50px 0 50px;
 }
 
 </style>

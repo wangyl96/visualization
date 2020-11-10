@@ -8,17 +8,11 @@ const visOverviewApi = {
 }
 
 // 数据可视化-今日数据总览
-export function getTodayOverview () {
+export function getTodayOverview (query) {
   return request({
     url: visOverviewApi.TodayOverview,
-    method: 'get'
-  })
-}
-// 数据可视化-饼图数据
-export function getPieView () {
-  return request({
-    url: visOverviewApi.PieView,
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 
@@ -28,5 +22,13 @@ export function getTodayMapData (query) {
     url: visOverviewApi.TodayMapData,
     method: 'get',
     params: query
+  })
+}
+
+// 数据可视化-饼图数据
+export function getPieView () {
+  return request({
+    url: visOverviewApi.PieView,
+    method: 'get'
   })
 }

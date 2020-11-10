@@ -1,6 +1,7 @@
 package com.sinosoft.visualization.business.controller;
 
 import com.sinosoft.visualization.business.api.dto.MapDataDTO;
+import com.sinosoft.visualization.business.api.dto.OverviewDTO;
 import com.sinosoft.visualization.business.api.dto.PieDataDto;
 import com.sinosoft.visualization.business.api.vo.BarDataViewVo;
 import com.sinosoft.visualization.business.api.vo.MapDataVO;
@@ -47,9 +48,9 @@ public class TodayVisController {
     @ResponseBody
     @GetMapping(value = "/getTodayOverview")
     @ApiOperation(value = "获取今日各平台各指标概览数据", tags = {"获取今日各平台各指标概览数据"}, notes = "此处今日指的是前一天,即已T+1时间表示")
-    public List<TodayOverviewVO> getTodayOverview() {
+    public List<TodayOverviewVO> getTodayOverview(OverviewDTO overviewDTO) {
         log.info("------------------获取今日各平台各指标概览数据开始-----------------");
-        List<TodayOverviewVO> todayOverviewVOList = todayVisService.getTodayOverview();
+        List<TodayOverviewVO> todayOverviewVOList = todayVisService.getTodayOverview(overviewDTO);
         log.info("------------------获取今日各平台各指标概览数据结束-----------------");
         return todayOverviewVOList;
     }
@@ -62,7 +63,7 @@ public class TodayVisController {
     @ResponseBody
     @GetMapping(value = "/getTabData")
     @ApiOperation(value = "获取各平台及指标编码和名称", tags = {"获取各平台及指标编码和名称"})
-    public List<TodayOverviewVO> getTabData() {
+    public List<TodayOverviewVO> getTabData(OverviewDTO overviewDTO) {
         log.info("------------------获取各平台及指标编码和名称开始-----------------");
         List<TodayOverviewVO> todayOverviewVOList = todayVisService.getTabData();
         log.info("------------------获取各平台及指标编码和名称结束-----------------");

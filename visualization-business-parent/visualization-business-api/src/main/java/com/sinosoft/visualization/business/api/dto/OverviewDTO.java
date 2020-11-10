@@ -4,35 +4,23 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * MapDataDTO
+ * OverviewDTO
  *
  * @author wangyl
  * Description:
- * Created in: 2020/11/5
+ * Created in: 2020/11/10
  * Modified by:
  */
 @Data
 @Accessors(chain = true)
-public class MapDataDTO {
-
-    /**
-     * 平台编码
-     */
-    private String platformCode;
-
-    /**
-     * 指标编码
-     */
-    private String quotaCode;
-
-    /**
-     * 指标名称
-     */
-    private String quotaName;
-
+public class OverviewDTO {
     /**
      * 查询日期
      */
     private String queryDate;
 
+    /**
+     * 环比数据日期
+     */
+    private String ratioDate;
 }

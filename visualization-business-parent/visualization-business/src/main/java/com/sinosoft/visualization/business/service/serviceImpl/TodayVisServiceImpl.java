@@ -1,6 +1,7 @@
 package com.sinosoft.visualization.business.service.serviceImpl;
 
 import com.sinosoft.visualization.business.api.dto.MapDataDTO;
+import com.sinosoft.visualization.business.api.dto.OverviewDTO;
 import com.sinosoft.visualization.business.api.dto.PieDataDto;
 import com.sinosoft.visualization.business.api.vo.BarDataViewVo;
 import com.sinosoft.visualization.business.api.vo.MapDataVO;
@@ -51,19 +52,19 @@ public class TodayVisServiceImpl implements TodayVisService {
      * 获取T+1各平台各指标概览数据
      */
     @Override
-    public List<TodayOverviewVO> getTodayOverview() {
+    public List<TodayOverviewVO> getTodayOverview(OverviewDTO overviewDTO) {
         // APP
-        List<Map<String, Object>> appInfoList = appVisDataRepository.getAppInfo();
+        List<Map<String, Object>> appInfoList = appVisDataRepository.getAppInfo(overviewDTO.getQueryDate(), overviewDTO.getRatioDate());
         TodayOverviewVO appOverviewVO = new TodayOverviewVO();
         appOverviewVO.setTodayOverviewMap(appInfoList);
         appOverviewVO.setPlatformName(APP);
         // PC
-        List<Map<String, Object>> pcInfoList = pcVisDataRepository.getPcInfo();
+        List<Map<String, Object>> pcInfoList = pcVisDataRepository.getPcInfo(overviewDTO.getQueryDate(), overviewDTO.getRatioDate());
         TodayOverviewVO pcOverviewVO = new TodayOverviewVO();
         pcOverviewVO.setTodayOverviewMap(pcInfoList);
         pcOverviewVO.setPlatformName(PC);
         // WAP
-        List<Map<String, Object>> wapInfoList = wapVisDataRepository.getWapInfo();
+        List<Map<String, Object>> wapInfoList = wapVisDataRepository.getWapInfo(overviewDTO.getQueryDate(), overviewDTO.getRatioDate());
         TodayOverviewVO wapOverviewVO = new TodayOverviewVO();
         wapOverviewVO.setTodayOverviewMap(wapInfoList);
         wapOverviewVO.setPlatformName(WAP);
@@ -102,9 +103,9 @@ public class TodayVisServiceImpl implements TodayVisService {
             case "app":
                 // 查APP分公司数据表
                 if (StringUtils.equals("app_installation", mapDataDTO.getQuotaCode())) {
-                    mapData = appComVisDataRepository.getInstallMapData("2020-10-09");
+                    mapData = appComVisDataRepository.getInstallMapData(mapDataDTO.getQueryDate());
                 } else if (StringUtils.equals("registrations", mapDataDTO.getQuotaCode())) {
-                    mapData = appComVisDataRepository.getRegistMapData("2020-10-09");
+                    mapData = appComVisDataRepository.getRegistMapData(mapDataDTO.getQueryDate());
                 }
                 break;
             default:

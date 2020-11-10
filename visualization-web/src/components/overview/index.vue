@@ -1,15 +1,15 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="header-info">
     <a-col :sm="8" :xs="24">
-      <a-card :title="platformInfo.platformName" :bordered="false" style="font-size: 18px; color: #333333; margin-left: 16px;">
-        <div id="core1" class="list-content" style="margin-top: -22px; margin-left: -26px">
+      <a-card :title="platformInfo.platformName" :bordered="false" style="font-size: 18px; color: #333333;padding-top: 4px; marginBottom:20px" @click="platformDetails()">
+        <div class="list-content" style="margin-top: -22px; margin-left: -24px">
           <div class="list-content-item" v-for="item in platformInfo.todayOverviewMap" :key="item.contentName">
             <a-statistic :value="item.contentData" :value-style="{fontSize: '18px', lineHeight: '20px', marginBottom: '10px', fontWeight: 'bold'}" >
               <template v-slot:prefix>
                 <span style="font-size: 18px; color: #333333; font-weight: normal">{{item.contentName}}</span>
               </template>
             </a-statistic>
-            <a-statistic v-if="item.ratio < 0" :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#3CB800', fontSize: '14px', fontWeight: 'bold', marginBottom:'10px'}">
+            <a-statistic v-if="item.ratio < 0" :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#3CB800', fontSize: '14px', fontWeight: 'bold', paddingBottom:'20px'}">
               <template v-slot:prefix>
                 <span style="font-size: 14px; color: #333333; font-weight: normal">环比</span>
                 <img src="../../../public/static/icon/drop.png" style="margin-top: -3px; margin-left: 6px"/>
@@ -18,7 +18,7 @@
                 <span>%</span>
               </template>
             </a-statistic>
-            <a-statistic v-else :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#F44242', fontSize: '14px', fontWeight: 'bold', marginBottom:'10px'}">
+            <a-statistic v-else :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#F44242', fontSize: '14px', fontWeight: 'bold', paddingBottom:'20px'}">
               <template v-slot:prefix>
                 <span style="font-size: 14px; color: #333333; font-weight: normal">环比</span>
                 <img src="../../../public/static/icon/up.png" style="margin-top: -3px; margin-left: 6px"/>
@@ -29,7 +29,6 @@
             </a-statistic>
           </div>
         </div>
-        <a-divider v-if="platformInfo.platformName != 'APP'" type="vertical" :style="{height: height}" style="margin-top: -110px; margin-left: -16px"/>
       </a-card>
     </a-col>
   </div>
@@ -58,6 +57,12 @@ export default {
     return {
       platformInfo: this.platform,
       height: ''
+    }
+  },
+  methods: {
+    platformDetails () {
+      // <router-link></router-link>
+      console.log('点击事件')
     }
   },
   mounted () {
@@ -94,6 +99,7 @@ export default {
 
 .header-info {
   position: relative;
+  margin-top: 10px;
   & > em {
     position: absolute;
     top: 0;

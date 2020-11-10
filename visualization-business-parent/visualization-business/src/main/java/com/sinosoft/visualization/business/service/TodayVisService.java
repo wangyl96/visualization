@@ -1,6 +1,7 @@
 package com.sinosoft.visualization.business.service;
 
 import com.sinosoft.visualization.business.api.dto.MapDataDTO;
+import com.sinosoft.visualization.business.api.dto.OverviewDTO;
 import com.sinosoft.visualization.business.api.dto.PieDataDto;
 import com.sinosoft.visualization.business.api.vo.BarDataViewVo;
 import com.sinosoft.visualization.business.api.vo.MapDataVO;
@@ -19,7 +20,7 @@ import java.util.List;
  * Modified by:
  */
 public interface TodayVisService {
-    List<TodayOverviewVO> getTodayOverview();
+    List<TodayOverviewVO> getTodayOverview(OverviewDTO overviewDTO);
 
     List<TodayOverviewVO> getTabData();
 

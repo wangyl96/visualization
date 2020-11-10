@@ -21,11 +21,8 @@ import java.util.Map;
 public interface AppComVisDataRepository extends JpaRepository<AppComVisData, Long>, JpaSpecificationExecutor<AppComVisData> {
 
     @Query(value = "SELECT company name, app_installation value FROM app_com_vis_data WHERE vis_date = ?1 AND company != '其他' ORDER BY app_installation DESC", nativeQuery = true)
-    List<Map<String, Integer>> getInstallMapData(String mapDate);
+    List<Map<String, Integer>> getInstallMapData(String queryDate);
 
     @Query(value = "SELECT company name, registrations value FROM app_com_vis_data WHERE vis_date = ?1 AND company != '其他' ORDER BY registrations DESC", nativeQuery = true)
-    List<Map<String, Integer>> getRegistMapData(String mapDate);
-
-
-
+    List<Map<String, Integer>> getRegistMapData(String queryDate);
 }

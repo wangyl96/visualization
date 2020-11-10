@@ -1,24 +1,26 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-  <!--  <a-spin :spinning="pieSpin">-->
   <!--  保费数据统计饼图  -->
-  <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24" >
-    <div :id="this.pieData.platForm" :style="{height: '240px'}"></div>
-    <div style="position: absolute; margin-top: -220px ;margin-left: 43%">
-      <ul style="margin-left: -42px; margin-top: 5px; color: #333333">
-        <li  class= "total-amount-font">¥{{pieData.barViewMap[0].realSum}}</li>
-        <span  class="mom-font" >环比
-            <span v-if="((pieData.mom)*100) < 0" >
-              <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
-               <span  style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom)*100)).toFixed(2)}}%</span>
-            </span>
-            <span v-else>
-              <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
-              <span  style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom)*100)).toFixed(2)}}%</span></span>
-            </span>
-      </ul>
-    </div>
-  </a-col>
-  <!--  </a-spin>-->
+  <div class="header-info">
+    <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24" >
+      <a-card :bordered="false" :style="{ marginBottom: '20px' }">
+        <div :id="this.pieData.platForm" :style="{height: '240px'}"></div>
+        <div style="position: absolute; margin-top: -220px; margin-left: 36.6%">
+          <ul style=" margin-top: 5px; color: #333333">
+            <li class= "total-amount-font">¥{{pieData.barViewMap[0].realSum}}</li>
+            <span class="mom-font" >环比
+                <span v-if="((pieData.mom)*100) < 0" >
+                  <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
+                   <span style="color: #3CB800FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom)*100)).toFixed(2)}}%</span>
+                </span>
+                <span v-else>
+                  <img src="../../../public/static/icon/up.png" style="margin-top: -3px"/>
+                  <span style="color: #F44242FF;" class="mom-font-num">&nbsp{{ Math.abs(((pieData.mom)*100)).toFixed(2)}}%</span></span>
+                </span>
+          </ul>
+        </div>
+      </a-card>
+    </a-col>
+  </div>
 </template>
 
 <script>
@@ -40,7 +42,6 @@ export default {
   },
   data () {
     return {
-      pieSpin: true,
       pieData: this.pieDataInfo
     }
   },
@@ -102,13 +103,6 @@ export default {
             itemWidth: 8,
             itemHeight: 8,
             data: this.pieData.legend,
-            // data: [
-            //   { name: '产', icon: 'circle' },
-            //   { name: '寿', icon: 'circle' },
-            //   { name: '健', icon: 'circle' },
-            //   { name: '资', icon: 'circle' },
-            //   { name: '金服', icon: 'circle' }
-            // ],
             textStyle: {
               rich: {
                 a: {
@@ -120,7 +114,7 @@ export default {
                 },
                 b: {
                   color: '#999',
-                  width: 56,
+                  width: 60,
                   fontSize: 12,
                   fontWeight: 400,
                   fontFamily: 'apple-system BlinkMacSystemFont'
@@ -219,4 +213,36 @@ export default {
 }
 </script>
 <style lang="less">
+@import "~ant-design-vue/es/style/themes/default.less";
+
+.header-info {
+  position: relative;
+  margin-top: 10px;
+  & > em {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 56px;
+    background-color: @border-color-split;
+  }
+
+  tbody tr:hover>td {
+    background-color: transparent !important
+  }
+
+  .ant-table-tbody > tr > td{
+    border-bottom: none;
+  }
+
+  .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+    padding: 5px 16px 5px 16px;
+  }
+
+  .ant-card-head-title {
+    font-size: 18px;
+    color: #333;
+  }
+
+}
 </style>

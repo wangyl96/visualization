@@ -18,18 +18,18 @@ import java.util.Map;
  */
 public interface PcVisDataRepository extends JpaRepository<PcVisData, Long> {
 
-    @Query(value = "(SELECT '注册量' AS contentName, pvd.registrations contentData, (pvd.registrations - (SELECT registrations FROM (SELECT pvd.vis_date,pvd.registrations FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
-            "ORDER BY vis_date LIMIT 1))/(SELECT registrations FROM (SELECT pvd.vis_date,pvd.registrations FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
-            "ORDER BY vis_date LIMIT 1) AS ratio FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 1) \n" +
-            "UNION\n" +
-            "(SELECT '访问量' AS contentName, pvd.visits_new + pvd.visits_old contentData, (pvd.visits_new + pvd.visits_old - (SELECT visits FROM (SELECT pvd.vis_date, pvd.visits_new + pvd.visits_old visits FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
-            "ORDER BY vis_date LIMIT 1))/(SELECT  pvd.visits_new + pvd.visits_old FROM (SELECT pvd.vis_date, pvd.visits_new + pvd.visits_old FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
-            "ORDER BY vis_date LIMIT 1) AS ratio FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 1) \n" +
-            "UNION\n" +
-            "(SELECT '访客量' AS contentName, pvd.visitors_new + pvd.visitors_old contentData, (pvd.visitors_new + pvd.visitors_old - (SELECT visitors FROM (SELECT pvd.vis_date, pvd.visitors_new + pvd.visitors_old visitors FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
-            "ORDER BY vis_date LIMIT 1))/(SELECT  pvd.visitors_new + pvd.visitors_old FROM (SELECT pvd.vis_date, pvd.visitors_new + pvd.visitors_old FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 2) AS table1\n" +
-            "ORDER BY vis_date LIMIT 1) AS ratio FROM pc_vis_data pvd ORDER BY vis_date DESC LIMIT 1) ", nativeQuery = true)
-    List<Map<String, Object>> getPcInfo();
+    @Query(value = "(SELECT '注册量' AS contentName, pvd.registrations contentData,\n" +
+            "((pvd.registrations - (SELECT pvd.registrations FROM pc_vis_data pvd WHERE vis_date = ?2))/\n" +
+            "(SELECT pvd.registrations FROM pc_vis_data pvd WHERE vis_date = ?2)) AS ratio FROM pc_vis_data pvd WHERE vis_date = ?1)  \n" +
+            "UNION \n" +
+            "(SELECT '访问量' AS contentName, pvd.visits_new + pvd.visits_old contentData,\n" +
+            "((pvd.visits_new + pvd.visits_old - (SELECT pvd.visits_new + pvd.visits_old FROM pc_vis_data pvd WHERE vis_date = ?2))/\n" +
+            "(SELECT pvd.visits_new + pvd.visits_old FROM pc_vis_data pvd WHERE vis_date = ?2)) AS ratio FROM pc_vis_data pvd WHERE vis_date = ?1)  \n" +
+            " UNION \n" +
+            "(SELECT '访客量' AS contentName, pvd.visitors_new + pvd.visitors_old contentData,\n" +
+            "((pvd.visitors_new + pvd.visitors_old - (SELECT pvd.visitors_new + pvd.visitors_old FROM pc_vis_data pvd WHERE vis_date = ?2))/\n" +
+            "(SELECT pvd.visitors_new + pvd.visitors_old FROM pc_vis_data pvd WHERE vis_date = ?2)) AS ratio FROM pc_vis_data pvd WHERE vis_date = ?1)", nativeQuery = true)
+    List<Map<String, Object>> getPcInfo(String queryDate, String ratioDate);
 
 
     @Query(value = "select product ,life,health,wealth,SUM(product\n" +
