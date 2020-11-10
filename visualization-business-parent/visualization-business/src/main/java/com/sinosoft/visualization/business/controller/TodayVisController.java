@@ -87,16 +87,6 @@ public class TodayVisController {
     }
 
     /**
-     * 获取app的今日的保险值(弃用)
-     *
-     * @return
-     */
-    @GetMapping("/appOldMoney")
-    public List<OldPieDataViewVo> appMoney() {
-        return todayVisService.getAppMoney();
-    }
-
-    /**
      * 获取保险值
      *
      * @return

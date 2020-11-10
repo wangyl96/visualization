@@ -26,7 +26,5 @@ public interface TodayVisService {
 
     MapDataVO getTodayMapData(MapDataDTO mapDataDTO);
 
-    List<OldPieDataViewVo> getAppMoney();
-
     List<BarDataViewVo> getAppData(PieDataDto pieDataDto);
 }

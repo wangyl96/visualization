@@ -33,46 +33,6 @@ public interface AppVisDataRepository extends JpaRepository<AppVisData, Long> {
             " ", nativeQuery = true)
     List<Map<String, Object>> getAppInfo(String queryDate, String ratioDate);
 
-
-    @Query(value = "SELECT  bc.`sv` type,bc.`name`,SUM(bc.`value`) `value` from (SELECT ac.`value`,sd.`value` sv ,sd.`name` ,sd.platform from\n" +
-            "app_vis_data ac\n" +
-            "JOIN (\n" +
-            "SELECT  sys_dict.`value`,sys_dict.`name`,sys_dict.id,sys_dict.platform\n" +
-            "FROM\n" +
-            "sys_dict\n" +
-            "WHERE is_active = 1\n" +
-            ")\n" +
-            "sd\n" +
-            "on\n" +
-            "sd.id = ac.sys_id\n" +
-            "WHERE ac.is_active = 1\n" +
-            "AND sd.platform=?1\n" +
-            "and\n" +
-            "SUBSTRING(vis_date,1,10) =?2 \n" +
-            ")\n" +
-            "bc \n" +
-            "GROUP  BY bc.sv,bc.`name`",nativeQuery = true)
-    List<Map<String,Object>> getAppMoney(String platForm, LocalDate testDay);
-
-    @Query(value = "SELECT\n" +
-            "\tSUM( bc.`value` ) `value` \n" +
-            "FROM\n" +
-            "\t(\n" +
-            "SELECT\n" +
-            "\tac.`value`,\n" +
-            "\tsd.platform \n" +
-            "FROM\n" +
-            "\tapp_vis_data ac\n" +
-            "\tJOIN ( SELECT sys_dict.id, sys_dict.platform FROM sys_dict WHERE is_active = 1 ) sd ON sd.id = ac.sys_id \n" +
-            "WHERE\n" +
-            "\tac.is_active = 1 \n" +
-            "AND sd.platform=?1\n" +
-            "and\n" +
-            "SUBSTRING(vis_date,1,10) =?2 \n" +
-            "\t) bc" ,nativeQuery = true)
-    Map<String, Double> getSumMoney(String platForm, LocalDate testDay);
-
-
     @Query(value = "select product ,life,health,wealth,gold,SUM(product\n" +
             "+ life + health + wealth+ gold) realSum, SUM((case when health> 0 then health else 0 end)+(case when product> 0 then product else 0 end)" +
             "+(case when life> 0 then life else 0 end)+(case when wealth> 0 then wealth else 0 end)+(case when gold> 0 then gold else 0 end)) falseSum  from app_vis_data where vis_date between ?1 and ?2 and is_active = 1",nativeQuery = true)
