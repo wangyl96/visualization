@@ -26,9 +26,10 @@ export function getTodayMapData (query) {
 }
 
 // 数据可视化-饼图数据
-export function getPieView () {
+export function getPieView (query) {
   return request({
     url: visOverviewApi.PieView,
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }

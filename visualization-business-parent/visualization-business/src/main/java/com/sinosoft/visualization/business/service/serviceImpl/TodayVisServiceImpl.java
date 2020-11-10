@@ -202,11 +202,11 @@ public class TodayVisServiceImpl implements TodayVisService {
         // 获取昨天的日期
         // LocalDate yestDay = LocalDate.now().plusDays(-1);
         // 测试昨天日期
-        LocalDate yestDay = LocalDate.of(2020, 01, 03);
+        String yestDay = pieDataDto.getQueryDate();
         // 获取前天的日期
         //LocalDate beforeYestDay = LocalDate.now().plusDays(-2);
         // 测试前天日期
-        LocalDate beforeYestDay = LocalDate.of(2020, 01, 02);
+        String beforeYestDay = pieDataDto.getRatioDate();
         List<BarDataViewVo> barDataViewVoList = new ArrayList<>();
         List<Map<String, Object>> appDatas = appVisDataRepository.getAppDatas(yestDay, yestDay);
         // 加入app的数据

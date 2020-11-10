@@ -14,13 +14,13 @@ import java.time.LocalDate;
 public class PieDataDto {
 
     /**
-     * 日期(今天)
+     * 日期(昨天)
      */
-    private LocalDate yestDay;
+    private String queryDate;
 
     /**
-     * 日期
+     * 前天
      */
-    private LocalDate beforeDay;
+    private String ratioDate;
 
 }

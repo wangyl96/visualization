@@ -291,7 +291,11 @@ export default {
      * 获取饼图所需数据
      */
     getPieView () {
-      getPieView().then(response => {
+      const query = {
+        'queryDate': this.yesterday,
+        'ratioDate': this.beforeYesterday
+      }
+      getPieView(query).then(response => {
         this.pieDatas = JSON.parse(JSON.stringify(response.data))
         this.pieSpin = false
       })
