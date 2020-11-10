@@ -7,13 +7,10 @@
           <!--  数据总览  -->
           <div class="account-center-detail" style="padding-left: 20px">
             <p>
-              <i class="title"></i>数据总览 {{ yesterday }}
+              <i class="title"></i><span style="margin-left: 2px">数据总览 {{ yesterday }}</span>
             </p>
           </div>
         </a-card>
-          <!--分割线-->
-<!--          <a-divider style="background: #F0F2F5;" />-->
-          <!--  各平台卡片  -->
           <a-row :gutter="10">
             <div v-for="(item) in platform" :key="item.platformName" >
               <platform-overview ref="platformOverview" :platform="item"></platform-overview>
@@ -53,7 +50,7 @@
         <a-card :bordered="false" style="margin-top: 20px;" >
           <div class="account-center-detail" style="padding-left: 20px">
             <p>
-              <i class="title"></i>保费数据统计
+              <i class="title"></i><span style="margin-left: 2px">保费数据统计</span>
             </p>
           </div>
         </a-card>

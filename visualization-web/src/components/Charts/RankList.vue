@@ -1,19 +1,18 @@
 <template>
   <div class="rank">
     <h4 class="title" style="font-size: 16px; color: #333333; font-family: MicrosoftYaHei;">{{ title }}</h4>
-
     <ul class="list">
       <li :key="index" v-for="(item, index) in list">
-        <span :class="index < 3 ? 'active' : null">{{ index + 1 }}</span>
+        <span :class="index < 3 ? 'active' : 'other'">{{ index + 1 }}</span>
         <span>{{ item.name }}</span>
-        <span>{{ item.value }}</span>
+        <span>{{ formatNum(item.value) }}</span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-
+import { formatNum } from '@/utils/util'
 export default {
   name: 'RankList',
   // ['title', 'list']
@@ -26,6 +25,14 @@ export default {
       type: Array,
       default: null
     }
+  },
+  methods: {
+    formatNum (value) {
+      return formatNum(value)
+    }
+  },
+  mounted () {
+    console.log(formatNum(0))
   }
 }
 </script>
@@ -52,16 +59,19 @@ export default {
             background-color: #f5f5f5;
             border-radius: 28px;
             display: inline-block;
-            font-size: 16px;
+            font-size: 14px;
             margin-right: 14px;
-            height: 28px;
-            line-height: 28px;
-            width: 28px;
+            height: 24px;
+            line-height: 24px;
+            width: 24px;
             text-align: center;
           }
           &.active {
             background-color: #314659;
             color: #fff;
+          }
+          &.other {
+            color: #999999;
           }
           &:last-child {
             float: right;

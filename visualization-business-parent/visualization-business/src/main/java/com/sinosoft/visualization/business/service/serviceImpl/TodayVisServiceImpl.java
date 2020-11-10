@@ -121,6 +121,7 @@ public class TodayVisServiceImpl implements TodayVisService {
         };
         return new MapDataVO().setMap(mapData).setQuota(quotaMap);
     }
+
     /**
      * 获取饼图的数据
      *

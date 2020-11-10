@@ -4,9 +4,9 @@
     <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24" >
       <a-card :bordered="false" :style="{ marginBottom: '20px' }">
         <div :id="this.pieData.platForm" :style="{height: '240px'}"></div>
-        <div style="position: absolute; margin-top: -220px; margin-left: 36.6%">
+        <div style="position: absolute; margin-top: -200px; margin-left: 36.6%">
           <ul style=" margin-top: 5px; color: #333333">
-            <li class= "total-amount-font">¥{{pieData.barViewMap[0].realSum}}</li>
+            <li class= "total-amount-font">¥{{formatNum(pieData.barViewMap[0].realSum)}}</li>
             <span class="mom-font" >环比
                 <span v-if="((pieData.mom)*100) < 0" >
                   <img src="../../../public/static/icon/drop.png" style="margin-top: -3px"/>
@@ -25,6 +25,7 @@
 
 <script>
 import echarts from 'echarts'
+import { formatNum } from '@/utils/util'
 
 export default {
   name: 'PieView',
@@ -105,7 +106,7 @@ export default {
             type: 'scroll',
             orient: 'vertical',
             x: '44%',
-            y: '80',
+            y: '96',
             itemWidth: 8,
             itemHeight: 8,
             data: this.pieData.legend,
@@ -140,27 +141,27 @@ export default {
               switch (name) {
                 case '产':
                   ratio = that.JudgePositiveNegative(((barViewMap.product / barViewMap.falseSum) * 100).toFixed(2)) + '%'
-                  value = '¥' + that.JudgePositiveNegative(barViewMap.product)
+                  value = '¥' + that.formatNum(that.JudgePositiveNegative(barViewMap.product))
                   break
 
                 case '寿':
                   ratio = that.JudgePositiveNegative(((barViewMap.life / barViewMap.falseSum) * 100).toFixed(2)) + '%'
-                  value = '¥' + that.JudgePositiveNegative(barViewMap.life)
+                  value = '¥' + that.formatNum(that.JudgePositiveNegative(barViewMap.life))
                   break
 
                 case '健':
                   ratio = that.JudgePositiveNegative(((barViewMap.health / barViewMap.falseSum) * 100).toFixed(2)) + '%'
-                  value = '¥' + that.JudgePositiveNegative(barViewMap.health)
+                  value = '¥' + that.formatNum(that.JudgePositiveNegative(barViewMap.health))
                   break
 
                 case '资':
                   ratio = that.JudgePositiveNegative(((barViewMap.wealth / barViewMap.falseSum) * 100).toFixed(2)) + '%'
-                  value = '¥' + that.JudgePositiveNegative(barViewMap.wealth)
+                  value = '¥' + that.formatNum(that.JudgePositiveNegative(barViewMap.wealth))
                   break
 
                 case '金服':
                   ratio = that.JudgePositiveNegative(((barViewMap.gold / barViewMap.falseSum) * 100).toFixed(2)) + '%'
-                  value = '¥' + that.JudgePositiveNegative(barViewMap.gold)
+                  value = '¥' + that.formatNum(that.JudgePositiveNegative(barViewMap.gold))
                   break
               }
               var arr = [
@@ -174,7 +175,7 @@ export default {
           series: {
             name: this.pieData.platForm + '平台',
             type: 'pie',
-            center: ['22%', '60%'],
+            center: ['22%', '55%'],
             radius: '56%',
             selectedMode: true, // 是否支持多选，默认为false,鼠标点击后选中饼图分裂出来
             data: [
@@ -214,6 +215,9 @@ export default {
           myPie.resize()
         }, false)
       })
+    },
+    formatNum (value) {
+      return formatNum(value)
     }
   }
 }
