@@ -56,7 +56,8 @@ export const asyncRouterMap = [
             path: '/visualization/his-platform-overview',
             name: 'HisPlatformOverview',
             component: () => import('@/views/visualization/HisPlatformOverview'),
-            meta: { title: '平台数据总览', keepAlive: true, permission: [ 'form' ] }
+            meta: { title: '平台数据总览', keepAlive: true, permission: [ 'form' ] },
+            hidden: true
           }
           // ,
           // {

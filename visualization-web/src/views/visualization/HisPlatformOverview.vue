@@ -1,13 +1,22 @@
-<template>
-  <div style="height: 100px; width: 100px; background-color: red"></div>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+  <page-header-wrapper :title="false">
+
+  </page-header-wrapper>
 </template>
 
 <script>
-export default {
-name: 'HisPlatformOverview'
-}
+  export default {
+    name: 'HisPlatformOverview',
+    data () {
+      return {
+      }
+    },
+    mounted () {
+    },
+    methods: {
+    }
+  }
 </script>
-
-<style scoped>
+<style lang="less" >
 
 </style>
