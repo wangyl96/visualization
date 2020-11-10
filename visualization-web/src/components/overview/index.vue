@@ -1,12 +1,12 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
   <div class="header-info">
     <a-col :sm="8" :xs="24">
-      <a-card :title="platformInfo.platformName" :bordered="false" style="font-size: 18px; color: #333333;padding-top: 4px; marginBottom:20px" @click="platformDetails()">
+      <a-card :title="platformInfo.platformName" :bordered="false" :style="{fontSize: '16px', color: '#333'}" style="padding-top: 4px; marginBottom:20px" @click="platformDetails()">
         <div class="list-content" style="margin-top: -22px; margin-left: -24px">
           <div class="list-content-item" v-for="item in platformInfo.todayOverviewMap" :key="item.contentName">
-            <a-statistic :value="item.contentData" :value-style="{fontSize: '18px', lineHeight: '20px', marginBottom: '10px', fontWeight: 'bold'}" >
+            <a-statistic :value="item.contentData" :value-style="{fontSize: '16px', marginBottom: '10px', fontWeight: 'bold'}" >
               <template v-slot:prefix>
-                <span style="font-size: 18px; color: #333333; font-weight: normal">{{item.contentName}}</span>
+                <span style="font-size: 16px; color: #333333; font-weight: normal; font-family: MicrosoftYaHei">{{item.contentName}}</span>
               </template>
             </a-statistic>
             <a-statistic v-if="item.ratio < 0" :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#3CB800', fontSize: '14px', fontWeight: 'bold', paddingBottom:'20px'}">
@@ -20,7 +20,7 @@
             </a-statistic>
             <a-statistic v-else :value="Math.abs(parseFloat(item.ratio * 100).toFixed(2))" :value-style="{color: '#F44242', fontSize: '14px', fontWeight: 'bold', paddingBottom:'20px'}">
               <template v-slot:prefix>
-                <span style="font-size: 14px; color: #333333; font-weight: normal">环比</span>
+                <span style="font-size: 14px; color: #333333; font-weight: normal;">环比</span>
                 <img src="../../../public/static/icon/up.png" style="margin-top: -3px; margin-left: 6px"/>
               </template>
               <template v-slot:suffix>
@@ -121,11 +121,6 @@ export default {
     padding: 5px 16px 5px 16px;
   }
 
-  .ant-card-head-title {
-    font-size: 18px;
-    color: #333;
-  }
-
 }
 
 .list-content-item {
@@ -143,4 +138,5 @@ export default {
     line-height: 22px;
   }
 }
+
 </style>

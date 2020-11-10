@@ -44,10 +44,6 @@
       drawLine () {
         // 基于准备好的dom，初始化echarts实例
         const myChartContainer = document.getElementById('myChartChina')
-        const resizeMyChartContainer = function () {
-          // myChartContainer.style.width = ((document.body.offsetWidth) / 3 * 2) + 'px'// 页面一半的大小
-        }
-        resizeMyChartContainer()
         const myChartChina = echarts.init(myChartContainer)
         // 指定高亮颜色
         let mapColor
@@ -59,8 +55,9 @@
             left: 20,
             textStyle: {
               fontWeight: 'normal',
-              fontSize: '18',
-              color: '#333'
+              fontSize: '16',
+              color: '#333',
+              fontFamily: 'MicrosoftYaHei'
             }
           },
           tooltip: {
@@ -124,7 +121,9 @@
 
               label: {
                 normal: {
-                  show: true
+                  show: true,
+                  fontSize: '14',
+                  fontFamily: 'MicrosoftYaHei'
                   // 地图上的字体颜色
                   // color: '#fff'
                 },
@@ -139,7 +138,6 @@
 
         myChartChina.setOption(optionMap)
         window.addEventListener('resize', () => {
-          resizeMyChartContainer()
           myChartChina.resize()
         }, false)
         // 设置鼠标移入指定省份后保持高亮颜色与原色相同

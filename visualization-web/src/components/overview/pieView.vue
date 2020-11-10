@@ -83,7 +83,13 @@ export default {
             text: this.pieData.platForm,
             left: 20,
             top: 28,
-            button: 100
+            button: 100,
+            textStyle: {
+              fontWeight: 'normal',
+              fontSize: 16,
+              color: '#333',
+              fontFamily: 'MicrosoftYaHei'
+            }
           },
           tooltip: {
             // 悬浮框提示相关
@@ -110,20 +116,20 @@ export default {
                   color: '#333',
                   fontSize: 12,
                   fontWeight: 400,
-                  fontFamily: 'apple-system BlinkMacSystemFont'
+                  fontFamily: 'MicrosoftYaHei'
                 },
                 b: {
                   color: '#999',
                   width: 60,
                   fontSize: 12,
                   fontWeight: 400,
-                  fontFamily: 'apple-system BlinkMacSystemFont'
+                  fontFamily: 'MicrosoftYaHei'
                 },
                 c: {
                   color: '#333',
                   fontSize: 12,
                   fontWeight: 400,
-                  fontFamily: 'apple-system BlinkMacSystemFont'
+                  fontFamily: 'MicrosoftYaHei'
                 }
               }
             },
@@ -194,7 +200,7 @@ export default {
                 color: function (params) {
                   // 自定义颜色
                   var colorList = [
-                    '#5680BB', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
+                    '#336EBE', '#7CBC5C', '#DDCB67', '#C6736C', '#9CAAB3'
                   ]
                   return colorList[params.dataIndex]
                 }
@@ -237,11 +243,6 @@ export default {
 
   .ant-table-thead > tr > th, .ant-table-tbody > tr > td {
     padding: 5px 16px 5px 16px;
-  }
-
-  .ant-card-head-title {
-    font-size: 18px;
-    color: #333;
   }
 
 }

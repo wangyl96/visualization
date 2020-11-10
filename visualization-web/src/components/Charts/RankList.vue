@@ -1,6 +1,7 @@
 <template>
   <div class="rank">
-    <h4 class="title" style="font-size: 18px; color: #333333">{{ title }}</h4>
+    <h4 class="title" style="font-size: 16px; color: #333333; font-family: MicrosoftYaHei;">{{ title }}</h4>
+
     <ul class="list">
       <li :key="index" v-for="(item, index) in list">
         <span :class="index < 3 ? 'active' : null">{{ index + 1 }}</span>
@@ -44,9 +45,9 @@ export default {
 
         span {
           color: #333333;
-          font-size: 18px;
+          font-size: 14px;
           line-height: 22px;
-
+          font-family: MicrosoftYaHei;
           &:first-child {
             background-color: #f5f5f5;
             border-radius: 28px;

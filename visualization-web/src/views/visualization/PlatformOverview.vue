@@ -7,7 +7,7 @@
           <!--  数据总览  -->
           <div class="account-center-detail" style="padding-left: 20px">
             <p>
-              <i class="title"></i>数据总览 2020-10-09
+              <i class="title"></i>数据总览 {{ yesterday }}
             </p>
           </div>
         </a-card>
@@ -24,30 +24,28 @@
       <!--   地图   -->
       <a-spin :spinning="mapSpin">
         <a-card :bordered="false" :body-style="{padding: '0'}">
-          <div class="salesCard">
-            <a-tabs default-active-key="app" size="large" @change="callback" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
-              <a-tab-pane v-for="(item) in tabData" :key="item.platform.code" :tab="item.platform.name" :disabled="item.platform.code !== 'app'"></a-tab-pane>
-              <div class="extra-wrapper" slot="tabBarExtraContent">
-                <div class="extra-item">
-                  <a-radio-group :value="quotaChecked" style="margin-right: 20px" @change="handleSizeChange" >
-                    <a-radio-button v-for="item in quotaCheckedList" :key="item.code" :value="item.code" :disabled="item.code == 'life_day'">
-                      {{item.name}}
-                    </a-radio-button>
-                  </a-radio-group>
-                </div>
+          <a-tabs default-active-key="app" size="large" @change="callback" :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}">
+            <a-tab-pane v-for="(item) in tabData" :key="item.platform.code" :tab="item.platform.name" :disabled="item.platform.code !== 'app'"></a-tab-pane>
+            <div class="extra-wrapper" slot="tabBarExtraContent">
+              <div class="extra-item">
+                <a-radio-group :value="quotaChecked" style="margin-right: 20px" @change="handleSizeChange" >
+                  <a-radio-button v-for="item in quotaCheckedList" :key="item.code" :value="item.code" :disabled="item.code == 'life_day'">
+                    {{item.name}}
+                  </a-radio-button>
+                </a-radio-group>
               </div>
-            </a-tabs>
-            <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <china-map ref="chinaMap" :china="mapData"></china-map>
-              </a-col>
-              <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
-                <rank-list v-if="rankList.length > 0" :title="title" :list="rankList"/>
-              </a-col>
-              <a-col :xl="2" :lg="12" :md="12" :sm="24" :xs="24">
-              </a-col>
-            </a-row>
-          </div>
+            </div>
+          </a-tabs>
+          <a-row>
+            <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+              <china-map ref="chinaMap" :china="mapData"></china-map>
+            </a-col>
+            <a-col :xl="6" :lg="12" :md="12" :sm="24" :xs="24">
+              <rank-list v-if="rankList.length > 0" :title="title" :list="rankList"/>
+            </a-col>
+            <a-col :xl="2" :lg="12" :md="12" :sm="24" :xs="24">
+            </a-col>
+          </a-row>
         </a-card>
       </a-spin>
       <!--   饼图   -->
@@ -309,29 +307,6 @@ export default {
   padding: 16px 0px 0px 0px;
 }
 
-.vis-div {
-  // 取消div之间边距
-  font-size: 0px;
-}
-
-.vis-tag {
-  width: 4px;
-  height: 18px;
-  background-color: #1890FF;
-}
-
-.vis-main {
-  // 上 右 下 左
-  //padding: 0px 20px 0px 20px;
-}
-
-.vis-font {
-  font-family: MicrosoftYaHei;
-  font-size: 18px;
-  line-height: 24px;
-  color: #333333;
-}
-
 .ant-col-1 {
   width: 30px;
 }
@@ -345,8 +320,8 @@ export default {
 }
 
 .account-center-detail {
+  font-size: 16px;
   font-family: MicrosoftYaHei;
-  font-size: 18px;
   line-height: 24px;
   color: #333333;
   p {
