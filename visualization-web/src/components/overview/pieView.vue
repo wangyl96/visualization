@@ -101,13 +101,14 @@ export default {
             y: '80',
             itemWidth: 8,
             itemHeight: 8,
-            data: [
-              { name: '产', icon: 'circle' },
-              { name: '寿', icon: 'circle' },
-              { name: '健', icon: 'circle' },
-              { name: '资', icon: 'circle' },
-              { name: '金服', icon: 'circle' }
-            ],
+            data: this.pieData.legend,
+            // data: [
+            //   { name: '产', icon: 'circle' },
+            //   { name: '寿', icon: 'circle' },
+            //   { name: '健', icon: 'circle' },
+            //   { name: '资', icon: 'circle' },
+            //   { name: '金服', icon: 'circle' }
+            // ],
             textStyle: {
               rich: {
                 a: {

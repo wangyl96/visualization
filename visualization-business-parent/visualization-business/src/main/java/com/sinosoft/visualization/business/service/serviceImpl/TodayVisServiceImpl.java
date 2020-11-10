@@ -219,6 +219,10 @@ public class TodayVisServiceImpl implements TodayVisService {
             double mom = ((yestDaySum.subtract(beforeDaySum)).divide(beforeDaySum, 2, BigDecimal.ROUND_HALF_UP)).doubleValue();
             barDataViewVo.setMom(mom);
             barDataViewVoList.add(barDataViewVo);
+            // 加入图例
+            List<Map<String, Object>> legends = appVisDataRepository.getLegends("app");
+            if (legends.size() > 0)
+                barDataViewVo.setLegend(legends);
         }
 
         // 获取pc数据
@@ -234,7 +238,13 @@ public class TodayVisServiceImpl implements TodayVisService {
             double mom = ((yestDaySum.subtract(beforeDaySum)).divide(beforeDaySum, 2, BigDecimal.ROUND_HALF_UP)).doubleValue();
             barDataViewVo.setMom(mom);
             barDataViewVoList.add(barDataViewVo);
+            // 加入图标
+            List<Map<String, Object>> legends = appVisDataRepository.getLegends("pc");
+            if (legends.size() > 0) {
+                barDataViewVo.setLegend(legends);
+            }
         }
+
 
         //获取wap的数据
         List<Map<String, Object>> wapDatas = wapVisDataRepository.getWapDatas(yestDay, yestDay);
@@ -249,6 +259,12 @@ public class TodayVisServiceImpl implements TodayVisService {
             double mom = ((yestDaySum.subtract(beforeDaySum)).divide(beforeDaySum, 2, BigDecimal.ROUND_HALF_UP)).doubleValue();
             barDataViewVo.setMom(mom);
             barDataViewVoList.add(barDataViewVo);
+
+            // 加入图标
+            List<Map<String, Object>> legends = appVisDataRepository.getLegends("wap");
+            if (legends.size() > 0) {
+                barDataViewVo.setLegend(legends);
+            }
         }
         return barDataViewVoList;
 

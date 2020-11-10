@@ -29,5 +29,9 @@ public class BarDataViewVo {
      */
     private String platForm;
 
+    /**
+     * 图标
+     */
+    private List<Map<String,Object>> legend;
 
 }
