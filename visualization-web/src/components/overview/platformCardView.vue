@@ -1,26 +1,32 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+  <div class="header-info">
   <a-col :sm="8" :xs="24">
-    <a-card :title="platformInfo.yearData[0].custNmae" :bordered="false" :style="{fontSize: '16px', color: '#333'}" style="padding-top: 4px; marginBottom:20px" >
-      <div class="list-content" style="margin-top: -22px; margin-left: -24px">
-        <div style="background: #8d7f86">111111111</div>
-        <div class="list-content-item">
-          <a-statistic :value="11114+55+6556" :value-style="{fontSize: '16px', marginBottom: '10px', fontWeight: 'bold'}" >
-            <template v-slot:prefix>
-              <span style="font-size: 16px; color: #333333; font-weight: normal; font-family: MicrosoftYaHei">{{111}}</span>
-            </template>
-          </a-statistic>
+      <a-card  :title="platformInfo.custNmae" :bordered="false" :style="{fontSize: '16px', color: '#333'}" style="padding-top: 4px; marginBottom:20px" >
+        <div class="list-content" style="margin-top: -22px; margin-left: -24px">
+          <div class="list-content-item-demo1">
+            <a-statistic :value="'总'+platformInfo.custNmae" :value-style="{fontSize: '16px', marginBottom: '10px', fontWeight: 'bold'}" >
+            </a-statistic>
+            <span style="font-size: 16px; color: #333333; font-weight: normal; font-family: MicrosoftYaHei">{{platformInfo.total}}</span>
+          </div>
+          <div class="list-content-item-demo1">
+            <a-statistic :value="this.year+'年'+platformInfo.custNmae" :value-style="{fontSize: '16px', marginBottom: '10px', fontWeight: 'bold'}" >
+            </a-statistic>
+            <span>{{platformInfo.yearValue}}</span>
+          </div>
         </div>
-      </div>
-    </a-card>
-  </a-col>
+      </a-card>
+   </a-col>
+  </div>
 </template>
 
 <script>
 // import elementResizeDetectorMaker from 'element-resize-detector'
+import { sameYear } from '@/utils/dateUtil'
+
 export default {
   name: 'PlatformCardView',
   props: {
-    platformCard: {
+    platformCardViewInfo: {
       type: Object,
       default: function () {
         return {
@@ -28,15 +34,24 @@ export default {
         }
       }
     },
-    platormCard: {
+    platformCardView: {
       type: String,
       default: ''
     }
   },
   data () {
     return {
-      platformInfo: this.platFormCardView,
-      height: ''
+      platformInfo: this.platformCardViewInfo,
+      year: sameYear
+    }
+  },
+  watch: {
+    platformInfo: {
+      deep: true,
+      handler (newVal, oldVal) {
+        this.platformInfo = JSON.parse(JSON.stringify(newVal))
+        console.log(this.platformInfo)
+      }
     }
   },
   methods: {
@@ -88,15 +103,54 @@ export default {
 
 }
 
-.list-content-item {
+//.list-content-item {
+//  color: rgba(0, 0, 0, .45);
+//  display: inline-block;
+//  vertical-align: middle;
+//  font-size: 14px;
+//  float: left;
+//
+//  span {
+//    line-height: 20px;
+//  }
+//
+//  p {
+//    margin-top: 4px;
+//    margin-bottom: 0;
+//    line-height: 22px;
+//  }
+//}
+.list-content-item-demo1 {
   color: rgba(0, 0, 0, .45);
   display: inline-block;
   vertical-align: middle;
   font-size: 14px;
-  margin-left: 50px;
+  margin-top: -5px;
+  margin-left: 46px;
+  margin-right: 70px;
+
   span {
     line-height: 20px;
   }
+
+  p {
+    margin-top: 4px;
+    margin-bottom: 0;
+    line-height: 22px;
+  }
+}
+.list-content-item-demo2 {
+  color: rgba(0, 0, 0, .45);
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  margin-top: -5px;
+  margin-left: 160px;
+
+  span {
+    line-height: 20px;
+  }
+
   p {
     margin-top: 4px;
     margin-bottom: 0;

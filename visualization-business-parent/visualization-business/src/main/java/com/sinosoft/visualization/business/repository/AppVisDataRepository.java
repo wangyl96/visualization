@@ -33,10 +33,16 @@ public interface AppVisDataRepository extends JpaRepository<AppVisData, Long> {
             " ", nativeQuery = true)
     List<Map<String, Object>> getAppInfo(String queryDate, String ratioDate);
 
+    /**
+     * 通过时间获取
+     * @param dateBefore
+     * @param dateAfter
+     * @return
+     */
     @Query(value = "select product ,life,health,wealth,gold,SUM(product\n" +
             "+ life + health + wealth+ gold) realSum, SUM((case when health> 0 then health else 0 end)+(case when product> 0 then product else 0 end)" +
             "+(case when life> 0 then life else 0 end)+(case when wealth> 0 then wealth else 0 end)+(case when gold> 0 then gold else 0 end)) falseSum  from app_vis_data where vis_date between ?1 and ?2 and is_active = 1",nativeQuery = true)
-    List<Map<String,Object>> getAppDatas(String dateBefore, String dateAfter);
+    List<Map<String,Object>> getAppPieData(String dateBefore, String dateAfter);
 
     @Query(value = "SELECT SUM(product+ life + health + wealth+ gold) mom FROM app_vis_data WHERE is_active =1\n" +
             "AND vis_date = ?1",nativeQuery = true)
@@ -46,6 +52,13 @@ public interface AppVisDataRepository extends JpaRepository<AppVisData, Long> {
     @Query(value = "select name, 'circle' as 'icon'\n" +
             "from sys_dict where platform =?1 and is_active = 1\n",nativeQuery = true)
     List<Map<String, Object>> getLegends(String platForm);
+
+    @Query(value = "SELECT '注册量' custNmae, SUM(registrations) 'total',(select  SUM(registrations)  FROM app_vis_data WHERE is_active = 1 and year(vis_date) = ?1) yearValue FROM app_vis_data WHERE is_active = 1\n" +
+            "\t   UNION all\n" +
+            "\tSELECT '安装量' custNmae, SUM(app_installation) 'total',(select  SUM(app_installation)  FROM app_vis_data WHERE is_active = 1 and year(vis_date) = ?1) yearValue FROM app_vis_data WHERE is_active = 1\n" +
+            "\tUNION all\n" +
+            "\tSELECT '访问量' custNmae, SUM(visits) 'total',(select  SUM(visits)  FROM app_vis_data WHERE is_active = 1 and year(vis_date) = ?1) yearValue FROM app_vis_data WHERE is_active = 1", nativeQuery = true)
+    List<Map<String, Object>> getYearAndTotalData(Integer year);
 
     /**
      * 通过limit来获取数据

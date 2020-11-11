@@ -33,7 +33,7 @@ public interface WapVisDataRepository extends JpaRepository<WapVisData, Long> {
 
     @Query(value = "select product ,life,health,SUM(product\n" +
             "+ life + health ) realSum, SUM((case when health> 0 then health else 0 end)+(case when product> 0 then product else 0 end)+(case when life> 0 then life else 0 end)) falseSum  from wap_vis_data where vis_date between ?1 and ?2 and is_active = 1", nativeQuery = true)
-    List<Map<String, Object>> getWapDatas(String dateBefore, String dateAfter);
+    List<Map<String, Object>> getWapPieData(String dateBefore, String dateAfter);
 
     @Query(value = "SELECT SUM(product+ life + health ) mom FROM wap_vis_data WHERE is_active =1\n" +
             "AND vis_date = ?1", nativeQuery = true)

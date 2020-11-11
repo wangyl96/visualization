@@ -9,6 +9,7 @@ import com.sinosoft.visualization.business.api.vo.OldPieDataViewVo;
 import com.sinosoft.visualization.business.api.vo.TodayOverviewVO;
 import com.sinosoft.visualization.business.repository.*;
 import com.sinosoft.visualization.business.service.TodayVisService;
+import com.sinosoft.visualization.common.util.DateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -133,7 +134,7 @@ public class TodayVisServiceImpl implements TodayVisService {
         String yestDay = pieDataDto.getQueryDate();
         String beforeYestDay = pieDataDto.getRatioDate();
         List<BarDataViewVo> barDataViewVoList = new ArrayList<>();
-        List<Map<String, Object>> appDatas = appVisDataRepository.getAppDatas(yestDay, yestDay);
+        List<Map<String, Object>> appDatas = appVisDataRepository.getAppPieData(yestDay, yestDay);
         // 加入app的数据
         if (appDatas.size() > 0) {
             BarDataViewVo barDataViewVo = new BarDataViewVo();
@@ -152,7 +153,7 @@ public class TodayVisServiceImpl implements TodayVisService {
         }
 
         // 获取pc数据
-        List<Map<String, Object>> pcDatas = pcVisDataRepository.getPcDatas(yestDay, yestDay);
+        List<Map<String, Object>> pcDatas = pcVisDataRepository.getPcPieData(yestDay, yestDay);
         // 加入pc的数据
         if (pcDatas.size() > 0) {
             BarDataViewVo barDataViewVo = new BarDataViewVo();
@@ -173,7 +174,7 @@ public class TodayVisServiceImpl implements TodayVisService {
 
 
         //获取wap的数据
-        List<Map<String, Object>> wapDatas = wapVisDataRepository.getWapDatas(yestDay, yestDay);
+        List<Map<String, Object>> wapDatas = wapVisDataRepository.getWapPieData(yestDay, yestDay);
         // 加入wap的数据
         if (wapDatas.size() > 0) {
             BarDataViewVo barDataViewVo = new BarDataViewVo();

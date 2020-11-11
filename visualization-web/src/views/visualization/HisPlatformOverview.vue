@@ -7,7 +7,7 @@
           <!--  数据总览  -->
           <div class="account-center-detail" style="padding-left: 20px">
             <p>
-              <i class="title"></i>数据总览
+              <i class="title"></i><span style="margin-left: 2px;">数据总览</span>
             </p>
           </div>
         </a-card>
@@ -15,9 +15,11 @@
         <!--          <a-divider style="background: #F0F2F5;" />-->
         <!--  各平台卡片  -->
         <a-row :gutter="10">
-          <div >
-            <platform-card-view></platform-card-view>
+          <a-spin :spinning="platFormSpin">
+          <div v-for="item in this.platFormCardView.yearData" :key="item.custNmae">
+            <platform-card-view ref="platformCardView" :platformCardViewInfo="item"></platform-card-view>
           </div>
+          </a-spin>
         </a-row>
       </a-spin>
       <!--   地图   -->
@@ -80,6 +82,7 @@ import { getTodayMapData, getPieView, getTodayOverview } from '@/api/business/vi
 import ChinaMap from '@/components/Charts/chinaMap'
 import PieView from '@/components/overview/pieView'
 import PlatformCardView from '@/components/overview/platformCardView'
+import { getPlatformInstOrVis } from '@/api/business/hisPlatformOverview'
 // import { beforeYesterday, yesterday } from '@/utils/dateUtil'
 
 export default {
@@ -176,28 +179,29 @@ export default {
       yesterday: '2020-10-09',
       // 环比日期
       beforeYesterday: '2020-10-08',
+      platFormCardView: {},
+      platForm: this.$route.params.platForm,
+      platFormSpin: true
       // beforeYesterday: beforeYesterday
-      platFormCardView: [
-        {
-          'yearData': [
-            {
-              'yearValue': 4879686,
-              'total': 4890301,
-              'custNmae': '注册量'
-            },
-            {
-              'yearValue': 7176598,
-              'custNmae': '安装量',
-              'total': 7189307
-            },
-            {
-              'total': 35634300,
-              'yearValue': 35547422,
-              'custNmae': '访问量'
-            }
-          ]
-        }
-      ]
+      // platFormCardView: {
+      //     'yearData': [
+      //       {
+      //         'yearValue': 4879686,
+      //         'total': 4890301,
+      //         'custNmae': '注册量'
+      //       },
+      //       {
+      //         'yearValue': 7176598,
+      //         'custNmae': '安装量',
+      //         'total': 7189307
+      //       },
+      //       {
+      //         'total': 35634300,
+      //         'yearValue': 35547422,
+      //         'custNmae': '访问量'
+      //       }
+      //     ]
+      //   }
     }
   },
   mounted () {
@@ -207,6 +211,7 @@ export default {
     this.drawLine()
     // 饼图
     this.getPieView()
+    this.getPlatformInstOrVis()
   },
   methods: {
     /**
@@ -316,6 +321,15 @@ export default {
       getPieView(query).then(response => {
         this.pieDatas = JSON.parse(JSON.stringify(response.data))
         this.pieSpin = false
+      })
+    },
+    getPlatformInstOrVis () {
+      const query = {
+        'platForm': this.platForm
+      }
+      getPlatformInstOrVis(query).then(response => {
+        this.platFormCardView = JSON.parse(JSON.stringify(response.data))
+        this.platFormSpin = false
       })
     }
   }

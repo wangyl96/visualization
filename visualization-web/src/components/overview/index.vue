@@ -62,8 +62,8 @@ export default {
   methods: {
     platformDetails () {
       // <router-link></router-link>
-      console.log('点击事件')
-      this.$router.push({ name: 'HisPlatformOverview' })
+      console.log(this.platformInfo.platformName)
+      this.$router.push({ name: 'HisPlatformOverview', params: { platForm: this.platformInfo.platformName } })
     }
   },
   mounted () {

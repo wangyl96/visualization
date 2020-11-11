@@ -28,6 +28,7 @@ public class ResourceServiceImpl {
         resourceRolesMap.put("/api/auth/currentUser", CollUtil.toList("ADMIN", "TEST"));
         resourceRolesMap.put("/api/business/getTodayOverview", CollUtil.toList("ADMIN", "TEST"));
         resourceRolesMap.put("/api/business/getAppData", CollUtil.toList("ADMIN", "TEST"));
+        resourceRolesMap.put("/api/business/getYearPlatData", CollUtil.toList("ADMIN", "TEST"));
         resourceRolesMap.put("/api/user/login", CollUtil.toList("ADMIN", "TEST"));
         resourceRolesMap.put("/api/user/getInfo", CollUtil.toList("ADMIN", "TEST"));
         resourceRolesMap.put("/api/business/getTodayMapData", CollUtil.toList("ADMIN", "TEST"));

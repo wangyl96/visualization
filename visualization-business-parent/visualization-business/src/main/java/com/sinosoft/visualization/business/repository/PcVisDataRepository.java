@@ -33,7 +33,7 @@ public interface PcVisDataRepository extends JpaRepository<PcVisData, Long> {
 
     @Query(value = "select product ,life,health,wealth,SUM(product\n" +
             "+ life + health + wealth) realSum, SUM((case when health> 0 then health else 0 end)+(case when product> 0 then product else 0 end)+(case when life> 0 then life else 0 end)+(case when wealth> 0 then wealth else 0 end)) falseSum  from pc_vis_data where vis_date between ?1 and ?2 and is_active = 1",nativeQuery = true)
-    List<Map<String,Object>> getPcDatas(String dateBefore, String dateAfter);
+    List<Map<String,Object>> getPcPieData(String dateBefore, String dateAfter);
 
     @Query(value = "SELECT SUM(product+ life + health + wealth) mom FROM pc_vis_data WHERE is_active =1\n" +
             "AND vis_date = ?1",nativeQuery = true)
