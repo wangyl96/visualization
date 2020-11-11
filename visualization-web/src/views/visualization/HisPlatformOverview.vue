@@ -22,6 +22,33 @@
           </a-spin>
         </a-row>
       </a-spin>
+      <!--   数据统计   -->
+      <a-spin :spinning="false" style="margin-bottom: 20px">
+        <a-card :bordered="false" style="margin-top: 20px; margin-bottom: 10px">
+          <div class="account-center-detail" style="padding-left: 20px">
+            <p>
+              <i class="title"></i><span style="margin-left: 2px">数据统计</span>
+            </p>
+          </div>
+        </a-card>
+        <a-row :gutter="10">
+          <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+            <a-card :bordered="false">
+              <div id="areaView1" style="width: 100%; height: 320px; margin-top: 12px; padding-bottom: 28px"></div>
+            </a-card>
+          </a-col>
+          <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+            <a-card :bordered="false">
+            <div id="areaView2" style="width: 100%; height: 320px; margin-top: 12px; padding-bottom: 28px"></div>
+            </a-card>
+          </a-col>
+          <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+            <a-card :bordered="false">
+              <div id="areaView3" style="width: 100%; height: 320px; margin-top: 12px; padding-bottom: 28px"></div>
+            </a-card>
+          </a-col>
+        </a-row>
+      </a-spin>
       <!--   地图   -->
       <a-spin :spinning="mapSpin">
         <a-card :bordered="false" :body-style="{padding: '0'}">
@@ -65,7 +92,6 @@
             <pie-view ref="pieView" :pieDataInfo="item"></pie-view>
           </div>
         </a-row>
-
       </a-spin>
     </div>
   </page-header-wrapper>
@@ -82,9 +108,12 @@ import { getTodayMapData, getPieView, getTodayOverview } from '@/api/business/vi
 import ChinaMap from '@/components/Charts/chinaMap'
 import PieView from '@/components/overview/pieView'
 import PlatformCardView from '@/components/overview/platformCardView'
+import echarts from 'echarts'
 import { getPlatformInstOrVis } from '@/api/business/hisPlatformOverview'
 // import { beforeYesterday, yesterday } from '@/utils/dateUtil'
-
+let areaView1 = null
+let areaView2 = null
+let areaView3 = null
 export default {
   name: 'HistPlatformOverview',
   components: { PlatformCardView, PieView, ChinaMap, PlatformOverview, RankList },
@@ -182,31 +211,13 @@ export default {
       platFormCardView: {},
       platForm: this.$route.params.platForm,
       platFormSpin: true
-      // beforeYesterday: beforeYesterday
-      // platFormCardView: {
-      //     'yearData': [
-      //       {
-      //         'yearValue': 4879686,
-      //         'total': 4890301,
-      //         'custNmae': '注册量'
-      //       },
-      //       {
-      //         'yearValue': 7176598,
-      //         'custNmae': '安装量',
-      //         'total': 7189307
-      //       },
-      //       {
-      //         'total': 35634300,
-      //         'yearValue': 35547422,
-      //         'custNmae': '访问量'
-      //       }
-      //     ]
-      //   }
     }
   },
   mounted () {
     // 数据总览
     this.getTodayOverview()
+    // 数据统计面积图
+    this.drawAreaView()
     // 地图
     this.drawLine()
     // 饼图
@@ -279,6 +290,173 @@ export default {
       })
     },
     /**
+     * 获取数据统计面积图
+     */
+    drawAreaView () {
+      areaView1 = echarts.init(document.getElementById('areaView1'))
+      areaView2 = echarts.init(document.getElementById('areaView2'))
+      areaView3 = echarts.init(document.getElementById('areaView3'))
+      const option = {
+        title: {
+          text: '近七日数据(单位: 个)',
+          left: 20,
+          textStyle: {
+            fontWeight: 'normal',
+            fontSize: 16,
+            color: '#333',
+            fontFamily: 'MicrosoftYaHei'
+          }
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          icon: 'rect',
+          itemWidth: 4, // 设置宽度
+          itemHeight: 14, // 设置高度
+          itemGap: 16,
+          x: '20',
+          y: '30',
+          data: ['安装量', '注册量', '活跃度'],
+          textStyle: {
+            fontSize: 14,
+            color: '#333',
+            fontFamily: 'MicrosoftYaHei'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          y: 70,
+          containLabel: true
+        },
+        xAxis:
+          {
+            type: 'category',
+            boundaryGap: false,
+            axisTick: {
+              show: false
+            },
+            // 坐标的字体颜色
+            axisLabel: {
+              textStyle: {
+                fontSize: 14,
+                color: '#333',
+                fontFamily: 'MicrosoftYaHei'
+              }
+            },
+            // Y轴颜色
+            axisLine: {
+              lineStyle: {
+                color: '#ECECEC',
+                width: 1
+              }
+            },
+            data: ['10-03', '10-04', '10-05', '10-06', '10-07', '10-08', '10-09']
+          },
+        yAxis:
+          {
+            type: 'value',
+            // Y轴刻度线
+            axisTick: {
+              show: false
+            },
+            // 分割线颜色
+            splitLine: {
+              lineStyle: {
+                color: '#ECECEC'
+              }
+            },
+            // 坐标的字体颜色
+            axisLabel: {
+              textStyle: {
+                fontSize: 14,
+                color: '#333',
+                fontFamily: 'MicrosoftYaHei'
+              }
+            },
+            // Y轴颜色
+            axisLine: {
+              lineStyle: {
+                color: '#ECECEC',
+                width: 1
+              }
+            }
+          },
+        series: [
+          {
+            name: '安装量',
+            type: 'line',
+            stack: '总量',
+            itemStyle: {
+              normal: {
+                color: '#F3470D', // 折线条的颜色
+                borderColor: '#F3470D', // 拐点边框颜色
+                areaStyle: {
+                  type: 'default',
+                  opacity: 0.1
+                }
+              }
+            },
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: '注册量',
+            type: 'line',
+            stack: '总量',
+            itemStyle: {
+              normal: {
+                color: '#22BAED',
+                borderColor: '#22BAED',
+                areaStyle: {
+                  type: 'default',
+                  opacity: 0.1
+                }
+              }
+            },
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: '活跃度',
+            type: 'line',
+            stack: '总量',
+            itemStyle: {
+              normal: {
+                color: '#05B54F',
+                borderColor: '#05B54F',
+                areaStyle: {
+                  type: 'default',
+                  opacity: 0.1
+                }
+              }
+            },
+            data: [150, 232, 201, 154, 190, 330, 410]
+          }
+        ]
+      }
+      areaView1.setOption(option)
+      areaView2.setOption(option)
+      areaView3.setOption(option)
+      setTimeout(() => {
+          areaView1.resize()
+          areaView2.resize()
+          areaView3.resize()
+      }, 100)
+      this.pieSpin = false
+      window.addEventListener('resize', () => {
+        areaView1.resize()
+        areaView2.resize()
+        areaView3.resize()
+      }, false)
+    },
+    /**
      * 绘制地图
      */
     drawLine () {
@@ -332,6 +510,11 @@ export default {
         this.platFormSpin = false
       })
     }
+  },
+  beforeDestroy () {
+    areaView1.clear()
+    areaView2.clear()
+    areaView3.clear()
   }
 }
 </script>

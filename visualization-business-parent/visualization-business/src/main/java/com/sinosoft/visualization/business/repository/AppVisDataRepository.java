@@ -75,5 +75,4 @@ public interface AppVisDataRepository extends JpaRepository<AppVisData, Long> {
             "(SELECT 'wap' as platForm ,product ,life,health,\"nan\" wealth ,\"nan\" gold FROM wap_vis_data WHERE is_active = 1 ORDER BY vis_date LIMIT 1 ) w",nativeQuery = true)
     List<Map<String, Object>> getAppData();
 
-
 }
