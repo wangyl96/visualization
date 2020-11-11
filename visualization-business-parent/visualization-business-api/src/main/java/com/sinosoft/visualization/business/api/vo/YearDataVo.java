@@ -16,14 +16,6 @@ import java.util.Map;
 @Accessors(chain = true)
 public class YearDataVo {
 
-    private Map<String, Object> yearData = new HashMap<>();
-    /**
-     * 平台
-     */
-    private String platForm;
+    private List<Map<String, Object>> yearData = new ArrayList<>();
 
-    /**
-     * 年份
-     */
-    private String year;
 }

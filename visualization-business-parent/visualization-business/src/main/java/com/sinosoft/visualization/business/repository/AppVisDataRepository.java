@@ -47,12 +47,20 @@ public interface AppVisDataRepository extends JpaRepository<AppVisData, Long> {
             "from sys_dict where platform =?1 and is_active = 1\n",nativeQuery = true)
     List<Map<String, Object>> getLegends(String platForm);
 
-    @Query(value = "SELECT SUM(registrations) '总注册量'," +
-            "(select  SUM(registrations) '年注册量' FROM app_vis_data WHERE is_active = 1 and year(vis_date) = ?1)'年注册量' ," +
-            "SUM(app_installation)'总安装量',(select  SUM(app_installation)  FROM app_vis_data WHERE is_active = 1 and year(vis_date) = ?1)'年访问量'," +
-            "SUM(visits) '总访问量',(select  SUM(visits)  FROM app_vis_data WHERE is_active = 1 and year(vis_date) =?1) '年访客量'" +
-            "FROM app_vis_data WHERE is_active = 1", nativeQuery = true)
-    Map<String, Object> getYearAndTotalData(Integer year);
+    /**
+     * 通过limit来获取数据
+     * @return
+     */
+    @Query(value = "select a.*, a.product + a.life + a.wealth + a.gold + a.health num from \n" +
+            "(SELECT 'app' as platForm ,product ,life,health,wealth,gold \n" +
+            "from app_vis_data WHERE is_active = 1 ORDER BY vis_date desc LIMIT 1 ) a\n" +
+            "UNION all\n" +
+            "select p.* , p.product + p.life + p.health + p.wealth num from \n" +
+            "(SELECT 'pc' as platForm ,product ,life,health,wealth ,\"nan\" gold FROM pc_vis_data WHERE is_active = 1  ORDER BY vis_date desc LIMIT 1) p\n" +
+            "UNION all\n" +
+            "SELECT w.* , w.product +w.life + w.health FROM\n" +
+            "(SELECT 'wap' as platForm ,product ,life,health,\"nan\" wealth ,\"nan\" gold FROM wap_vis_data WHERE is_active = 1 ORDER BY vis_date LIMIT 1 ) w",nativeQuery = true)
+    List<Map<String, Object>> getAppData();
 
 
 }

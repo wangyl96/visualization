@@ -124,7 +124,7 @@ public class TodayVisServiceImpl implements TodayVisService {
 
     /**
      * 获取饼图的数据
-     *
+     * @param pieDataDto 前天 昨天
      * @return
      */
     @Override

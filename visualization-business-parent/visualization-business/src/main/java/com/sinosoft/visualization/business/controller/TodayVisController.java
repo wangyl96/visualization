@@ -87,8 +87,8 @@ public class TodayVisController {
     }
 
     /**
-     * 获取保险值
-     *
+     * 获取今日的保险值
+     * @param pieDataDto 昨天和前天
      * @return
      */
     @GetMapping("/getAppData")

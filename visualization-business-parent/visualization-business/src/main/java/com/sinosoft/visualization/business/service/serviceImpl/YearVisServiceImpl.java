@@ -39,31 +39,28 @@ public class YearVisServiceImpl implements YearVisService {
 
         switch (yearAndHistoryDataDto.getPlatForm()){
             case "APP":
-               Map<String, Object> appYearDataMap = appVisDataRepository.getYearAndTotalData(year);
+               List<Map<String, Object>> appYearDataMap = appVisDataRepository.getYearAndTotalData(year);
                 if (appYearDataMap.size() > 0){
                     YearDataVo yearDataVo = new YearDataVo();
-                    yearDataVo.setPlatForm("APP");
-                    yearDataVo.setYear(year.toString());
+
                     yearDataVo.setYearData(appYearDataMap);
                     yearDataVos.add(yearDataVo);
                 }
                 break;
             case "PC":
-               Map<String, Object> pcYearDataMap = pcVisDataRepository.getYearAndTotalData(year);
+                List<Map<String, Object>> pcYearDataMap = pcVisDataRepository.getYearAndTotalData(year);
                 if (pcYearDataMap.size() > 0){
                     YearDataVo yearDataVo = new YearDataVo();
-                    yearDataVo.setPlatForm("PC");
-                    yearDataVo.setYear(year.toString());
+
                     yearDataVo.setYearData(pcYearDataMap);
                     yearDataVos.add(yearDataVo);
                 }
                 break;
             case "WAP":
-                Map<String, Object> wapYearDataMap = wapVisDataRepository.getYearAndTotalData(year);
+                List<Map<String, Object>> wapYearDataMap = wapVisDataRepository.getYearAndTotalData(year);
                 if (wapYearDataMap.size() > 0){
                     YearDataVo yearDataVo = new YearDataVo();
-                    yearDataVo.setPlatForm("WAP");
-                    yearDataVo.setYear(year.toString());
+
                     yearDataVo.setYearData(wapYearDataMap);
                     yearDataVos.add(yearDataVo);
                 }

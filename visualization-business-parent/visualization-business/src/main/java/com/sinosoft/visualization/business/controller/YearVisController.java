@@ -29,7 +29,8 @@ public class YearVisController {
     private YearVisService yearVisService;
 
     /**
-     * 获取各个平台的总总注册 日活 安装
+     * 获取各个平台的总安装 访客
+     * @param yearAndHistoryDataDto 平台
      * @return
      */
     @ApiOperation(value = "各个平台总注册量，日活 安装",tags = "获取平台最新一年和总的安装，注册，日活")

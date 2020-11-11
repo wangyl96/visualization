@@ -4,7 +4,6 @@ import com.sinosoft.visualization.business.api.entity.PcVisData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -41,10 +40,10 @@ public interface PcVisDataRepository extends JpaRepository<PcVisData, Long> {
     Double getPcMom(String date);
 
 
-    @Query(value = "SELECT SUM(registrations) '总注册量'," +
-            "(select  SUM(registrations) '年注册量' FROM pc_vis_data WHERE is_active = 1 and year(vis_date) = ?1)'年注册量' ," +
-            "SUM(visits_old+visits_new)'总访问量',(select  SUM(visits_old+visits_new)  FROM pc_vis_data WHERE is_active = 1 and year(vis_date) = ?1)'年访问量'," +
-            "SUM(visitors_new+visitors_old) '总访客量',(select  SUM(visitors_new+visitors_old)  FROM pc_vis_data WHERE is_active = 1 and year(vis_date) =?1) '年访客量'" +
-            "FROM pc_vis_data WHERE is_active = 1", nativeQuery = true)
-   Map<String, Object> getYearAndTotalData(Integer year);
+    @Query(value = "SELECT '注册量' custNmae, SUM(registrations) 'total',(select  SUM(registrations)  FROM pc_vis_data WHERE is_active = 1 and year(vis_date) = ?1) yearValue FROM pc_vis_data WHERE is_active = 1\n" +
+            "\t   UNION all\n" +
+            "\tSELECT '访客量' custNmae, SUM(visitors_new+visitors_old) 'total',(select  SUM(visitors_new+visitors_old)  FROM pc_vis_data WHERE is_active = 1 and year(vis_date) = ?1) yearValue FROM pc_vis_data WHERE is_active = 1\n" +
+            "\tUNION all\n" +
+            "\tSELECT '访问量' custNmae, SUM(visits_new+visits_old) 'total',(select  SUM(visits_new+visits_old)  FROM pc_vis_data WHERE is_active = 1 and year(vis_date) = ?1) yearValue FROM pc_vis_data WHERE is_active = 1", nativeQuery = true)
+    List<Map<String, Object>> getYearAndTotalData(Integer year);
 }
